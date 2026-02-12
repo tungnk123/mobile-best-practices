@@ -17,7 +17,8 @@
       "Bash(npx tsc:*)",
       "Bash(node /home/tungnk123/Desktop/android/mobile-best-practices/cli/dist/index.js:*)",
       "Bash(node:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ]
   }
 }
