@@ -1,11 +1,11 @@
-# mobilepro-cli
+# mobile-best-practices
 
 CLI to install Mobile Best Practices skill for AI coding assistants.
 
 ## Install
 
 ```bash
-npm install -g mobilepro-cli
+npm install -g mobile-best-practices
 ```
 
 ## Usage
@@ -14,33 +14,33 @@ npm install -g mobilepro-cli
 cd /path/to/your/project
 
 # Android-focused (Jetpack Compose)
-mobilepro init --ai claude --platform android
+mobile-best-practices init --ai claude --platform android
 
 # iOS-focused (SwiftUI)
-mobilepro init --ai claude --platform ios
+mobile-best-practices init --ai claude --platform ios
 
 # Flutter-focused (Dart/BLoC)
-mobilepro init --ai cursor --platform flutter
+mobile-best-practices init --ai cursor --platform flutter
 
 # React Native-focused (TypeScript)
-mobilepro init --ai copilot --platform react-native
+mobile-best-practices init --ai copilot --platform react-native
 
 # All platforms (unified)
-mobilepro init --ai claude --platform all
+mobile-best-practices init --ai claude --platform all
 
 # All AI assistants + Android
-mobilepro init --ai all --platform android
+mobile-best-practices init --ai all --platform android
 
 # Interactive mode (prompts for both)
-mobilepro init
+mobile-best-practices init
 ```
 
 ## Commands
 
 ```bash
-mobilepro init        # Install skill for your AI assistant
-mobilepro update      # Check for updates
-mobilepro versions    # List versions and changelog
+mobile-best-practices init        # Install skill for your AI assistant
+mobile-best-practices update      # Check for updates
+mobile-best-practices versions    # List versions and changelog
 ```
 
 ## Platform-Specific Skills

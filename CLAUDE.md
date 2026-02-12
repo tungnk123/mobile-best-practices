@@ -42,7 +42,7 @@ src/mobile-best-practices/
         ├── windsurf.json
         └── ...
 
-cli/                          (npm installer: mobilepro-cli)
+cli/                          (npm installer: mobile-best-practices)
 ├── src/
 ├── assets/                   (bundled data ~500KB)
 └── package.json

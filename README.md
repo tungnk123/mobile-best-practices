@@ -26,24 +26,24 @@ Every entry includes a **Reference URL** linking to official docs, GitHub repos,
 ### Option A: CLI Installer (any AI assistant)
 
 ```bash
-npm install -g mobilepro-cli
+npm install -g mobile-best-practices
 
 cd /path/to/your/project
 
 # Android-focused skill
-mobilepro init --ai claude --platform android
+mobile-best-practices init --ai claude --platform android
 
 # iOS-focused skill
-mobilepro init --ai claude --platform ios
+mobile-best-practices init --ai claude --platform ios
 
 # Flutter-focused skill
-mobilepro init --ai cursor --platform flutter
+mobile-best-practices init --ai cursor --platform flutter
 
 # All platforms (unified)
-mobilepro init --ai claude --platform all
+mobile-best-practices init --ai claude --platform all
 
 # Interactive mode (prompts for AI + platform)
-mobilepro init
+mobile-best-practices init
 ```
 
 Supported AI: `claude`, `cursor`, `windsurf`, `copilot`, `kiro`, `codex`, `gemini`, `roocode`, `continue`, `opencode`, `qoder`, `codebuddy`, `trae`, `antigravity`, `all`
@@ -124,7 +124,7 @@ src/mobile-best-practices/          # Source of truth
     ├── base/                       # Shared SKILL.md content
     └── platforms/                  # 15 AI platform configs
 
-cli/                                # npm package (mobilepro-cli)
+cli/                                # npm package (mobile-best-practices)
 ├── src/                            # TypeScript source
 ├── assets/                         # Bundled data for offline install
 └── package.json

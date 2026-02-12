@@ -7,7 +7,7 @@ import { versionsCommand } from './commands/versions.js';
 const program = new Command();
 
 program
-  .name('mobilepro')
+  .name('mobile-best-practices')
   .description('CLI to install Mobile Best Practices skill for AI coding assistants')
   .version('1.0.0');
 
