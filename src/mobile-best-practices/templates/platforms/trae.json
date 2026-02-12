@@ -1,0 +1,11 @@
+{
+  "name": "trae",
+  "displayName": "Trae",
+  "type": "rules",
+  "installPath": ".trae/rules",
+  "files": {
+    "rule": "mobile-best-practices.md"
+  },
+  "ruleFormat": "md",
+  "skillPath": ".trae/rules"
+}

@@ -1,0 +1,11 @@
+{
+  "name": "copilot",
+  "displayName": "GitHub Copilot",
+  "type": "instructions",
+  "installPath": ".github",
+  "files": {
+    "instructions": "copilot-instructions.md"
+  },
+  "ruleFormat": "md",
+  "skillPath": ".github"
+}

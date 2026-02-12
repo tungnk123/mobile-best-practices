@@ -1,0 +1,33 @@
+import chalk from 'chalk';
+import type { Version } from '../types/index.js';
+
+const VERSIONS: Version[] = [
+  {
+    version: '1.0.0',
+    date: '2026-02-12',
+    changes: [
+      'Initial release',
+      '500+ mobile best practices across 15 CSV files',
+      'Support for 15 AI coding assistants',
+      'BM25 search engine with auto-domain detection',
+      '--stack and --persist flags',
+      '30 Android copy-paste code snippets',
+      '48 Gradle dependency declarations',
+      '26 architecture patterns',
+      '160+ platform-specific guidelines',
+      'Reference URLs for all entries',
+    ],
+  },
+];
+
+export function versionsCommand(): void {
+  console.log(chalk.bold('\nMobile Best Practices - Version History\n'));
+
+  for (const v of VERSIONS) {
+    console.log(`  ${chalk.green(v.version)} ${chalk.dim(`(${v.date})`)}`);
+    for (const change of v.changes) {
+      console.log(`    ${chalk.dim('-')} ${change}`);
+    }
+    console.log();
+  }
+}

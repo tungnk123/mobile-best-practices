@@ -1,0 +1,11 @@
+{
+  "name": "windsurf",
+  "displayName": "Windsurf",
+  "type": "rules",
+  "installPath": ".windsurf/rules",
+  "files": {
+    "rule": "mobile-best-practices.md"
+  },
+  "ruleFormat": "md",
+  "skillPath": ".windsurf/rules/mobile-best-practices"
+}

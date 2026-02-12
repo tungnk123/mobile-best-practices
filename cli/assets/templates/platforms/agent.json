@@ -1,0 +1,11 @@
+{
+  "name": "agent",
+  "displayName": "Agent",
+  "type": "instructions",
+  "installPath": ".",
+  "files": {
+    "instructions": "AGENT.md"
+  },
+  "ruleFormat": "md",
+  "skillPath": "."
+}

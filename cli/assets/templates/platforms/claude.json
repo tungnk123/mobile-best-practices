@@ -1,0 +1,27 @@
+{
+  "name": "claude",
+  "displayName": "Claude Code",
+  "type": "skill",
+  "installPath": ".claude/skills/mobile-best-practices",
+  "files": {
+    "skill": "SKILL.md",
+    "data": "data/",
+    "scripts": "scripts/"
+  },
+  "settings": {
+    "file": ".claude/settings.local.json",
+    "permissions": [
+      "Bash(python3:*)",
+      "Bash(python:*)",
+      "Bash(gradle:*)",
+      "Bash(./gradlew:*)",
+      "Bash(flutter:*)",
+      "Bash(npx react-native:*)",
+      "Bash(npm install:*)",
+      "Bash(pod install:*)",
+      "Skill(mobile-best-practices)",
+      "Skill(mobile-best-practices:*)"
+    ]
+  },
+  "skillPath": ".claude/skills/mobile-best-practices"
+}

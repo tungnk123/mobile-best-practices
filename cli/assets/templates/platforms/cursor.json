@@ -1,0 +1,11 @@
+{
+  "name": "cursor",
+  "displayName": "Cursor",
+  "type": "rules",
+  "installPath": ".cursor/rules",
+  "files": {
+    "rule": "mobile-best-practices.mdc"
+  },
+  "ruleFormat": "mdc",
+  "skillPath": ".cursor/rules/mobile-best-practices"
+}

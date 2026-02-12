@@ -1,0 +1,11 @@
+{
+  "name": "roocode",
+  "displayName": "Roo Code",
+  "type": "workflow",
+  "installPath": ".roo",
+  "files": {
+    "workflow": "mobile-best-practices.md"
+  },
+  "ruleFormat": "md",
+  "skillPath": ".roo"
+}

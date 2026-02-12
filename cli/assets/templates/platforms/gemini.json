@@ -1,0 +1,11 @@
+{
+  "name": "gemini",
+  "displayName": "Gemini CLI",
+  "type": "instructions",
+  "installPath": ".",
+  "files": {
+    "instructions": "GEMINI.md"
+  },
+  "ruleFormat": "md",
+  "skillPath": "."
+}

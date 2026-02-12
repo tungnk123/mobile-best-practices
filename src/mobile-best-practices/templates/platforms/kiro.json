@@ -1,0 +1,11 @@
+{
+  "name": "kiro",
+  "displayName": "Kiro",
+  "type": "workflow",
+  "installPath": ".kiro/workflows",
+  "files": {
+    "workflow": "mobile-best-practices.workflow.md"
+  },
+  "ruleFormat": "workflow",
+  "skillPath": ".kiro/workflows"
+}

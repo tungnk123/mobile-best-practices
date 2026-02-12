@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3:*)",
+      "Bash(python:*)",
+      "Bash(gradle:*)",
+      "Bash(./gradlew:*)",
+      "Bash(xcodebuild:*)",
+      "Bash(flutter:*)",
+      "Bash(npx react-native:*)",
+      "Bash(npm install:*)",
+      "Bash(pod install:*)",
+      "Skill(mobile-best-practices)",
+      "Skill(mobile-best-practices:*)",
+      "Bash(cd:*)",
+      "WebFetch(domain:github.com)",
+      "Bash(npx tsc:*)",
+      "Bash(node /home/tungnk123/Desktop/android/mobile-best-practices/cli/dist/index.js:*)",
+      "Bash(node:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}

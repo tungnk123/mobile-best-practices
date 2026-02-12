@@ -1,0 +1,11 @@
+{
+  "name": "continue",
+  "displayName": "Continue",
+  "type": "rules",
+  "installPath": ".continue/rules",
+  "files": {
+    "rule": "mobile-best-practices.yaml"
+  },
+  "ruleFormat": "yaml",
+  "skillPath": ".continue/rules"
+}

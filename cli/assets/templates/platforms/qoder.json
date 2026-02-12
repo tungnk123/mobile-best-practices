@@ -1,0 +1,11 @@
+{
+  "name": "qoder",
+  "displayName": "Qoder",
+  "type": "instructions",
+  "installPath": ".qoder",
+  "files": {
+    "instructions": "mobile-best-practices.md"
+  },
+  "ruleFormat": "md",
+  "skillPath": ".qoder"
+}

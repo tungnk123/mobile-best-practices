@@ -1,0 +1,11 @@
+{
+  "name": "codex",
+  "displayName": "Codex CLI",
+  "type": "instructions",
+  "installPath": ".",
+  "files": {
+    "instructions": "AGENTS.md"
+  },
+  "ruleFormat": "md",
+  "skillPath": "."
+}

@@ -1,0 +1,11 @@
+{
+  "name": "codebuddy",
+  "displayName": "CodeBuddy",
+  "type": "instructions",
+  "installPath": ".codebuddy",
+  "files": {
+    "instructions": "mobile-best-practices.md"
+  },
+  "ruleFormat": "md",
+  "skillPath": ".codebuddy"
+}

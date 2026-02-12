@@ -1,0 +1,13 @@
+{
+  "name": "antigravity",
+  "displayName": "Antigravity",
+  "type": "skills",
+  "installPath": ".antigravity/skills/mobile-best-practices",
+  "files": {
+    "skill": "SKILL.md",
+    "data": "data/",
+    "scripts": "scripts/"
+  },
+  "ruleFormat": "skill",
+  "skillPath": ".antigravity/skills/mobile-best-practices"
+}

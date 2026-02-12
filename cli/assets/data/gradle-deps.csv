@@ -1,0 +1,47 @@
+Name,Category,Keywords,Version Catalog Key,Implementation,KSP/KAPT,Version,Notes,Reference URL
+Jetpack Compose BOM,Compose,"compose bom ui material3 foundation",compose-bom,implementation(platform(libs.compose.bom)),,2024.12.01,BOM manages all Compose versions,https://developer.android.com/develop/ui/compose/bom
+Compose Material3,Compose,"material3 theme color typography",compose-material3,implementation(libs.compose.material3),,BOM,Included via BOM,https://developer.android.com/develop/ui/compose/designsystems/material3
+Compose UI,Compose,"compose ui modifier layout",compose-ui,implementation(libs.compose.ui),,BOM,Included via BOM,https://developer.android.com/develop/ui/compose
+Compose UI Tooling,Compose,"compose preview debug tooling",compose-ui-tooling,debugImplementation(libs.compose.ui.tooling),,BOM,Debug only for preview,https://developer.android.com/develop/ui/compose/tooling
+Compose UI Tooling Preview,Compose,"compose preview annotation",compose-ui-tooling-preview,implementation(libs.compose.ui.tooling.preview),,BOM,For @Preview annotation,https://developer.android.com/develop/ui/compose/tooling/previews
+Compose Icons Extended,Compose,"icons material extended vector",compose-icons-extended,implementation(libs.compose.icons.extended),,BOM,Large library use sparingly,https://developer.android.com/develop/ui/compose/graphics/images/material
+Activity Compose,Compose,"activity compose setcontent",activity-compose,implementation(libs.activity.compose),,1.9.3,Required for setContent in Activity,https://developer.android.com/develop/ui/compose/setup
+Lifecycle Runtime Compose,Lifecycle,"lifecycle compose collectasstate",lifecycle-compose,implementation(libs.lifecycle.runtime.compose),,2.8.7,For collectAsStateWithLifecycle,https://developer.android.com/topic/libraries/architecture/lifecycle
+Lifecycle ViewModel Compose,Lifecycle,"viewmodel compose hiltviewmodel",lifecycle-viewmodel-compose,implementation(libs.lifecycle.viewmodel.compose),,2.8.7,For viewModel() composable,https://developer.android.com/topic/libraries/architecture/viewmodel
+Navigation Compose,Navigation,"navigation compose navhost route",navigation-compose,implementation(libs.navigation.compose),,2.8.5,Type-safe routes with @Serializable,https://developer.android.com/develop/ui/compose/navigation
+Hilt Android,DI,"hilt dagger inject module",hilt-android,implementation(libs.hilt.android),ksp(libs.hilt.compiler),2.51.1,Use with KSP not KAPT,https://developer.android.com/training/dependency-injection/hilt-android
+Hilt Compiler,DI,"hilt compiler ksp kapt processor",hilt-compiler,,ksp(libs.hilt.compiler),2.51.1,Must match hilt-android version,https://developer.android.com/training/dependency-injection/hilt-android
+Hilt Navigation Compose,DI,"hilt navigation viewmodel compose",hilt-navigation-compose,implementation(libs.hilt.navigation.compose),,1.2.0,For hiltViewModel() in Compose,https://developer.android.com/develop/ui/compose/libraries#hilt
+Room Runtime,Database,"room database sqlite orm",room-runtime,implementation(libs.room.runtime),,2.6.1,Use with KSP processor,https://developer.android.com/training/data-storage/room
+Room KTX,Database,"room coroutine flow suspend",room-ktx,implementation(libs.room.ktx),,2.6.1,Coroutine and Flow support,https://developer.android.com/training/data-storage/room
+Room Compiler,Database,"room compiler ksp processor annotation",room-compiler,,ksp(libs.room.compiler),2.6.1,Must match runtime version,https://developer.android.com/training/data-storage/room
+Retrofit,Network,"retrofit http api rest client",retrofit,implementation(libs.retrofit),,2.11.0,Type-safe HTTP client,https://square.github.io/retrofit/
+Retrofit Moshi Converter,Network,"retrofit moshi converter json",retrofit-moshi,implementation(libs.retrofit.converter.moshi),,2.11.0,Moshi JSON converter for Retrofit,https://github.com/square/moshi
+OkHttp,Network,"okhttp client interceptor logging",okhttp,implementation(libs.okhttp),,4.12.0,HTTP client underlying Retrofit,https://square.github.io/okhttp/
+OkHttp Logging,Network,"okhttp logging interceptor debug",okhttp-logging,implementation(libs.okhttp.logging),,4.12.0,Request/response logging for debug,https://square.github.io/okhttp/features/interceptors/
+Moshi Kotlin,Serialization,"moshi json kotlin codegen",moshi-kotlin,implementation(libs.moshi.kotlin),,1.15.1,Use with codegen for performance,https://github.com/square/moshi
+Moshi Codegen,Serialization,"moshi codegen ksp annotation",moshi-codegen,,ksp(libs.moshi.codegen),1.15.1,Generates JSON adapters at compile time,https://github.com/square/moshi#codegen
+Kotlin Serialization,Serialization,"kotlinx serialization json multiplatform",kotlinx-serialization,implementation(libs.kotlinx.serialization.json),,1.7.3,Required for Navigation type-safe routes,https://kotlinlang.org/docs/serialization.html
+Coil Compose,Image,"coil image loading compose async",coil-compose,implementation(libs.coil.compose),,2.7.0,AsyncImage composable for Compose,https://coil-kt.github.io/coil/compose/
+Paging Runtime,Pagination,"paging3 pagination load data",paging-runtime,implementation(libs.paging.runtime),,3.3.5,Core pagination library,https://developer.android.com/topic/libraries/architecture/paging/v3-overview
+Paging Compose,Pagination,"paging compose lazycolumn collectaslazyp",paging-compose,implementation(libs.paging.compose),,3.3.5,LazyPagingItems for Compose,https://developer.android.com/topic/libraries/architecture/paging/v3-overview
+DataStore Preferences,Storage,"datastore preferences key value async",datastore-preferences,implementation(libs.datastore.preferences),,1.1.1,Replaces SharedPreferences,https://developer.android.com/topic/libraries/architecture/datastore
+Coroutines Core,Async,"coroutines core flow channel kotlin",coroutines-core,implementation(libs.coroutines.core),,1.9.0,Core coroutine library,https://kotlinlang.org/docs/coroutines-overview.html
+Coroutines Android,Async,"coroutines android main dispatcher",coroutines-android,implementation(libs.coroutines.android),,1.9.0,Dispatchers.Main for Android,https://developer.android.com/kotlin/coroutines
+WorkManager,Background,"workmanager background task schedule reliable",work-runtime,implementation(libs.work.runtime.ktx),,2.10.0,Reliable background work,https://developer.android.com/develop/background-work/background-tasks/persistent/getting-started
+Timber,Logging,"timber log debug release tree",timber,implementation(libs.timber),,5.0.1,Better logging strip in release,https://github.com/JakeWharton/timber
+Splashscreen,UI,"splashscreen core splash launch startup",splashscreen,implementation(libs.splashscreen),,1.0.1,Material3 splash screen API,https://developer.android.com/develop/ui/views/launch/splash-screen
+LeakCanary,Debug,"leakcanary memory leak detection debug",leakcanary,debugImplementation(libs.leakcanary),,2.14,Debug only auto leak detection,https://square.github.io/leakcanary/
+JUnit,Testing,"junit test unit assert rule",junit,testImplementation(libs.junit),,4.13.2,Standard unit testing,https://junit.org/junit4/
+JUnit5,Testing,"junit5 jupiter test parameterized",junit5,testImplementation(libs.junit.jupiter),,5.10.2,Modern testing with extensions,https://junit.org/junit5/
+MockK,Testing,"mockk mock test kotlin coroutine",mockk,testImplementation(libs.mockk),,1.13.13,Kotlin-first mocking,https://mockk.io/
+Turbine,Testing,"turbine flow test stateflow coroutine",turbine,testImplementation(libs.turbine),,1.2.0,Flow testing made easy,https://github.com/cashapp/turbine
+Coroutines Test,Testing,"coroutines test dispatcher runtest",coroutines-test,testImplementation(libs.coroutines.test),,1.9.0,TestDispatcher and runTest,https://kotlinlang.org/docs/coroutines-test.html
+Compose UI Test,Testing,"compose test ui junit4 semantics rule",compose-ui-test,androidTestImplementation(libs.compose.ui.test.junit4),,BOM,Compose UI testing,https://developer.android.com/develop/ui/compose/testing
+Compose UI Test Manifest,Testing,"compose test manifest activity debug",compose-ui-test-manifest,debugImplementation(libs.compose.ui.test.manifest),,BOM,Required for Compose tests,https://developer.android.com/develop/ui/compose/testing
+Room Testing,Testing,"room test inmemory database migration",room-testing,testImplementation(libs.room.testing),,2.6.1,In-memory DB for tests,https://developer.android.com/training/data-storage/room/testing-db
+Hilt Testing,Testing,"hilt test android inject bindvalue",hilt-android-testing,androidTestImplementation(libs.hilt.android.testing),,2.51.1,Hilt integration testing,https://developer.android.com/training/dependency-injection/hilt-testing
+EncryptedSharedPreferences,Security,"encrypted sharedpreferences security crypto",security-crypto,implementation(libs.security.crypto),,1.1.0-alpha06,Encrypted key-value storage,https://developer.android.com/reference/androidx/security/crypto/EncryptedSharedPreferences
+Biometric,Security,"biometric fingerprint face authenticate prompt",biometric,implementation(libs.biometric),,1.2.0-alpha05,Biometric authentication,https://developer.android.com/training/sign-in/biometric-auth
+ExoPlayer Media3,Media,"media3 exoplayer video audio player",media3-exoplayer,implementation(libs.media3.exoplayer),,1.5.0,Modern media playback,https://developer.android.com/media/media3/exoplayer
+Google Maps Compose,Maps,"maps google compose marker location",maps-compose,implementation(libs.maps.compose),,6.2.1,Google Maps for Compose,https://developers.google.com/maps/documentation/android-sdk/maps-compose

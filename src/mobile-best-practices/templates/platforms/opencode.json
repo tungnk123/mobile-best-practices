@@ -1,0 +1,11 @@
+{
+  "name": "opencode",
+  "displayName": "OpenCode",
+  "type": "instructions",
+  "installPath": ".",
+  "files": {
+    "instructions": "OPENCODE.md"
+  },
+  "ruleFormat": "md",
+  "skillPath": "."
+}
