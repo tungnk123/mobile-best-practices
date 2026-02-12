@@ -1,0 +1,76 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate-csv:
+    name: Validate CSV Data
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate CSV files
+        run: python3 scripts/validate-csv.py
+
+  test-search:
+    name: Test Search Engine
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run search tests
+        run: |
+          cd src/mobile-best-practices
+          python3 scripts/search.py "mvvm" --domain architecture --json
+          python3 scripts/search.py "compose" --platform android --json
+          python3 scripts/search.py "navigation" --stack swiftui --json
+          python3 scripts/search.py "hilt retrofit" --domain gradle --json
+          python3 scripts/search.py "viewmodel" --domain snippet --json
+          echo "All search tests passed"
+
+  build-cli:
+    name: Build CLI
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: cli
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: npm ci
+      - run: npm run build
+      - name: Test CLI commands
+        run: |
+          node dist/index.js versions
+          node dist/index.js init --ai claude --offline
+          echo "CLI build and test passed"
+
+  publish-npm:
+    name: Publish to npm
+    needs: [validate-csv, test-search, build-cli]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && startsWith(github.event.head_commit.message, 'release:')
+    defaults:
+      run:
+        working-directory: cli
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+      - run: npm ci
+      - run: npm run build
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

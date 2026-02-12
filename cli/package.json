@@ -44,5 +44,14 @@
     "mvvm",
     "clean-architecture"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tungnk123/mobile-best-practices.git",
+    "directory": "cli"
+  },
+  "homepage": "https://github.com/tungnk123/mobile-best-practices#readme",
+  "bugs": {
+    "url": "https://github.com/tungnk123/mobile-best-practices/issues"
+  }
 }
