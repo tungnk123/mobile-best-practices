@@ -15,6 +15,7 @@ program
   .command('init')
   .description('Install mobile best practices skill for your AI assistant')
   .option('--ai <platform>', 'AI assistant (claude, cursor, windsurf, copilot, kiro, codex, gemini, roocode, continue, opencode, qoder, codebuddy, trae, antigravity, all)')
+  .option('--platform <mobile>', 'Mobile platform (android, ios, flutter, react-native, all)')
   .option('--offline', 'Skip GitHub, use bundled assets')
   .action(initCommand);
 

@@ -13,22 +13,25 @@ npm install -g mobilepro-cli
 ```bash
 cd /path/to/your/project
 
-# Claude Code
-mobilepro init --ai claude
+# Android-focused (Jetpack Compose)
+mobilepro init --ai claude --platform android
 
-# Cursor
-mobilepro init --ai cursor
+# iOS-focused (SwiftUI)
+mobilepro init --ai claude --platform ios
 
-# Windsurf
-mobilepro init --ai windsurf
+# Flutter-focused (Dart/BLoC)
+mobilepro init --ai cursor --platform flutter
 
-# GitHub Copilot
-mobilepro init --ai copilot
+# React Native-focused (TypeScript)
+mobilepro init --ai copilot --platform react-native
 
-# All assistants
-mobilepro init --ai all
+# All platforms (unified)
+mobilepro init --ai claude --platform all
 
-# Interactive mode
+# All AI assistants + Android
+mobilepro init --ai all --platform android
+
+# Interactive mode (prompts for both)
 mobilepro init
 ```
 
@@ -39,6 +42,22 @@ mobilepro init        # Install skill for your AI assistant
 mobilepro update      # Check for updates
 mobilepro versions    # List versions and changelog
 ```
+
+## Platform-Specific Skills
+
+Each platform gets a focused SKILL.md with:
+- Platform-specific default stack and code examples
+- Targeted search commands (auto-filters by platform)
+- Platform-specific anti-patterns and checklist
+- Focused code generation rules
+
+| Platform | Default Stack |
+|---|---|
+| `android` | MVVM + Hilt + Room + Retrofit + Coil + Compose + Material3 |
+| `ios` | MVVM + SwiftUI + Combine + async/await + SwiftData + Kingfisher |
+| `flutter` | BLoC + Dio + GoRouter + Drift + CachedNetworkImage |
+| `react-native` | Redux Toolkit + Axios + React Navigation + MMKV + FastImage |
+| `all` | Unified skill covering all 4 platforms |
 
 ## Supported AI Assistants
 

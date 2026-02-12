@@ -29,10 +29,26 @@ Every entry includes a **Reference URL** linking to official docs, GitHub repos,
 npm install -g mobilepro-cli
 
 cd /path/to/your/project
-mobilepro init --ai claude
+
+# Android-focused skill
+mobilepro init --ai claude --platform android
+
+# iOS-focused skill
+mobilepro init --ai claude --platform ios
+
+# Flutter-focused skill
+mobilepro init --ai cursor --platform flutter
+
+# All platforms (unified)
+mobilepro init --ai claude --platform all
+
+# Interactive mode (prompts for AI + platform)
+mobilepro init
 ```
 
-Supported: `claude`, `cursor`, `windsurf`, `copilot`, `kiro`, `codex`, `gemini`, `roocode`, `continue`, `opencode`, `qoder`, `codebuddy`, `trae`, `antigravity`, `all`
+Supported AI: `claude`, `cursor`, `windsurf`, `copilot`, `kiro`, `codex`, `gemini`, `roocode`, `continue`, `opencode`, `qoder`, `codebuddy`, `trae`, `antigravity`, `all`
+
+Supported platforms: `android`, `ios`, `flutter`, `react-native`, `all`
 
 ### Option B: Manual (Claude Code)
 

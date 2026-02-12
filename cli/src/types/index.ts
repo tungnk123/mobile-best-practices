@@ -48,6 +48,15 @@ export const SUPPORTED_PLATFORMS: AIPlatform[] = [
   'antigravity',
 ];
 
+export type MobilePlatform = 'android' | 'ios' | 'flutter' | 'react-native' | 'all';
+
+export const MOBILE_PLATFORMS: MobilePlatform[] = [
+  'android',
+  'ios',
+  'flutter',
+  'react-native',
+];
+
 export interface Version {
   version: string;
   date: string;

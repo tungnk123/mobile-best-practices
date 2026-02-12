@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, cpSync, readFileSync, writeFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import type { PlatformConfig } from '../types/index.js';
+import type { PlatformConfig, MobilePlatform } from '../types/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -35,39 +35,57 @@ export function copyDir(src: string, dest: string): void {
 
 export function generateSkillFile(
   config: PlatformConfig,
-  targetDir: string
+  targetDir: string,
+  mobilePlatform: MobilePlatform = 'all'
 ): void {
-  const baseContent = readFileSync(
-    join(getTemplatesDir(), 'base', 'skill-content.md'),
-    'utf-8'
-  );
-  const quickRef = readFileSync(
-    join(getTemplatesDir(), 'base', 'quick-reference.md'),
-    'utf-8'
-  );
-
+  const assetsDir = getAssetsDir();
+  const skillsDir = join(assetsDir, 'skills');
   const skillPath = config.skillPath;
-  let content = baseContent.replace(/\{SKILL_PATH\}/g, skillPath);
-  let quickRefContent = quickRef.replace(/\{SKILL_PATH\}/g, skillPath);
 
-  const fullContent = `---
+  // Try to load platform-specific skill file
+  const skillFileName = mobilePlatform === 'all' ? 'all.md' : `${mobilePlatform}.md`;
+  const platformSkillPath = join(skillsDir, skillFileName);
+
+  let content: string;
+
+  if (existsSync(platformSkillPath)) {
+    // Use platform-specific SKILL.md
+    content = readFileSync(platformSkillPath, 'utf-8');
+    content = content.replace(/\{SKILL_PATH\}/g, skillPath);
+  } else {
+    // Fallback to template-based generation
+    const baseContent = readFileSync(
+      join(getTemplatesDir(), 'base', 'skill-content.md'),
+      'utf-8'
+    );
+    const quickRef = readFileSync(
+      join(getTemplatesDir(), 'base', 'quick-reference.md'),
+      'utf-8'
+    );
+
+    let processedBase = baseContent.replace(/\{SKILL_PATH\}/g, skillPath);
+    let processedQuickRef = quickRef.replace(/\{SKILL_PATH\}/g, skillPath);
+
+    content = `---
 name: mobile-best-practices
 description: "Mobile development intelligence for Android, iOS, Flutter, and React Native. 500+ best practices."
 ---
 
-${content}
+${processedBase}
 
-${quickRefContent}
+${processedQuickRef}
 `;
+  }
 
   const targetFile = join(targetDir, config.files.skill || config.files.rule || config.files.instructions || config.files.workflow || 'SKILL.md');
   ensureDir(dirname(targetFile));
-  writeFileSync(targetFile, fullContent, 'utf-8');
+  writeFileSync(targetFile, content, 'utf-8');
 }
 
 export function installForPlatform(
   platform: string,
-  projectDir: string
+  projectDir: string,
+  mobilePlatform: MobilePlatform = 'all'
 ): void {
   const config = loadPlatformConfig(platform);
   const targetDir = join(projectDir, config.installPath);
@@ -79,10 +97,10 @@ export function installForPlatform(
   if (config.type === 'skill' || config.type === 'skills') {
     copyDir(join(assetsDir, 'data'), join(targetDir, 'data'));
     copyDir(join(assetsDir, 'scripts'), join(targetDir, 'scripts'));
-    generateSkillFile(config, targetDir);
+    generateSkillFile(config, targetDir, mobilePlatform);
   } else {
     // For rules/instructions/workflow, generate a single file
-    generateSkillFile(config, targetDir);
+    generateSkillFile(config, targetDir, mobilePlatform);
     // Also copy data and scripts to a shared location
     const sharedDir = join(projectDir, '.mobile-best-practices');
     copyDir(join(assetsDir, 'data'), join(sharedDir, 'data'));
