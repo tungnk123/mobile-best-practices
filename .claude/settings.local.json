@@ -21,7 +21,8 @@
       "Bash(git commit:*)",
       "WebFetch(domain:googlesamples.github.io)",
       "WebFetch(domain:pinterest.github.io)",
-      "WebFetch(domain:detekt.dev)"
+      "WebFetch(domain:detekt.dev)",
+      "Bash(ln:*)"
     ]
   }
 }

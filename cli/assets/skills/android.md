@@ -1,6 +1,11 @@
 ---
-name: mobile-best-practices-android
-description: "Android development intelligence with Jetpack Compose. 49 architecture patterns, 91 UI patterns, 113 anti-patterns, 101 libraries, 228 performance rules, 437 security practices, 73 testing patterns, 79 code snippets, 78 Gradle declarations, 246 Android-specific guidelines. Default stack: MVVM + Hilt + Room + Retrofit + Coil + Navigation Compose + Material3. Actions: plan, build, create, design, implement, review, fix, improve, optimize, refactor, architect Android apps."
+name: mobile-best-practices
+description: "Android development intelligence with Jetpack Compose. 1,738 searchable entries including 79 code snippets, 78 Gradle declarations, 246 Android-specific guidelines. Default stack: MVVM + Hilt + Room + Retrofit + Coil + Navigation Compose + Material3. Use when building, reviewing, fixing, or optimizing Android apps. Covers architecture patterns, UI components, anti-patterns, performance, security, and testing."
+license: MIT
+compatibility: Requires Python 3.x for BM25 search. Works with Claude Code and other skills-compatible agents.
+metadata:
+  author: tungnk123
+  version: "1.0"
 ---
 
 # Android Best Practices - Jetpack Compose Development Intelligence
@@ -156,140 +161,8 @@ python3 {SKILL_PATH}/scripts/search.py "testing junit mockk turbine" --domain gr
 
 ---
 
-## Code Generation Rules
+## Code Generation & Quality
 
-### Default Stack
+Before generating code, read the [code generation rules](references/CODE-RULES.md) for Android-specific conventions, required patterns (sealed UiState, @HiltViewModel, collectAsStateWithLifecycle), and anti-patterns to avoid.
 
-```
-Architecture:  MVVM + Clean Architecture + Repository Pattern
-DI:            Hilt (@HiltViewModel, @Inject, @Module)
-UI:            Jetpack Compose + Material3
-State:         StateFlow + sealed interface UiState
-Events:        Channel<Event> for one-shot (navigation, snackbar)
-Navigation:    Navigation Compose with @Serializable type-safe routes
-Network:       Retrofit + Moshi + OkHttp
-Database:      Room + KSP
-Image:         Coil (AsyncImage)
-Async:         Coroutines + Flow (viewModelScope, Dispatchers.IO)
-Testing:       JUnit5 + MockK + Turbine + Compose Test
-Build:         Version Catalog (libs.versions.toml) + KSP
-```
-
-### Always Use Sealed Interface for UiState
-
-```kotlin
-sealed interface HomeUiState {
-    data object Loading : HomeUiState
-    data class Success(val items: List<Item>) : HomeUiState
-    data class Error(val message: String) : HomeUiState
-    data object Empty : HomeUiState
-}
-```
-
-### Always Use @HiltViewModel Pattern
-
-```kotlin
-@HiltViewModel
-class HomeViewModel @Inject constructor(
-    private val repository: HomeRepository
-) : ViewModel() {
-    private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Loading)
-    val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
-
-    fun loadData() {
-        viewModelScope.launch {
-            _uiState.value = HomeUiState.Loading
-            try {
-                val data = repository.getData()
-                _uiState.value = if (data.isEmpty()) HomeUiState.Empty
-                    else HomeUiState.Success(data)
-            } catch (e: Exception) {
-                _uiState.value = HomeUiState.Error(e.message ?: "Unknown error")
-            }
-        }
-    }
-}
-```
-
-### Always Use collectAsStateWithLifecycle
-
-```kotlin
-@Composable
-fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
-    when (val state = uiState) {
-        is HomeUiState.Loading -> LoadingIndicator()
-        is HomeUiState.Success -> ItemList(state.items)
-        is HomeUiState.Error -> ErrorMessage(state.message, onRetry = viewModel::loadData)
-        is HomeUiState.Empty -> EmptyState()
-    }
-}
-```
-
-### Anti-Patterns to ALWAYS Avoid
-
-- Business logic in Activities/Fragments
-- Direct database access in UI layer
-- GlobalScope for coroutines (use viewModelScope)
-- collectAsState without lifecycle (use collectAsStateWithLifecycle)
-- Not handling process death (use SavedStateHandle)
-- KAPT instead of KSP (KSP is 2x faster)
-- Hardcoded versions in build.gradle (use Version Catalog)
-- Toast for user feedback (use Snackbar with SnackbarHostState)
-- God classes (500+ lines)
-- Hardcoded strings/colors
-- No error handling
-- Hardcoded API keys
-- Storing secrets in plain SharedPreferences
-
----
-
-## Pre-Delivery Checklist
-
-### Architecture
-- [ ] MVVM with Clean Architecture layers (UI / ViewModel / Repository / DataSource)
-- [ ] Hilt dependency injection configured
-- [ ] Repository pattern for data access
-- [ ] Sealed interface for UI state (Loading, Success, Error, Empty)
-- [ ] One-shot events via Channel (not SharedFlow replay=0)
-
-### Compose
-- [ ] collectAsStateWithLifecycle (NOT collectAsState)
-- [ ] LazyColumn with stable keys and contentType
-- [ ] rememberSaveable for user input state
-- [ ] Proper Modifier ordering (clickable before padding)
-- [ ] Material3 components (Scaffold, TopAppBar, NavigationBar)
-- [ ] @Preview for all screens with sample data
-
-### Gradle
-- [ ] Version Catalog (libs.versions.toml) for all dependencies
-- [ ] Compose BOM managing Compose versions
-- [ ] KSP for annotation processing (not KAPT)
-- [ ] Correct configurations (implementation vs api vs testImplementation)
-
-### Performance
-- [ ] LazyColumn/LazyGrid with stable keys
-- [ ] Images cached with Coil + size()
-- [ ] No work on main thread (Dispatchers.IO)
-- [ ] derivedStateOf for computed values
-- [ ] Baseline Profiles for startup
-
-### Security
-- [ ] No hardcoded secrets/API keys
-- [ ] EncryptedSharedPreferences for sensitive data
-- [ ] HTTPS for all network calls
-- [ ] R8/ProGuard enabled for release builds
-- [ ] Certificate pinning for sensitive APIs
-
-### Testing
-- [ ] Unit tests for ViewModels (runTest + Turbine + MockK)
-- [ ] Mocked dependencies in tests
-- [ ] Error states tested
-- [ ] Compose UI tests for critical screens
-
-### Accessibility
-- [ ] contentDescription on Images and IconButtons
-- [ ] Sufficient color contrast (4.5:1 minimum)
-- [ ] Touch targets minimum 48dp
-- [ ] Screen reader navigation works
+Before delivering code, verify against the [pre-delivery checklist](references/CHECKLIST.md) covering architecture, Compose, Gradle, performance, security, testing, and accessibility.

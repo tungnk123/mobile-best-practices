@@ -1,6 +1,11 @@
 ---
-name: mobile-best-practices-flutter
-description: "Flutter development intelligence with Dart. 49 architecture patterns, 91 UI patterns, 113 anti-patterns, 101 libraries, 228 performance rules, 437 security practices, 73 testing patterns, 54 Flutter-specific guidelines. Default stack: BLoC/Riverpod + Dio + GoRouter + Drift + CachedNetworkImage. Actions: plan, build, create, design, implement, review, fix, improve, optimize, refactor, architect Flutter apps."
+name: mobile-best-practices
+description: "Flutter development intelligence with Dart. 1,738 searchable entries including 54 Flutter-specific guidelines. Default stack: BLoC/Riverpod + Dio + GoRouter + Drift + CachedNetworkImage. Use when building, reviewing, fixing, or optimizing Flutter apps. Covers architecture patterns, UI components, anti-patterns, performance, security, and testing."
+license: MIT
+compatibility: Requires Python 3.x for BM25 search. Works with Claude Code and other skills-compatible agents.
+metadata:
+  author: tungnk123
+  version: "1.0"
 ---
 
 # Flutter Best Practices - Dart Development Intelligence
@@ -141,140 +146,8 @@ python3 {SKILL_PATH}/scripts/search.py "flutter storage encryption key" --domain
 
 ---
 
-## Code Generation Rules
+## Code Generation & Quality
 
-### Default Stack
+Before generating code, read the [code generation rules](references/CODE-RULES.md) for platform-specific conventions, required patterns, and anti-patterns to avoid.
 
-```
-Architecture:  BLoC + Clean Architecture + Repository Pattern
-State:         flutter_bloc (Cubit for simple, Bloc for complex)
-Routing:       GoRouter with typed routes
-Network:       Dio + Retrofit (code gen)
-Database:      Drift (SQLite) or Hive (NoSQL)
-Image:         CachedNetworkImage
-DI:            get_it + injectable
-Serialization: freezed + json_serializable
-Testing:       bloc_test + mocktail + integration_test
-Linting:       very_good_analysis
-```
-
-### Always Use BLoC/Cubit Pattern
-
-```dart
-// State
-sealed class HomeState {
-  const HomeState();
-}
-
-class HomeLoading extends HomeState {
-  const HomeLoading();
-}
-
-class HomeLoaded extends HomeState {
-  final List<Item> items;
-  const HomeLoaded(this.items);
-}
-
-class HomeError extends HomeState {
-  final String message;
-  const HomeError(this.message);
-}
-
-class HomeEmpty extends HomeState {
-  const HomeEmpty();
-}
-
-// Cubit
-class HomeCubit extends Cubit<HomeState> {
-  final HomeRepository _repository;
-
-  HomeCubit(this._repository) : super(const HomeLoading());
-
-  Future<void> loadData() async {
-    emit(const HomeLoading());
-    try {
-      final items = await _repository.getData();
-      emit(items.isEmpty ? const HomeEmpty() : HomeLoaded(items));
-    } catch (e) {
-      emit(HomeError(e.toString()));
-    }
-  }
-}
-```
-
-### Always Use BlocBuilder/BlocConsumer
-
-```dart
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<HomeCubit, HomeState>(
-      builder: (context, state) => switch (state) {
-        HomeLoading() => const Center(child: CircularProgressIndicator()),
-        HomeLoaded(:final items) => ItemListView(items: items),
-        HomeError(:final message) => ErrorView(message: message, onRetry: () => context.read<HomeCubit>().loadData()),
-        HomeEmpty() => const EmptyStateView(),
-      },
-    );
-  }
-}
-```
-
-### Anti-Patterns to ALWAYS Avoid
-
-- `setState` for complex state (use BLoC/Riverpod/Provider)
-- Business logic in `build()` methods
-- Not disposing controllers/streams
-- Non-`const` constructors for static widgets
-- `Column`/`Row` for long lists (use `ListView.builder`)
-- Not using `freezed` for data classes
-- Mutable state in widgets
-- God widgets (500+ lines)
-- Hardcoded strings/colors - use l10n and ThemeData
-- Storing secrets in SharedPreferences - use flutter_secure_storage
-
----
-
-## Pre-Delivery Checklist
-
-### Architecture
-- [ ] BLoC/Cubit or Riverpod for state management
-- [ ] Clean Architecture layers (presentation / domain / data)
-- [ ] Repository pattern for data access
-- [ ] Sealed class for UI state
-- [ ] Dependency injection with get_it
-
-### Widgets
-- [ ] `const` constructors where possible
-- [ ] `ListView.builder` for long lists (not Column)
-- [ ] Proper widget decomposition (no 500+ line widgets)
-- [ ] Keys on list items
-- [ ] `const` keyword on static widgets
-
-### Performance
-- [ ] `const` constructors to prevent unnecessary rebuilds
-- [ ] `ListView.builder`/`GridView.builder` for lazy loading
-- [ ] Images cached with CachedNetworkImage
-- [ ] No heavy computation in build methods
-- [ ] RepaintBoundary for complex animations
-
-### Security
-- [ ] flutter_secure_storage for sensitive data
-- [ ] Certificate pinning for sensitive APIs
-- [ ] No hardcoded secrets in source code
-- [ ] Obfuscation enabled for release builds
-- [ ] Input validation on user inputs
-
-### Testing
-- [ ] BLoC tests with bloc_test
-- [ ] Widget tests for critical UI
-- [ ] Integration tests for critical flows
-- [ ] Mocked dependencies with mocktail
-
-### Accessibility
-- [ ] Semantics widgets for screen readers
-- [ ] Sufficient color contrast
-- [ ] Touch targets minimum 48x48
-- [ ] Proper label text for form fields
+Before delivering code, verify against the [pre-delivery checklist](references/CHECKLIST.md) covering architecture, widgets, performance, security, testing, and accessibility.

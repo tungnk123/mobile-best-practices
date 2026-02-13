@@ -10,8 +10,11 @@ This file guides Claude Code (claude.ai/code) when working with this repository.
 
 **Source of Truth:** `src/mobile-best-practices/`
 
+Follows the [Agent Skills](https://agentskills.io/specification) open format.
+
 ```
-src/mobile-best-practices/
+src/mobile-best-practices/           (Agent Skills directory)
+├── SKILL.md                 (Required: skill metadata + instructions)
 ├── data/                    (Canonical CSV databases - 15 files)
 │   ├── architectures.csv    (49 architecture patterns)
 │   ├── libraries.csv        (101 libraries)
@@ -29,9 +32,12 @@ src/mobile-best-practices/
 │       ├── ios.csv           (60 iOS guidelines)
 │       ├── flutter.csv       (54 Flutter guidelines)
 │       └── react-native.csv  (55 React Native guidelines)
-├── scripts/
+├── scripts/                 (Executable code for agents)
 │   ├── core.py              (BM25 search engine)
 │   └── search.py            (CLI search interface)
+├── references/              (Progressive disclosure docs)
+│   ├── CODE-RULES.md        (Code generation rules & anti-patterns)
+│   └── CHECKLIST.md         (Pre-delivery quality checklist)
 └── templates/
     ├── base/
     │   ├── skill-content.md  (Common SKILL.md content)
@@ -45,9 +51,18 @@ src/mobile-best-practices/
 cli/                          (npm installer: mobile-best-practices)
 ├── src/
 ├── assets/                   (bundled data ~500KB)
+│   ├── data/                 (CSV databases)
+│   ├── scripts/              (Search engine)
+│   ├── references/           (Reference docs)
+│   ├── skills/               (Platform-specific SKILL.md variants)
+│   └── templates/            (Platform configs)
 └── package.json
 
 .claude/skills/mobile-best-practices/ (symlinks to src/)
+├── SKILL.md → src/SKILL.md
+├── data → src/data
+├── scripts → src/scripts
+└── references → src/references
 ```
 
 ## Search Command
@@ -91,10 +106,15 @@ When modifying files:
    - `base/skill-content.md` - Common SKILL.md content
    - `platforms/*.json` - Platform-specific configs
 
-3. **CLI Assets** - Sync before publishing:
+3. **References** - Edit in `src/mobile-best-practices/references/`:
+   - `CODE-RULES.md` - Code generation rules and anti-patterns
+   - `CHECKLIST.md` - Pre-delivery quality checklist
+
+4. **CLI Assets** - Sync before publishing:
    ```bash
    cp -r src/mobile-best-practices/data/* cli/assets/data/
    cp -r src/mobile-best-practices/scripts/* cli/assets/scripts/
+   cp -r src/mobile-best-practices/references/* cli/assets/references/
    cp -r src/mobile-best-practices/templates/* cli/assets/templates/
    ```
 

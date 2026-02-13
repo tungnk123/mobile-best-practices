@@ -97,6 +97,7 @@ export function installForPlatform(
   if (config.type === 'skill' || config.type === 'skills') {
     copyDir(join(assetsDir, 'data'), join(targetDir, 'data'));
     copyDir(join(assetsDir, 'scripts'), join(targetDir, 'scripts'));
+    copyDir(join(assetsDir, 'references'), join(targetDir, 'references'));
     generateSkillFile(config, targetDir, mobilePlatform);
   } else {
     // For rules/instructions/workflow, generate a single file
