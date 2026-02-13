@@ -99,6 +99,17 @@ export function installForPlatform(
     copyDir(join(assetsDir, 'scripts'), join(targetDir, 'scripts'));
     copyDir(join(assetsDir, 'references'), join(targetDir, 'references'));
     generateSkillFile(config, targetDir, mobilePlatform);
+
+    // Copy custom slash commands for Claude Code and Cursor
+    if (platform === 'claude' || platform === 'cursor') {
+      const commandsDir = join(assetsDir, 'commands');
+      if (existsSync(commandsDir)) {
+        const targetCommandsDir = platform === 'claude'
+          ? join(projectDir, '.claude', 'commands')
+          : join(projectDir, '.cursor', 'commands');
+        copyDir(commandsDir, targetCommandsDir);
+      }
+    }
   } else {
     // For rules/instructions/workflow, generate a single file
     generateSkillFile(config, targetDir, mobilePlatform);
@@ -132,5 +143,78 @@ export function installForPlatform(
     }
 
     writeFileSync(settingsPath, JSON.stringify(settings, null, 2) + '\n', 'utf-8');
+  }
+}
+
+export function updateGitignore(projectDir: string, platform: string): void {
+  const gitignorePath = join(projectDir, '.gitignore');
+
+  // Patterns to add based on platform
+  const patterns: string[] = [];
+
+  if (platform === 'claude' || platform === 'all') {
+    patterns.push('.claude/');
+  }
+  if (platform === 'cursor' || platform === 'all') {
+    patterns.push('.cursor/');
+  }
+  if (platform === 'windsurf' || platform === 'all') {
+    patterns.push('.windsurf/');
+  }
+  if (platform === 'opencode' || platform === 'all') {
+    patterns.push('.opencode/');
+  }
+  if (platform === 'copilot' || platform === 'all') {
+    patterns.push('.github/copilot/');
+  }
+  if (platform === 'roocode' || platform === 'all') {
+    patterns.push('.roo/');
+  }
+  if (platform === 'continue' || platform === 'all') {
+    patterns.push('.continue/');
+  }
+  if (platform === 'kiro' || platform === 'all') {
+    patterns.push('.kiro/');
+  }
+  if (platform === 'qoder' || platform === 'all') {
+    patterns.push('.qoder/');
+  }
+  if (platform === 'codebuddy' || platform === 'all') {
+    patterns.push('.codebuddy/');
+  }
+  if (platform === 'trae' || platform === 'all') {
+    patterns.push('.trae/');
+  }
+  if (platform === 'antigravity' || platform === 'all') {
+    patterns.push('.antigravity/');
+  }
+
+  // Also add shared directory
+  patterns.push('.mobile-best-practices/');
+
+  let content = '';
+  if (existsSync(gitignorePath)) {
+    content = readFileSync(gitignorePath, 'utf-8');
+  }
+
+  // Add header comment if not present
+  const header = '# AI Assistant Skills (mobile-best-practices)';
+  let needsUpdate = false;
+
+  if (!content.includes(header)) {
+    content += (content && !content.endsWith('\n\n') ? '\n\n' : '') + header + '\n';
+    needsUpdate = true;
+  }
+
+  // Add missing patterns
+  for (const pattern of patterns) {
+    if (!content.includes(pattern)) {
+      content += pattern + '\n';
+      needsUpdate = true;
+    }
+  }
+
+  if (needsUpdate) {
+    writeFileSync(gitignorePath, content, 'utf-8');
   }
 }

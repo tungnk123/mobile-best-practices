@@ -22,7 +22,11 @@
       "WebFetch(domain:googlesamples.github.io)",
       "WebFetch(domain:pinterest.github.io)",
       "WebFetch(domain:detekt.dev)",
-      "Bash(ln:*)"
+      "Bash(ln:*)",
+      "Bash(npm view:*)",
+      "Bash(npm whoami:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm publish:*)"
     ]
   }
 }

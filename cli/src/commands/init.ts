@@ -2,7 +2,7 @@ import chalk from 'chalk';
 import ora from 'ora';
 import prompts from 'prompts';
 import { SUPPORTED_PLATFORMS, type AIPlatform, type MobilePlatform } from '../types/index.js';
-import { installForPlatform } from '../utils/index.js';
+import { installForPlatform, updateGitignore } from '../utils/index.js';
 
 export async function initCommand(options: { ai?: string; offline?: boolean; platform?: string }): Promise<void> {
   let aiPlatform = options.ai as AIPlatform;
@@ -73,24 +73,66 @@ export async function initCommand(options: { ai?: string; offline?: boolean; pla
     }
   }
 
+  // Update .gitignore to exclude AI assistant directories
+  try {
+    updateGitignore(projectDir, aiPlatform);
+  } catch (error) {
+    // Non-critical error, just log it
+    console.log(chalk.yellow(`Note: Could not update .gitignore: ${(error as Error).message}`));
+  }
+
   console.log();
-  console.log(chalk.green('Mobile Best Practices skill installed successfully!'));
-  console.log(chalk.dim(`Platform: ${mobilePlatform}`));
+  console.log(chalk.green('✓ Mobile Best Practices skill installed successfully!'));
+  console.log(chalk.dim(`  Platform: ${mobilePlatform}`));
+
+  // Show where files were installed
+  const installPaths = aiPlatforms.map(p => {
+    const dirName = p === 'claude' ? '.claude' :
+      p === 'cursor' ? '.cursor' :
+        p === 'windsurf' ? '.windsurf' :
+          p === 'copilot' ? '.github/copilot' :
+            p === 'opencode' ? '.opencode' :
+              `.${p}`;
+    return `${dirName}/skills/mobile-best-practices/`;
+  });
+  console.log(chalk.dim(`  Installed to: ${installPaths.join(', ')}`));
   console.log();
-  console.log(chalk.dim('Usage:'));
-  if (aiPlatform === 'claude' || aiPlatform === 'all') {
-    console.log(chalk.dim('  Just chat naturally with Claude Code:'));
-    if (mobilePlatform === 'android') {
-      console.log(chalk.white('  "Build a product list screen with Compose"'));
-    } else if (mobilePlatform === 'ios') {
-      console.log(chalk.white('  "Build a settings screen with SwiftUI"'));
-    } else if (mobilePlatform === 'flutter') {
-      console.log(chalk.white('  "Build a product list with BLoC"'));
-    } else if (mobilePlatform === 'react-native') {
-      console.log(chalk.white('  "Build a product list with React Navigation"'));
-    } else {
-      console.log(chalk.white('  "Build a product list screen for my e-commerce app"'));
-    }
+
+  console.log(chalk.cyan('How to use:'));
+  console.log(chalk.dim('  No commands needed - just chat naturally with your AI assistant!'));
+  console.log(chalk.dim('  The AI will automatically search 1,738 best practices as you work.'));
+  console.log();
+
+  console.log(chalk.yellow('Examples:'));
+  if (mobilePlatform === 'android' || mobilePlatform === 'all') {
+    console.log(chalk.white('  • "Review my project for security issues"'));
+    console.log(chalk.white('  • "Build a login screen with Compose"'));
+    console.log(chalk.white('  • "Check my code for performance problems"'));
+  } else if (mobilePlatform === 'ios') {
+    console.log(chalk.white('  • "Review my iOS app for security vulnerabilities"'));
+    console.log(chalk.white('  • "Build a settings screen with SwiftUI"'));
+    console.log(chalk.white('  • "Check my app for accessibility issues"'));
+  } else if (mobilePlatform === 'flutter') {
+    console.log(chalk.white('  • "Audit my Flutter app for OWASP issues"'));
+    console.log(chalk.white('  • "Build a product list with BLoC"'));
+    console.log(chalk.white('  • "Find performance bottlenecks in my app"'));
+  } else if (mobilePlatform === 'react-native') {
+    console.log(chalk.white('  • "Review my React Native app for anti-patterns"'));
+    console.log(chalk.white('  • "Build a product list with React Navigation"'));
+    console.log(chalk.white('  • "Optimize my FlatList performance"'));
+  }
+  console.log();
+  console.log(chalk.dim('Tip: The skill works invisibly - no slash commands, no special syntax!'));
+
+  // Add slash command info for Claude Code and Cursor
+  if (aiPlatform === 'claude' || aiPlatform === 'cursor' || aiPlatform === 'all') {
+    console.log();
+    console.log(chalk.cyan('Slash commands (Claude Code & Cursor):'));
+    console.log(chalk.dim('  Type / to see available commands:'));
+    console.log(chalk.white('  • /mobile-best-practices - Main skill'));
+    console.log(chalk.white('  • /mobile-security-audit - Security vulnerability scan'));
+    console.log(chalk.white('  • /mobile-performance-check - Performance analysis'));
+    console.log(chalk.white('  • /mobile-setup-android - New Android project setup'));
   }
   console.log();
 }

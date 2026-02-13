@@ -36,6 +36,8 @@ npx mobile-best-practices init
 
 This launches an interactive prompt — pick your AI assistant and mobile platform, and the skill files are installed into your project.
 
+**Note**: The installer automatically updates your `.gitignore` to exclude AI assistant directories (`.claude/`, `.cursor/`, etc.), so skill files won't appear in git changes.
+
 ### One-liner Install
 
 ```bash
@@ -94,6 +96,17 @@ AI assistant automatically:
   4. Searches anti-patterns → warns about common banking app mistakes
   5. Generates production-ready code following all best practices
 ```
+
+### Slash Commands (Claude Code & Cursor)
+
+Claude Code and Cursor users can also invoke the skill using slash commands:
+
+- **`/mobile-best-practices`** - Invokes the main skill
+- **`/mobile-security-audit`** - Runs a comprehensive security audit
+- **`/mobile-performance-check`** - Analyzes performance issues
+- **`/mobile-setup-android`** - Sets up a new Android project with best practices
+
+Just type `/` in your AI assistant to see all available commands!
 
 ---
 
