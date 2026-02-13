@@ -1,23 +1,23 @@
 # Mobile Best Practices
 
-Searchable database of **598 mobile development best practices** packaged as an AI skill for Claude Code and 14 other AI coding assistants. Covers Android, iOS, Flutter, and React Native.
+Searchable database of **1,738 mobile development best practices** packaged as an AI skill for Claude Code and 14 other AI coding assistants. Covers Android, iOS, Flutter, and React Native.
 
 ## What's Inside
 
 | CSV Database | Entries | Description |
 |---|---|---|
-| Architecture Patterns | 25 | MVVM, MVI, Clean Architecture, VIPER, TCA, BLoC, Redux |
-| UI Patterns | 55 | Bottom navigation, lists, sheets, pull-to-refresh, tabs |
-| Anti-Patterns | 54 | God Activity, memory leaks, prop drilling, setState abuse |
-| Libraries | 64 | Retrofit, Hilt, Coil, Kingfisher, Dio, BLoC, Redux Toolkit |
-| Performance | 43 | Startup, recomposition, memory, battery, image loading |
-| Security | 35 | Encryption, keychain, SSL pinning, biometric, token storage |
-| Testing | 35 | Unit tests, UI tests, BLoC tests, snapshot, mocking |
-| Reasoning Rules | 32 | Product-type recommendations (e-commerce, banking, etc.) |
+| Architecture Patterns | 49 | MVVM, MVI, Clean Architecture, VIPER, TCA, BLoC, Redux, KMP, Modular Monolith |
+| UI Patterns | 91 | Navigation, lists, sheets, inputs, modals, feedback, animation, onboarding, stepper |
+| Anti-Patterns | 113 | God Activity, memory leaks, prop drilling, setState abuse, UX, build, concurrency |
+| Libraries | 101 | Retrofit, Hilt, Coil, Kingfisher, Dio, BLoC, Redux, Crashlytics, Detekt, Lottie |
+| Performance | 228 | Startup, rendering, memory, network, Compose, CI/CD, monitoring, localization |
+| Security | 437 | Encryption, keychain, SSL pinning, biometric, AI security, compliance, privacy |
+| Testing | 73 | Unit, UI, integration, E2E (Maestro), screenshot (Paparazzi), contract, fuzz |
+| Reasoning Rules | 56 | Product-type recommendations across 12 product types and 4 platforms |
 | Project Templates | 18 | Starter configs for common app types |
-| Code Snippets | 28 | Copy-paste Android/Compose templates |
-| Gradle Dependencies | 46 | Ready-to-paste dependency declarations |
-| Platform Guidelines | 163 | Android (59), iOS (35), Flutter (34), React Native (35) |
+| Code Snippets | 79 | Copy-paste templates for Android, iOS, Flutter, and React Native |
+| Gradle Dependencies | 78 | Dependencies, plugins, code quality, monitoring, analytics |
+| Platform Guidelines | 415 | Android (246), iOS (60), Flutter (54), React Native (55) |
 
 Every entry includes a **Reference URL** linking to official docs, GitHub repos, or guides.
 

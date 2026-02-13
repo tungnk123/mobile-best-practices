@@ -4,7 +4,7 @@ This file guides Claude Code (claude.ai/code) when working with this repository.
 
 ## Project Overview
 
-**Mobile Best Practices** is a searchable database of 500+ mobile development best practices packaged as an AI skill for Claude Code and other AI coding assistants. It covers architecture patterns, UI components, anti-patterns, libraries, performance rules, security practices, testing patterns, code snippets, Gradle dependencies, and platform-specific guidelines for Android, iOS, Flutter, and React Native.
+**Mobile Best Practices** is a searchable database of **1,738 mobile development best practices** packaged as an AI skill for Claude Code and other AI coding assistants. It covers architecture patterns, UI components, anti-patterns, libraries, performance rules, security practices, testing patterns, code snippets, Gradle dependencies, and platform-specific guidelines for Android, iOS, Flutter, and React Native.
 
 ## Architecture
 
@@ -13,22 +13,22 @@ This file guides Claude Code (claude.ai/code) when working with this repository.
 ```
 src/mobile-best-practices/
 ├── data/                    (Canonical CSV databases - 15 files)
-│   ├── architectures.csv    (26 architecture patterns)
-│   ├── libraries.csv        (66 libraries)
-│   ├── ui-patterns.csv      (57 UI/UX patterns)
-│   ├── anti-patterns.csv    (56 anti-patterns)
-│   ├── testing.csv          (37 testing patterns)
-│   ├── security.csv         (36 security practices)
-│   ├── performance.csv      (45 performance rules)
-│   ├── code-snippets.csv    (30 code templates)
-│   ├── reasoning-rules.csv  (34 product recommendations)
-│   ├── project-templates.csv(20 starters)
-│   ├── gradle-deps.csv      (48 Gradle deps)
+│   ├── architectures.csv    (49 architecture patterns)
+│   ├── libraries.csv        (101 libraries)
+│   ├── ui-patterns.csv      (91 UI/UX patterns)
+│   ├── anti-patterns.csv    (113 anti-patterns)
+│   ├── testing.csv          (73 testing patterns)
+│   ├── security.csv         (437 security practices)
+│   ├── performance.csv      (228 performance rules)
+│   ├── code-snippets.csv    (79 code templates)
+│   ├── reasoning-rules.csv  (56 product recommendations)
+│   ├── project-templates.csv(18 starters)
+│   ├── gradle-deps.csv      (78 Gradle deps)
 │   └── platforms/
-│       ├── android.csv      (60+ Android guidelines)
-│       ├── ios.csv           (35+ iOS guidelines)
-│       ├── flutter.csv       (34+ Flutter guidelines)
-│       └── react-native.csv  (35+ React Native guidelines)
+│       ├── android.csv      (246 Android guidelines)
+│       ├── ios.csv           (60 iOS guidelines)
+│       ├── flutter.csv       (54 Flutter guidelines)
+│       └── react-native.csv  (55 React Native guidelines)
 ├── scripts/
 │   ├── core.py              (BM25 search engine)
 │   └── search.py            (CLI search interface)
@@ -57,7 +57,7 @@ python3 src/mobile-best-practices/scripts/search.py "<query>" --domain <domain> 
 ```
 
 ### Domains
-- `snippet` - Copy-paste code templates (Android)
+- `snippet` - Copy-paste code templates (Android, iOS, Flutter, React Native)
 - `gradle` - Gradle dependency declarations
 - `reasoning` - Product type recommendations
 - `architecture` - Architecture patterns
