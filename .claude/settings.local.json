@@ -18,7 +18,10 @@
       "Bash(node /home/tungnk123/Desktop/android/mobile-best-practices/cli/dist/index.js:*)",
       "Bash(node:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "WebFetch(domain:googlesamples.github.io)",
+      "WebFetch(domain:pinterest.github.io)",
+      "WebFetch(domain:detekt.dev)"
     ]
   }
 }
