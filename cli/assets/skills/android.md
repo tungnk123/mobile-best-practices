@@ -1,11 +1,11 @@
 ---
 name: mobile-best-practices-android
-description: "Android development intelligence with Jetpack Compose. 25+ architecture patterns, 55+ UI patterns, 55+ anti-patterns, 65+ libraries, 45+ performance rules, 35+ security practices, 35+ testing patterns, 30+ code snippets, 48+ Gradle declarations, 60+ Android-specific guidelines. Default stack: MVVM + Hilt + Room + Retrofit + Coil + Navigation Compose + Material3. Actions: plan, build, create, design, implement, review, fix, improve, optimize, refactor, architect Android apps."
+description: "Android development intelligence with Jetpack Compose. 49 architecture patterns, 91 UI patterns, 113 anti-patterns, 101 libraries, 228 performance rules, 437 security practices, 73 testing patterns, 79 code snippets, 78 Gradle declarations, 246 Android-specific guidelines. Default stack: MVVM + Hilt + Room + Retrofit + Coil + Navigation Compose + Material3. Actions: plan, build, create, design, implement, review, fix, improve, optimize, refactor, architect Android apps."
 ---
 
 # Android Best Practices - Jetpack Compose Development Intelligence
 
-Searchable database of 500+ mobile best practices, **optimized for Android with Jetpack Compose**. All searches default to Android platform. Includes copy-paste code snippets and ready-to-use Gradle dependency declarations.
+Searchable database of **1,738 mobile best practices**, **optimized for Android with Jetpack Compose**. All searches default to Android platform. Includes copy-paste code snippets and ready-to-use Gradle dependency declarations.
 
 ## Prerequisites
 

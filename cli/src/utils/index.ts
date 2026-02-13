@@ -68,7 +68,7 @@ export function generateSkillFile(
 
     content = `---
 name: mobile-best-practices
-description: "Mobile development intelligence for Android, iOS, Flutter, and React Native. 500+ best practices."
+description: "Mobile development intelligence for Android, iOS, Flutter, and React Native. 1,738 best practices."
 ---
 
 ${processedBase}

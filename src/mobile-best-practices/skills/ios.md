@@ -1,11 +1,11 @@
 ---
 name: mobile-best-practices-ios
-description: "iOS development intelligence with SwiftUI. 25+ architecture patterns, 55+ UI patterns, 55+ anti-patterns, 65+ libraries, 45+ performance rules, 35+ security practices, 35+ testing patterns, 35+ iOS-specific guidelines. Default stack: MVVM + SwiftUI + Combine + async/await + SwiftData + URLSession + Kingfisher + NavigationStack. Actions: plan, build, create, design, implement, review, fix, improve, optimize, refactor, architect iOS apps."
+description: "iOS development intelligence with SwiftUI. 49 architecture patterns, 91 UI patterns, 113 anti-patterns, 101 libraries, 228 performance rules, 437 security practices, 73 testing patterns, 60 iOS-specific guidelines. Default stack: MVVM + SwiftUI + Combine + async/await + SwiftData + URLSession + Kingfisher + NavigationStack. Actions: plan, build, create, design, implement, review, fix, improve, optimize, refactor, architect iOS apps."
 ---
 
 # iOS Best Practices - SwiftUI Development Intelligence
 
-Searchable database of 500+ mobile best practices, **optimized for iOS with SwiftUI**. All searches default to iOS platform. Covers architecture, UI patterns, security, performance, and testing for Apple platforms.
+Searchable database of **1,738 mobile best practices**, **optimized for iOS with SwiftUI**. All searches default to iOS platform. Covers architecture, UI patterns, security, performance, and testing for Apple platforms.
 
 ## Prerequisites
 

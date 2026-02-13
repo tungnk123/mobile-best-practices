@@ -1,11 +1,11 @@
 ---
 name: mobile-best-practices-react-native
-description: "React Native development intelligence with TypeScript. 25+ architecture patterns, 55+ UI patterns, 55+ anti-patterns, 65+ libraries, 45+ performance rules, 35+ security practices, 35+ testing patterns, 35+ React Native-specific guidelines. Default stack: Redux Toolkit/Zustand + Axios + React Navigation + MMKV + FastImage + React Native Reanimated. Actions: plan, build, create, design, implement, review, fix, improve, optimize, refactor, architect React Native apps."
+description: "React Native development intelligence with TypeScript. 49 architecture patterns, 91 UI patterns, 113 anti-patterns, 101 libraries, 228 performance rules, 437 security practices, 73 testing patterns, 55 React Native-specific guidelines. Default stack: Redux Toolkit/Zustand + Axios + React Navigation + MMKV + FastImage + React Native Reanimated. Actions: plan, build, create, design, implement, review, fix, improve, optimize, refactor, architect React Native apps."
 ---
 
 # React Native Best Practices - TypeScript Development Intelligence
 
-Searchable database of 500+ mobile best practices, **optimized for React Native with TypeScript**. All searches default to React Native platform. Covers architecture, hooks, navigation, performance, and testing for cross-platform RN apps.
+Searchable database of **1,738 mobile best practices**, **optimized for React Native with TypeScript**. All searches default to React Native platform. Covers architecture, hooks, navigation, performance, and testing for cross-platform RN apps.
 
 ## Prerequisites
 

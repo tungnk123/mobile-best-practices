@@ -1,6 +1,6 @@
 # Mobile Best Practices - Development Intelligence
 
-Searchable database of 500+ mobile development best practices covering architecture patterns, UI components, anti-patterns, libraries, performance rules, security practices, testing patterns, code snippets, Gradle dependencies, and platform-specific guidelines for Android, iOS, Flutter, and React Native.
+Searchable database of **1,738 mobile development best practices** covering architecture patterns, UI components, anti-patterns, libraries, performance rules, security practices, testing patterns, code snippets, Gradle dependencies, and platform-specific guidelines for Android, iOS, Flutter, and React Native.
 
 **Android-first**: Optimized for Android/Jetpack Compose with full copy-paste code snippets and ready-to-use Gradle declarations.
 

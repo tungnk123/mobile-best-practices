@@ -1,11 +1,11 @@
 ---
 name: mobile-best-practices-flutter
-description: "Flutter development intelligence with Dart. 25+ architecture patterns, 55+ UI patterns, 55+ anti-patterns, 65+ libraries, 45+ performance rules, 35+ security practices, 35+ testing patterns, 34+ Flutter-specific guidelines. Default stack: BLoC/Riverpod + Dio + GoRouter + Drift + CachedNetworkImage. Actions: plan, build, create, design, implement, review, fix, improve, optimize, refactor, architect Flutter apps."
+description: "Flutter development intelligence with Dart. 49 architecture patterns, 91 UI patterns, 113 anti-patterns, 101 libraries, 228 performance rules, 437 security practices, 73 testing patterns, 54 Flutter-specific guidelines. Default stack: BLoC/Riverpod + Dio + GoRouter + Drift + CachedNetworkImage. Actions: plan, build, create, design, implement, review, fix, improve, optimize, refactor, architect Flutter apps."
 ---
 
 # Flutter Best Practices - Dart Development Intelligence
 
-Searchable database of 500+ mobile best practices, **optimized for Flutter with Dart**. All searches default to Flutter platform. Covers architecture, widgets, state management, performance, and testing for cross-platform Flutter apps.
+Searchable database of **1,738 mobile best practices**, **optimized for Flutter with Dart**. All searches default to Flutter platform. Covers architecture, widgets, state management, performance, and testing for cross-platform Flutter apps.
 
 ## Prerequisites
 
