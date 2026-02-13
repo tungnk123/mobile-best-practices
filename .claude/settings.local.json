@@ -26,7 +26,8 @@
       "Bash(npm view:*)",
       "Bash(npm whoami:*)",
       "Bash(npm run build:*)",
-      "Bash(npm publish:*)"
+      "Bash(npm publish:*)",
+      "Bash(npm login:*)"
     ]
   }
 }

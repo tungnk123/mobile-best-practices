@@ -58,19 +58,19 @@ Use `search.py` to gather comprehensive information. Run multiple searches acros
 
 ```bash
 # Basic domain search
-python3 .claude/skills/mobile-best-practices/scripts/search.py "<keyword>" --domain <domain> [-n <max_results>]
+python3 {SKILL_PATH}/scripts/search.py "<keyword>" --domain <domain> [-n <max_results>]
 
 # Platform-specific guidelines
-python3 .claude/skills/mobile-best-practices/scripts/search.py "<keyword>" --platform android
+python3 {SKILL_PATH}/scripts/search.py "<keyword>" --platform android
 
 # Filter any domain by platform
-python3 .claude/skills/mobile-best-practices/scripts/search.py "<keyword>" --domain library --filter-platform android
+python3 {SKILL_PATH}/scripts/search.py "<keyword>" --domain library --filter-platform android
 
 # Get code snippets (Android copy-paste templates)
-python3 .claude/skills/mobile-best-practices/scripts/search.py "viewmodel hilt" --domain snippet
+python3 {SKILL_PATH}/scripts/search.py "viewmodel hilt" --domain snippet
 
 # Get Gradle dependencies
-python3 .claude/skills/mobile-best-practices/scripts/search.py "compose room hilt" --domain gradle
+python3 {SKILL_PATH}/scripts/search.py "compose room hilt" --domain gradle
 ```
 
 ### Step 3: Android-First Workflow (Recommended Order)
@@ -79,22 +79,22 @@ For Android projects, search in this order:
 
 ```bash
 # 1. Get code snippet for what you're building
-python3 .claude/skills/mobile-best-practices/scripts/search.py "viewmodel repository" --domain snippet -n 3
+python3 {SKILL_PATH}/scripts/search.py "viewmodel repository" --domain snippet -n 3
 
 # 2. Get Gradle dependencies needed
-python3 .claude/skills/mobile-best-practices/scripts/search.py "hilt room retrofit" --domain gradle -n 5
+python3 {SKILL_PATH}/scripts/search.py "hilt room retrofit" --domain gradle -n 5
 
 # 3. Get Android-specific best practices
-python3 .claude/skills/mobile-best-practices/scripts/search.py "compose state hilt" --platform android -n 5
+python3 {SKILL_PATH}/scripts/search.py "compose state hilt" --platform android -n 5
 
 # 4. Check anti-patterns to avoid
-python3 .claude/skills/mobile-best-practices/scripts/search.py "android compose" --domain antipattern
+python3 {SKILL_PATH}/scripts/search.py "android compose" --domain antipattern
 
 # 5. Get architecture guidance
-python3 .claude/skills/mobile-best-practices/scripts/search.py "mvvm clean architecture" --domain architecture
+python3 {SKILL_PATH}/scripts/search.py "mvvm clean architecture" --domain architecture
 
 # 6. Check performance rules
-python3 .claude/skills/mobile-best-practices/scripts/search.py "compose recomposition lazy" --domain performance
+python3 {SKILL_PATH}/scripts/search.py "compose recomposition lazy" --domain performance
 ```
 
 ### Step 4: Generate Code
@@ -148,79 +148,79 @@ Use snippet results as starting templates. Customize for user's specific needs. 
 
 ```bash
 # 1. Get ViewModel + Screen code templates
-python3 .claude/skills/mobile-best-practices/scripts/search.py "viewmodel compose screen" --domain snippet -n 3
+python3 {SKILL_PATH}/scripts/search.py "viewmodel compose screen" --domain snippet -n 3
 
 # 2. Get Gradle deps for image loading and paging
-python3 .claude/skills/mobile-best-practices/scripts/search.py "coil paging compose" --domain gradle -n 5
+python3 {SKILL_PATH}/scripts/search.py "coil paging compose" --domain gradle -n 5
 
 # 3. Get LazyColumn and image best practices
-python3 .claude/skills/mobile-best-practices/scripts/search.py "lazy list image performance" --platform android -n 3
+python3 {SKILL_PATH}/scripts/search.py "lazy list image performance" --platform android -n 3
 
 # 4. Get UI patterns for product list
-python3 .claude/skills/mobile-best-practices/scripts/search.py "product list card" --domain ui
+python3 {SKILL_PATH}/scripts/search.py "product list card" --domain ui
 ```
 
 ### New Android Project: "Build an e-commerce app"
 
 ```bash
 # 1. Get full product-type recommendation
-python3 .claude/skills/mobile-best-practices/scripts/search.py "e-commerce" --domain reasoning
+python3 {SKILL_PATH}/scripts/search.py "e-commerce" --domain reasoning
 
 # 2. Get architecture details
-python3 .claude/skills/mobile-best-practices/scripts/search.py "mvvm clean architecture android" --domain architecture
+python3 {SKILL_PATH}/scripts/search.py "mvvm clean architecture android" --domain architecture
 
 # 3. Get ALL code templates
-python3 .claude/skills/mobile-best-practices/scripts/search.py "viewmodel repository hilt" --domain snippet -n 5
-python3 .claude/skills/mobile-best-practices/scripts/search.py "room navigation theme" --domain snippet -n 5
+python3 {SKILL_PATH}/scripts/search.py "viewmodel repository hilt" --domain snippet -n 5
+python3 {SKILL_PATH}/scripts/search.py "room navigation theme" --domain snippet -n 5
 
 # 4. Get ALL Gradle dependencies
-python3 .claude/skills/mobile-best-practices/scripts/search.py "compose hilt room retrofit" --domain gradle -n 10
+python3 {SKILL_PATH}/scripts/search.py "compose hilt room retrofit" --domain gradle -n 10
 
 # 5. Get anti-patterns and performance
-python3 .claude/skills/mobile-best-practices/scripts/search.py "android architecture" --domain antipattern
-python3 .claude/skills/mobile-best-practices/scripts/search.py "compose startup image" --domain performance
+python3 {SKILL_PATH}/scripts/search.py "android architecture" --domain antipattern
+python3 {SKILL_PATH}/scripts/search.py "compose startup image" --domain performance
 ```
 
 ### Code Review: "Review my Android code"
 
 ```bash
 # 1. Check for anti-patterns
-python3 .claude/skills/mobile-best-practices/scripts/search.py "android compose viewmodel" --domain antipattern -n 5
+python3 {SKILL_PATH}/scripts/search.py "android compose viewmodel" --domain antipattern -n 5
 
 # 2. Check Compose best practices
-python3 .claude/skills/mobile-best-practices/scripts/search.py "state recomposition lifecycle" --platform android -n 5
+python3 {SKILL_PATH}/scripts/search.py "state recomposition lifecycle" --platform android -n 5
 
 # 3. Check performance
-python3 .claude/skills/mobile-best-practices/scripts/search.py "compose lazy image startup" --domain performance
+python3 {SKILL_PATH}/scripts/search.py "compose lazy image startup" --domain performance
 
 # 4. Check security
-python3 .claude/skills/mobile-best-practices/scripts/search.py "android storage encryption api key" --domain security
+python3 {SKILL_PATH}/scripts/search.py "android storage encryption api key" --domain security
 ```
 
 ### Gradle Setup: "What dependencies do I need?"
 
 ```bash
 # Get all core Android dependencies
-python3 .claude/skills/mobile-best-practices/scripts/search.py "compose material3 bom" --domain gradle -n 5
-python3 .claude/skills/mobile-best-practices/scripts/search.py "hilt room retrofit" --domain gradle -n 5
-python3 .claude/skills/mobile-best-practices/scripts/search.py "navigation coil paging" --domain gradle -n 5
-python3 .claude/skills/mobile-best-practices/scripts/search.py "testing junit mockk turbine" --domain gradle -n 5
+python3 {SKILL_PATH}/scripts/search.py "compose material3 bom" --domain gradle -n 5
+python3 {SKILL_PATH}/scripts/search.py "hilt room retrofit" --domain gradle -n 5
+python3 {SKILL_PATH}/scripts/search.py "navigation coil paging" --domain gradle -n 5
+python3 {SKILL_PATH}/scripts/search.py "testing junit mockk turbine" --domain gradle -n 5
 ```
 
 ### Cross-Platform: "Compare architectures for banking iOS app"
 
 ```bash
 # 1. Get reasoning-based recommendation
-python3 .claude/skills/mobile-best-practices/scripts/search.py "banking" --domain reasoning
+python3 {SKILL_PATH}/scripts/search.py "banking" --domain reasoning
 
 # 2. Compare architectures
-python3 .claude/skills/mobile-best-practices/scripts/search.py "viper tca mvvm ios" --domain architecture
+python3 {SKILL_PATH}/scripts/search.py "viper tca mvvm ios" --domain architecture
 
 # 3. Get security for banking
-python3 .claude/skills/mobile-best-practices/scripts/search.py "banking encryption biometric" --domain security
+python3 {SKILL_PATH}/scripts/search.py "banking encryption biometric" --domain security
 
 # 4. iOS-specific practices
-python3 .claude/skills/mobile-best-practices/scripts/search.py "keychain security architecture" --platform ios
+python3 {SKILL_PATH}/scripts/search.py "keychain security architecture" --platform ios
 ```
 
 ---

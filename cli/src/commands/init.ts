@@ -84,18 +84,8 @@ export async function initCommand(options: { ai?: string; offline?: boolean; pla
   console.log();
   console.log(chalk.green('✓ Mobile Best Practices skill installed successfully!'));
   console.log(chalk.dim(`  Platform: ${mobilePlatform}`));
-
-  // Show where files were installed
-  const installPaths = aiPlatforms.map(p => {
-    const dirName = p === 'claude' ? '.claude' :
-      p === 'cursor' ? '.cursor' :
-        p === 'windsurf' ? '.windsurf' :
-          p === 'copilot' ? '.github/copilot' :
-            p === 'opencode' ? '.opencode' :
-              `.${p}`;
-    return `${dirName}/skills/mobile-best-practices/`;
-  });
-  console.log(chalk.dim(`  Installed to: ${installPaths.join(', ')}`));
+  console.log(chalk.dim(`  Cache: ~/.mobile-best-practices/`));
+  console.log(chalk.dim(`  Mode: symlink (no files copied into project)`));
   console.log();
 
   console.log(chalk.cyan('How to use:'));

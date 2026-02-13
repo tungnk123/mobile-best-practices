@@ -26,6 +26,15 @@ const VERSIONS: Version[] = [
       'Feat: Enable slash commands for OpenCode',
     ],
   },
+  {
+    version: '1.2.0',
+    date: '2026-02-13',
+    changes: [
+      'Feat: Symlink install — assets cached at ~/.mobile-best-practices/, single symlink per project',
+      'Fix: Slash commands now install for Cursor and OpenCode (were only installed for Claude)',
+      'Fix: all.md uses {SKILL_PATH} instead of hardcoded Claude paths',
+    ],
+  },
 ];
 
 export function versionsCommand(): void {

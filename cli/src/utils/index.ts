@@ -1,10 +1,13 @@
-import { existsSync, mkdirSync, cpSync, readFileSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync, cpSync, readFileSync, writeFileSync, symlinkSync, lstatSync, unlinkSync, rmSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { homedir } from 'os';
 import type { PlatformConfig, MobilePlatform } from '../types/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
+const CACHE_DIR = join(homedir(), '.mobile-best-practices');
 
 export function getAssetsDir(): string {
   return join(__dirname, '..', '..', 'assets');
@@ -12,6 +15,10 @@ export function getAssetsDir(): string {
 
 export function getTemplatesDir(): string {
   return join(getAssetsDir(), 'templates');
+}
+
+export function getCacheDir(): string {
+  return CACHE_DIR;
 }
 
 export function loadPlatformConfig(platform: string): PlatformConfig {
@@ -33,6 +40,76 @@ export function copyDir(src: string, dest: string): void {
   cpSync(src, dest, { recursive: true });
 }
 
+/**
+ * Install assets to the central cache (~/.mobile-best-practices/)
+ * and generate the SKILL.md with paths pointing to the cache.
+ */
+export function installToCache(mobilePlatform: MobilePlatform = 'all'): void {
+  const assetsDir = getAssetsDir();
+  const cacheDir = getCacheDir();
+
+  // Copy data, scripts, references to cache
+  copyDir(join(assetsDir, 'data'), join(cacheDir, 'data'));
+  copyDir(join(assetsDir, 'scripts'), join(cacheDir, 'scripts'));
+  copyDir(join(assetsDir, 'references'), join(cacheDir, 'references'));
+
+  // Generate SKILL.md in cache with ~/.mobile-best-practices as the skill path
+  const skillsDir = join(assetsDir, 'skills');
+  const skillFileName = mobilePlatform === 'all' ? 'all.md' : `${mobilePlatform}.md`;
+  const platformSkillPath = join(skillsDir, skillFileName);
+
+  let content: string;
+  if (existsSync(platformSkillPath)) {
+    content = readFileSync(platformSkillPath, 'utf-8');
+    content = content.replace(/\{SKILL_PATH\}/g, '~/.mobile-best-practices');
+  } else {
+    const baseContent = readFileSync(
+      join(getTemplatesDir(), 'base', 'skill-content.md'),
+      'utf-8'
+    );
+    const quickRef = readFileSync(
+      join(getTemplatesDir(), 'base', 'quick-reference.md'),
+      'utf-8'
+    );
+
+    let processedBase = baseContent.replace(/\{SKILL_PATH\}/g, '~/.mobile-best-practices');
+    let processedQuickRef = quickRef.replace(/\{SKILL_PATH\}/g, '~/.mobile-best-practices');
+
+    content = `---
+name: mobile-best-practices
+description: "Mobile development intelligence for Android, iOS, Flutter, and React Native. 1,738 best practices."
+---
+
+${processedBase}
+
+${processedQuickRef}
+`;
+  }
+
+  writeFileSync(join(cacheDir, 'SKILL.md'), content, 'utf-8');
+}
+
+/**
+ * Create a symlink, removing any existing file/symlink/directory at the link path.
+ */
+function createSymlink(target: string, linkPath: string): void {
+  ensureDir(dirname(linkPath));
+
+  // Remove existing file/symlink/directory at link path
+  try {
+    const stat = lstatSync(linkPath);
+    if (stat.isSymbolicLink() || stat.isFile()) {
+      unlinkSync(linkPath);
+    } else if (stat.isDirectory()) {
+      rmSync(linkPath, { recursive: true });
+    }
+  } catch {
+    // Does not exist, that's fine
+  }
+
+  symlinkSync(target, linkPath, 'dir');
+}
+
 export function generateSkillFile(
   config: PlatformConfig,
   targetDir: string,
@@ -40,7 +117,9 @@ export function generateSkillFile(
 ): void {
   const assetsDir = getAssetsDir();
   const skillsDir = join(assetsDir, 'skills');
-  const skillPath = config.skillPath;
+
+  // Always use ~/.mobile-best-practices as the skill path for search commands
+  const skillPath = '~/.mobile-best-practices';
 
   // Try to load platform-specific skill file
   const skillFileName = mobilePlatform === 'all' ? 'all.md' : `${mobilePlatform}.md`;
@@ -49,11 +128,9 @@ export function generateSkillFile(
   let content: string;
 
   if (existsSync(platformSkillPath)) {
-    // Use platform-specific SKILL.md
     content = readFileSync(platformSkillPath, 'utf-8');
     content = content.replace(/\{SKILL_PATH\}/g, skillPath);
   } else {
-    // Fallback to template-based generation
     const baseContent = readFileSync(
       join(getTemplatesDir(), 'base', 'skill-content.md'),
       'utf-8'
@@ -88,37 +165,33 @@ export function installForPlatform(
   mobilePlatform: MobilePlatform = 'all'
 ): void {
   const config = loadPlatformConfig(platform);
-  const targetDir = join(projectDir, config.installPath);
+  const cacheDir = getCacheDir();
 
-  ensureDir(targetDir);
+  // Install assets to central cache (~/.mobile-best-practices/)
+  installToCache(mobilePlatform);
 
-  // Copy data and scripts
-  const assetsDir = getAssetsDir();
   if (config.type === 'skill' || config.type === 'skills') {
-    copyDir(join(assetsDir, 'data'), join(targetDir, 'data'));
-    copyDir(join(assetsDir, 'scripts'), join(targetDir, 'scripts'));
-    copyDir(join(assetsDir, 'references'), join(targetDir, 'references'));
-    generateSkillFile(config, targetDir, mobilePlatform);
-
-    // Copy custom slash commands for Claude Code, Cursor, and OpenCode
-    if (platform === 'claude' || platform === 'cursor' || platform === 'opencode') {
-      const commandsDir = join(assetsDir, 'commands');
-      if (existsSync(commandsDir)) {
-        const targetCommandsDir = platform === 'claude'
-          ? join(projectDir, '.claude', 'commands')
-          : platform === 'cursor'
-            ? join(projectDir, '.cursor', 'commands')
-            : join(projectDir, '.opencode', 'commands');
-        copyDir(commandsDir, targetCommandsDir);
-      }
-    }
+    // Create a single symlink: e.g. .claude/skills/mobile-best-practices → ~/.mobile-best-practices/
+    const targetDir = join(projectDir, config.installPath);
+    createSymlink(cacheDir, targetDir);
   } else {
-    // For rules/instructions/workflow, generate a single file
+    // For rules/instructions/workflow, generate the platform-specific file only
+    // No need to copy data/scripts - the rule file references ~/.mobile-best-practices/ directly
+    const targetDir = join(projectDir, config.installPath);
     generateSkillFile(config, targetDir, mobilePlatform);
-    // Also copy data and scripts to a shared location
-    const sharedDir = join(projectDir, '.mobile-best-practices');
-    copyDir(join(assetsDir, 'data'), join(sharedDir, 'data'));
-    copyDir(join(assetsDir, 'scripts'), join(sharedDir, 'scripts'));
+  }
+
+  // Copy slash commands for Claude, Cursor, and OpenCode (OUTSIDE the skill-type block)
+  if (platform === 'claude' || platform === 'cursor' || platform === 'opencode') {
+    const commandsDir = join(getAssetsDir(), 'commands');
+    if (existsSync(commandsDir)) {
+      const targetCommandsDir = platform === 'claude'
+        ? join(projectDir, '.claude', 'commands')
+        : platform === 'cursor'
+          ? join(projectDir, '.cursor', 'commands')
+          : join(projectDir, '.opencode', 'commands');
+      copyDir(commandsDir, targetCommandsDir);
+    }
   }
 
   // Create settings file if needed (Claude only)
