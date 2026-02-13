@@ -124,10 +124,10 @@ export async function initCommand(options: { ai?: string; offline?: boolean; pla
   console.log();
   console.log(chalk.dim('Tip: The skill works invisibly - no slash commands, no special syntax!'));
 
-  // Add slash command info for Claude Code and Cursor
-  if (aiPlatform === 'claude' || aiPlatform === 'cursor' || aiPlatform === 'all') {
+  // Add slash command info for Claude Code, Cursor and OpenCode
+  if (aiPlatform === 'claude' || aiPlatform === 'cursor' || aiPlatform === 'opencode' || aiPlatform === 'all') {
     console.log();
-    console.log(chalk.cyan('Slash commands (Claude Code & Cursor):'));
+    console.log(chalk.cyan('Slash commands (Claude Code, Cursor & OpenCode):'));
     console.log(chalk.dim('  Type / to see available commands:'));
     console.log(chalk.white('  • /mobile-best-practices - Main skill'));
     console.log(chalk.white('  • /mobile-security-audit - Security vulnerability scan'));

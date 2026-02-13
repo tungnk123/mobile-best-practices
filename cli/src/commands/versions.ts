@@ -18,6 +18,14 @@ const VERSIONS: Version[] = [
       'Reference URLs for all entries',
     ],
   },
+  {
+    version: '1.1.1',
+    date: '2026-02-13',
+    changes: [
+      'Fix: Automatically add OPENCODE.md to .gitignore',
+      'Feat: Enable slash commands for OpenCode',
+    ],
+  },
 ];
 
 export function versionsCommand(): void {

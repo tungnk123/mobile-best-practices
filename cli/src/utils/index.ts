@@ -100,13 +100,15 @@ export function installForPlatform(
     copyDir(join(assetsDir, 'references'), join(targetDir, 'references'));
     generateSkillFile(config, targetDir, mobilePlatform);
 
-    // Copy custom slash commands for Claude Code and Cursor
-    if (platform === 'claude' || platform === 'cursor') {
+    // Copy custom slash commands for Claude Code, Cursor, and OpenCode
+    if (platform === 'claude' || platform === 'cursor' || platform === 'opencode') {
       const commandsDir = join(assetsDir, 'commands');
       if (existsSync(commandsDir)) {
         const targetCommandsDir = platform === 'claude'
           ? join(projectDir, '.claude', 'commands')
-          : join(projectDir, '.cursor', 'commands');
+          : platform === 'cursor'
+            ? join(projectDir, '.cursor', 'commands')
+            : join(projectDir, '.opencode', 'commands');
         copyDir(commandsDir, targetCommandsDir);
       }
     }
@@ -163,6 +165,7 @@ export function updateGitignore(projectDir: string, platform: string): void {
   }
   if (platform === 'opencode' || platform === 'all') {
     patterns.push('.opencode/');
+    patterns.push('OPENCODE.md');
   }
   if (platform === 'copilot' || platform === 'all') {
     patterns.push('.github/copilot/');
