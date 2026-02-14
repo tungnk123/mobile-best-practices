@@ -36,7 +36,7 @@ CSV_CONFIG = {
     "antipattern": {
         "file": "anti-patterns.csv",
         "search_cols": ["Name", "Platform", "Category", "Keywords", "Description"],
-        "output_cols": ["Name", "Platform", "Category", "Severity", "Description", "Bad Example", "Good Example", "Why Bad", "Fix"]
+        "output_cols": ["Name", "Platform", "Category", "Severity", "Description", "Bad Example", "Good Example", "Fix"]
     },
     "reasoning": {
         "file": "reasoning-rules.csv",
@@ -61,7 +61,7 @@ CSV_CONFIG = {
     "security": {
         "file": "security.csv",
         "search_cols": ["Category", "Threat", "Platform", "Keywords", "Description"],
-        "output_cols": ["Category", "Threat", "Platform", "Severity", "Description", "Mitigation", "Code Good", "Code Bad", "OWASP Ref"]
+        "output_cols": ["Category", "Threat", "Platform", "Severity", "Description", "Mitigation", "Code Good", "Code Bad"]
     },
     "snippet": {
         "file": "code-snippets.csv",
@@ -76,7 +76,7 @@ CSV_CONFIG = {
     "designpattern": {
         "file": "design-patterns.csv",
         "search_cols": ["Name", "Category", "Platform", "Keywords", "Intent", "Code Smell"],
-        "output_cols": ["Name", "Category", "Platform", "Intent", "Code Smell", "When To Use", "Structure", "Bad Example", "Good Example", "Notes"]
+        "output_cols": ["Name", "Category", "Platform", "Intent", "Code Smell", "When To Use", "Bad Example", "Good Example", "Notes"]
     }
 }
 
