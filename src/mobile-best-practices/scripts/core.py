@@ -9,8 +9,9 @@ import json
 import re
 from pathlib import Path
 from math import log
-from collections import defaultdict
 from datetime import datetime
+from typing import List, Dict, Any, Tuple, Optional, Union, cast
+from itertools import islice
 
 # ============ CONFIGURATION ============
 DATA_DIR = Path(__file__).parent.parent / "data"
@@ -124,12 +125,12 @@ class BM25:
     def __init__(self, k1=1.5, b=0.75):
         self.k1 = k1
         self.b = b
-        self.corpus = []
-        self.doc_lengths = []
-        self.avgdl = 0
-        self.idf = {}
-        self.doc_freqs = defaultdict(int)
-        self.N = 0
+        self.corpus: List[List[str]] = []
+        self.doc_lengths: List[int] = []
+        self.avgdl: float = 0.0
+        self.idf: Dict[str, float] = {}
+        self.doc_freqs: Dict[str, int] = {}
+        self.N: int = 0
 
     def tokenize(self, text):
         """Lowercase, split, remove punctuation, filter short words"""
@@ -142,6 +143,7 @@ class BM25:
         self.N = len(self.corpus)
         if self.N == 0:
             return
+            
         self.doc_lengths = [len(doc) for doc in self.corpus]
         self.avgdl = sum(self.doc_lengths) / self.N
 
@@ -149,33 +151,33 @@ class BM25:
             seen = set()
             for word in doc:
                 if word not in seen:
-                    self.doc_freqs[word] += 1
+                    self.doc_freqs[word] = self.doc_freqs.get(word, 0) + 1
                     seen.add(word)
 
         for word, freq in self.doc_freqs.items():
             self.idf[word] = log((self.N - freq + 0.5) / (freq + 0.5) + 1)
 
-    def score(self, query):
+    def score(self, query: str) -> List[Tuple[int, float]]:
         """Score all documents against query"""
         query_tokens = self.tokenize(query)
         scores = []
 
         for idx, doc in enumerate(self.corpus):
-            score = 0
+            doc_score: float = 0.0
             doc_len = self.doc_lengths[idx]
-            term_freqs = defaultdict(int)
+            term_freqs = {}
             for word in doc:
-                term_freqs[word] += 1
+                term_freqs[word] = term_freqs.get(word, 0) + 1
 
             for token in query_tokens:
                 if token in self.idf:
-                    tf = term_freqs[token]
+                    tf = term_freqs.get(token, 0)
                     idf = self.idf[token]
                     numerator = tf * (self.k1 + 1)
                     denominator = tf + self.k1 * (1 - self.b + self.b * doc_len / self.avgdl)
-                    score += idf * numerator / denominator
+                    doc_score = doc_score + (idf * numerator / denominator)  # type: ignore
 
-            scores.append((idx, score))
+            scores.append((idx, doc_score))
 
         return sorted(scores, key=lambda x: x[1], reverse=True)
 
@@ -187,7 +189,7 @@ def _load_csv(filepath):
         return list(csv.DictReader(f))
 
 
-def _search_csv(filepath, search_cols, output_cols, query, max_results):
+def _search_csv(filepath: Path, search_cols: List[str], output_cols: List[str], query: str, max_results: int) -> List[Dict[str, str]]:
     """Core search function using BM25"""
     if not filepath.exists():
         return []
@@ -204,7 +206,7 @@ def _search_csv(filepath, search_cols, output_cols, query, max_results):
 
     # Get top results with score > 0
     results = []
-    for idx, score in ranked[:max_results]:
+    for idx, score in islice(ranked, int(max_results)):
         if score > 0:
             row = data[idx]
             results.append({col: row.get(col, "") for col in output_cols if col in row})
@@ -231,22 +233,27 @@ def detect_domain(query):
     }
 
     scores = {domain: sum(1 for kw in keywords if kw in query_lower) for domain, keywords in domain_keywords.items()}
-    best = max(scores, key=scores.get)
+    best = max(scores, key=scores.__getitem__)
     return best if scores[best] > 0 else "architecture"
 
 
-def search(query, domain=None, max_results=MAX_RESULTS, filter_platform=None):
+def search(query: str, domain: Optional[str] = None, max_results: int = MAX_RESULTS, filter_platform: Optional[str] = None) -> Dict[str, Any]:
     """Main search function with auto-domain detection and optional platform filter"""
     if domain is None:
         domain = detect_domain(query)
 
     config = CSV_CONFIG.get(domain, CSV_CONFIG["architecture"])
-    filepath = DATA_DIR / config["file"]
+    # Ensure file is treated as string for Path concatenation
+    filepath = DATA_DIR / str(config["file"])
 
     if not filepath.exists():
         return {"error": f"File not found: {filepath}", "domain": domain}
 
-    results = _search_csv(filepath, config["search_cols"], config["output_cols"], query, max_results * 3 if filter_platform else max_results)
+    # Cast config values to expected types
+    search_cols = cast(List[str], config["search_cols"])
+    output_cols = cast(List[str], config["output_cols"])
+
+    results = _search_csv(filepath, search_cols, output_cols, query, max_results * 3 if filter_platform else max_results)
 
     # Filter by platform if specified
     if filter_platform and results:
@@ -259,7 +266,8 @@ def search(query, domain=None, max_results=MAX_RESULTS, filter_platform=None):
             filter_lower in str(v).lower()
             for k, v in r.items()
             if k.lower() == "platform"
-        )][:max_results]
+        )]
+        results = list(islice(results, int(max_results)))
 
     return {
         "domain": domain,
@@ -270,17 +278,19 @@ def search(query, domain=None, max_results=MAX_RESULTS, filter_platform=None):
     }
 
 
-def search_platform(query, platform, max_results=MAX_RESULTS):
+def search_platform(query: str, platform: str, max_results: int = MAX_RESULTS) -> Dict[str, Any]:
     """Search platform-specific guidelines"""
     if platform not in PLATFORM_CONFIG:
         return {"error": f"Unknown platform: {platform}. Available: {', '.join(AVAILABLE_PLATFORMS)}"}
 
-    filepath = DATA_DIR / PLATFORM_CONFIG[platform]["file"]
+    filepath = DATA_DIR / str(PLATFORM_CONFIG[platform]["file"])
 
     if not filepath.exists():
         return {"error": f"Platform file not found: {filepath}", "platform": platform}
 
-    results = _search_csv(filepath, _PLATFORM_COLS["search_cols"], _PLATFORM_COLS["output_cols"], query, max_results)
+    search_cols = cast(List[str], _PLATFORM_COLS["search_cols"])
+    output_cols = cast(List[str], _PLATFORM_COLS["output_cols"])
+    results = _search_csv(filepath, search_cols, output_cols, query, max_results)
 
     return {
         "domain": "platform",
@@ -292,7 +302,7 @@ def search_platform(query, platform, max_results=MAX_RESULTS):
     }
 
 
-def search_stack(query, stack, max_results=MAX_RESULTS):
+def search_stack(query: str, stack: str, max_results: int = MAX_RESULTS) -> Dict[str, Any]:
     """Search filtered by tech stack (maps stack to platform + adds stack keywords)"""
     stack_lower = stack.lower()
 
@@ -308,19 +318,21 @@ def search_stack(query, stack, max_results=MAX_RESULTS):
     domain_results = search(f"{query} {stack}", filter_platform=platform, max_results=max_results)
 
     # Merge results
-    all_results = []
+    all_results: List[Any] = []
     if platform_results.get("results"):
         all_results.extend(platform_results["results"])
     if domain_results.get("results"):
         all_results.extend(domain_results["results"])
+
+    final_results = list(islice(all_results, int(max_results)))
 
     return {
         "domain": "stack",
         "stack": stack,
         "platform": platform,
         "query": query,
-        "count": len(all_results[:max_results]),
-        "results": all_results[:max_results]
+        "count": len(final_results),
+        "results": final_results
     }
 
 
@@ -333,7 +345,7 @@ def persist_blueprint(query, output_dir=None, project_name=None, page=None):
 
     # Run multi-domain search
     domains_to_search = ["reasoning", "architecture", "snippet", "gradle", "performance", "security", "antipattern"]
-    all_results = {}
+    all_results: Dict[str, Any] = {}
 
     for domain in domains_to_search:
         result = search(query, domain=domain, max_results=5)
@@ -341,13 +353,11 @@ def persist_blueprint(query, output_dir=None, project_name=None, page=None):
             all_results[domain] = result["results"]
 
     # Detect platform
-    platform = None
-    for kw in ["android", "ios", "flutter", "react-native", "react native"]:
+    platform = "android" # default
+    for kw in ["android-xml", "android", "ios", "flutter", "react-native", "react native"]:
         if kw in query.lower():
             platform = kw.replace(" ", "-")
             break
-    if not platform:
-        platform = "android"
 
     # Get platform guidelines
     platform_result = search_platform(query, platform, max_results=5)
