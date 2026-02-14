@@ -35,6 +35,16 @@ const VERSIONS: Version[] = [
       'Fix: all.md uses {SKILL_PATH} instead of hardcoded Claude paths',
     ],
   },
+  {
+    version: '1.3.0',
+    date: '2026-02-14',
+    changes: [
+      'Feat: Integration of Android Security Best Practices',
+      'Feat: Enhanced Code Quality guidelines (Performance, Anti-patterns)',
+      'Feat: Android XML View support',
+      'Fix: Gitignore auto-update for AI assistant directories',
+    ],
+  },
 ];
 
 export function versionsCommand(): void {
