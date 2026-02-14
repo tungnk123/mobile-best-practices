@@ -76,6 +76,7 @@ CSV_CONFIG = {
 
 PLATFORM_CONFIG = {
     "android": {"file": "platforms/android.csv"},
+    "android-xml": {"file": "platforms/android.csv"},
     "ios": {"file": "platforms/ios.csv"},
     "flutter": {"file": "platforms/flutter.csv"},
     "react-native": {"file": "platforms/react-native.csv"}
@@ -96,6 +97,8 @@ STACK_MAP = {
     "hilt": "android",
     "room": "android",
     "kotlin": "android",
+    "viewbinding": "android-xml",
+    "xml": "android-xml",
     "swiftui": "ios",
     "combine": "ios",
     "uikit": "ios",
@@ -248,6 +251,10 @@ def search(query, domain=None, max_results=MAX_RESULTS, filter_platform=None):
     # Filter by platform if specified
     if filter_platform and results:
         filter_lower = filter_platform.lower()
+        # Aliases for filtering
+        if filter_lower == "android-xml":
+            filter_lower = "android"
+
         results = [r for r in results if any(
             filter_lower in str(v).lower()
             for k, v in r.items()

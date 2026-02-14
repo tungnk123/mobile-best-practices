@@ -46,6 +46,7 @@ export async function initCommand(options: { ai?: string; offline?: boolean; pla
       message: 'Which mobile platform are you building for?',
       choices: [
         { title: 'Android (Jetpack Compose)', value: 'android' },
+        { title: 'Android (XML Views)', value: 'android-xml' },
         { title: 'iOS (SwiftUI)', value: 'ios' },
         { title: 'Flutter (Dart)', value: 'flutter' },
         { title: 'React Native (TypeScript)', value: 'react-native' },
@@ -98,6 +99,10 @@ export async function initCommand(options: { ai?: string; offline?: boolean; pla
     console.log(chalk.white('  • "Review my project for security issues"'));
     console.log(chalk.white('  • "Build a login screen with Compose"'));
     console.log(chalk.white('  • "Check my code for performance problems"'));
+  } else if (mobilePlatform === 'android-xml') {
+    console.log(chalk.white('  • "Review my XML layouts for performance"'));
+    console.log(chalk.white('  • "Convert this Fragment to ViewBinding"'));
+    console.log(chalk.white('  • "Check for memory leaks in my Activity"'));
   } else if (mobilePlatform === 'ios') {
     console.log(chalk.white('  • "Review my iOS app for security vulnerabilities"'));
     console.log(chalk.white('  • "Build a settings screen with SwiftUI"'));

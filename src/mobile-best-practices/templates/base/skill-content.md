@@ -2,7 +2,7 @@
 
 Searchable database of **1,738 mobile development best practices** covering architecture patterns, UI components, anti-patterns, libraries, performance rules, security practices, testing patterns, code snippets, Gradle dependencies, and platform-specific guidelines for Android, iOS, Flutter, and React Native.
 
-**Android-first**: Optimized for Android/Jetpack Compose with full copy-paste code snippets and ready-to-use Gradle declarations.
+**Android-first**: Optimized for Android/Jetpack Compose (XML available via `android-xml`) with full copy-paste code snippets and ready-to-use Gradle declarations.
 
 ## Prerequisites
 
@@ -43,6 +43,16 @@ python3 {SKILL_PATH}/scripts/search.py "<query>" --domain <domain> [-n <max_resu
 | `--persist` | Save architecture blueprint |
 | `--max-results` / `-n` | Number of results (default: 3) |
 | `--json` | Output as JSON |
+
+### Platforms
+
+| Platform | Count | Technologies |
+|----------|-------|--------------|
+| `android` | 246 | Jetpack Compose, Material3, Coroutines, Hilt, Room, Navigation, Gradle |
+| `android-xml` | 246 | XML Views, Fragments, ViewBinding, ConstraintLayout, RecyclerView, Hilt, Room |
+| `ios` | 60 | SwiftUI, Combine, async/await, Actors, NavigationStack, SwiftData |
+| `flutter` | 30 | Dart, Widgets, BLoC, Provider, Riverpod, Firebase |
+| `react-native` | 20 | JavaScript, TypeScript, React, Native Modules, Expo |
 
 ### Android Default Stack
 

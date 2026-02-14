@@ -136,4 +136,4 @@ Python 3.x (no external dependencies required)
 - Other CSVs have `Reference URL` column
 - Code snippets use `\n` for literal newlines in quoted CSV fields
 - Search engine: BM25 ranking with auto-domain detection
-- Default platform: Android with Jetpack Compose
+- Default platform: Android with Jetpack Compose (XML available via `android-xml`)

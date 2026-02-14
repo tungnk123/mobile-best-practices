@@ -126,6 +126,7 @@ Use snippet results as starting templates. Customize for user's specific needs. 
 | Platform | Guidelines | Focus |
 |----------|-----------|-------|
 | `android` | 404 | Jetpack Compose, Material3, XML Views, Coroutines, Hilt, Room, Navigation, Edge-to-Edge, Accessibility, Gradle |
+| `android-xml` | 404 | XML Views, Fragments, ViewBinding, ConstraintLayout, RecyclerView, Hilt, Room |
 | `ios` | 60 | SwiftUI, Combine, async/await, Actors, NavigationStack, SwiftData |
 | `flutter` | 54 | Widgets, BLoC/Riverpod, Dart 3, GoRouter, Slivers, Freezed |
 | `react-native` | 55 | Hooks, React Navigation, Reanimated, FlatList, Zustand, Expo |
