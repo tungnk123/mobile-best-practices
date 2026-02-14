@@ -4,7 +4,7 @@ This file guides Claude Code (claude.ai/code) when working with this repository.
 
 ## Project Overview
 
-**Mobile Best Practices** is a searchable database of **1,738 mobile development best practices** packaged as an AI skill for Claude Code and other AI coding assistants. It covers architecture patterns, UI components, anti-patterns, libraries, performance rules, security practices, testing patterns, code snippets, Gradle dependencies, and platform-specific guidelines for Android, iOS, Flutter, and React Native.
+**Mobile Best Practices** is a searchable database of **1,896 mobile development best practices** packaged as an AI skill for Claude Code and other AI coding assistants. It covers architecture patterns, UI components, anti-patterns, libraries, performance rules, security practices, testing patterns, code snippets, Gradle dependencies, and platform-specific guidelines for Android, iOS, Flutter, and React Native.
 
 ## Architecture
 
@@ -28,7 +28,7 @@ src/mobile-best-practices/           (Agent Skills directory)
 │   ├── project-templates.csv(18 starters)
 │   ├── gradle-deps.csv      (78 Gradle deps)
 │   └── platforms/
-│       ├── android.csv      (246 Android guidelines)
+│       ├── android.csv      (404 Android guidelines)
 │       ├── ios.csv           (60 iOS guidelines)
 │       ├── flutter.csv       (54 Flutter guidelines)
 │       └── react-native.csv  (55 React Native guidelines)

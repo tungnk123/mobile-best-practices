@@ -1,6 +1,6 @@
 # Mobile Best Practices
 
-Searchable database of **1,738 mobile development best practices** packaged as an AI skill for Claude Code and 14 other AI coding assistants. Covers Android, iOS, Flutter, and React Native.
+Searchable database of **1,896 mobile development best practices** packaged as an AI skill for Claude Code and 14 other AI coding assistants. Covers Android, iOS, Flutter, and React Native.
 
 Your AI assistant becomes a mobile development expert — it automatically searches architecture patterns, security rules, performance tips, anti-patterns, and code snippets while helping you build, review, and fix mobile apps.
 
@@ -19,7 +19,7 @@ Your AI assistant becomes a mobile development expert — it automatically searc
 | Project Templates | 18 | Starter configs for common app types |
 | Code Snippets | 79 | Copy-paste templates for Android, iOS, Flutter, React Native |
 | Gradle Dependencies | 78 | Ready-to-paste dependency declarations and plugins |
-| Platform Guidelines | 415 | Android (246), iOS (60), Flutter (54), React Native (55) |
+| Platform Guidelines | 573 | Android (404), iOS (60), Flutter (54), React Native (55) |
 
 Every entry includes a **Reference URL** linking to official docs, GitHub repos, or guides.
 
@@ -84,7 +84,7 @@ Copy the `.claude/skills/mobile-best-practices/` directory into your project. En
 
 ## How It Works
 
-After installation, your AI assistant gains access to 1,738 best practices through a built-in search engine. **You don't need to learn any commands** — just chat naturally and your AI assistant searches the right databases automatically.
+After installation, your AI assistant gains access to 1,896 best practices through a built-in search engine. **You don't need to learn any commands** — just chat naturally and your AI assistant searches the right databases automatically.
 
 ```
 You: "Build a login screen for my banking app"
