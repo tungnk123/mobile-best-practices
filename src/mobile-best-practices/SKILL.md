@@ -1,6 +1,6 @@
 ---
 name: mobile-best-practices
-description: "Mobile development intelligence for Android, iOS, Flutter, and React Native. 1,896 searchable entries: 49 architecture patterns, 91 UI patterns, 113 anti-patterns, 101 libraries, 228 performance rules, 437 security practices, 73 testing patterns, 56 reasoning rules, 18 project templates, 573 platform-specific guidelines, 79 copy-paste code snippets, and 78 Gradle dependency declarations. Use when building, reviewing, fixing, or optimizing mobile apps. Covers MVVM, MVI, VIPER, TCA, BLoC, Clean Architecture, state management, navigation, DI, networking, database, testing, security, performance, accessibility, Material3, XML Views, edge-to-edge, Gradle version catalog."
+description: "Mobile development intelligence for Android, iOS, Flutter, and React Native. 1,926 searchable entries: 49 architecture patterns, 91 UI patterns, 113 anti-patterns, 101 libraries, 228 performance rules, 437 security practices, 73 testing patterns, 56 reasoning rules, 18 project templates, 573 platform-specific guidelines, 79 copy-paste code snippets, 78 Gradle dependency declarations, and 30 design patterns with code smell detection. Use when building, reviewing, fixing, or optimizing mobile apps. Covers MVVM, MVI, VIPER, TCA, BLoC, Clean Architecture, design patterns (Factory, Observer, Strategy, Builder, Repository, DI), state management, navigation, DI, networking, database, testing, security, performance, accessibility, Material3, XML Views, edge-to-edge, Gradle version catalog."
 license: MIT
 compatibility: Requires Python 3.x for BM25 search. Works with Claude Code and other skills-compatible agents.
 metadata:
@@ -10,7 +10,7 @@ metadata:
 
 # Mobile Best Practices - Development Intelligence
 
-Searchable database of **1,896 mobile development best practices** covering architecture patterns, UI components, anti-patterns, libraries, performance rules, security practices, testing patterns, code snippets, Gradle dependencies, and platform-specific guidelines for Android, iOS, Flutter, and React Native.
+Searchable database of **1,926 mobile development best practices** covering architecture patterns, design patterns, UI components, anti-patterns, libraries, performance rules, security practices, testing patterns, code snippets, Gradle dependencies, and platform-specific guidelines for Android, iOS, Flutter, and React Native.
 
 **Android-first**: Optimized for Android/Jetpack Compose with full copy-paste code snippets and ready-to-use Gradle declarations.
 
@@ -105,7 +105,7 @@ Use snippet results as starting templates. Customize for user's specific needs. 
 
 ## Search Reference
 
-### Available Domains (11 total)
+### Available Domains (12 total)
 
 | Domain | Use For | Example Keywords |
 |--------|---------|------------------|
@@ -120,6 +120,7 @@ Use snippet results as starting templates. Customize for user's specific needs. 
 | `security` | Security best practices | encryption, keychain, ssl pinning, token, biometric |
 | `testing` | Testing patterns | unit test, ui test, bloc test, snapshot, mocking |
 | `template` | Project templates/starters | e-commerce android, banking ios, delivery flutter |
+| `designpattern` | **Design patterns & code smell detection** | factory, observer, strategy, builder, adapter, repository, code smell, refactor |
 
 ### Available Platforms
 
@@ -188,13 +189,16 @@ python3 scripts/search.py "compose startup image" --domain performance
 # 1. Check for anti-patterns
 python3 scripts/search.py "android compose viewmodel" --domain antipattern -n 5
 
-# 2. Check Compose best practices
+# 2. Spot code smells and suggest design patterns
+python3 scripts/search.py "code smell switch if-else" --domain designpattern -n 5
+
+# 3. Check Compose best practices
 python3 scripts/search.py "state recomposition lifecycle" --platform android -n 5
 
-# 3. Check performance
+# 4. Check performance
 python3 scripts/search.py "compose lazy image startup" --domain performance
 
-# 4. Check security
+# 5. Check security
 python3 scripts/search.py "android storage encryption api key" --domain security
 ```
 

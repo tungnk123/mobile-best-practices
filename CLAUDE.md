@@ -4,7 +4,7 @@ This file guides Claude Code (claude.ai/code) when working with this repository.
 
 ## Project Overview
 
-**Mobile Best Practices** is a searchable database of **1,896 mobile development best practices** packaged as an AI skill for Claude Code and other AI coding assistants. It covers architecture patterns, UI components, anti-patterns, libraries, performance rules, security practices, testing patterns, code snippets, Gradle dependencies, and platform-specific guidelines for Android, iOS, Flutter, and React Native.
+**Mobile Best Practices** is a searchable database of **1,926 mobile development best practices** packaged as an AI skill for Claude Code and other AI coding assistants. It covers architecture patterns, design patterns, UI components, anti-patterns, libraries, performance rules, security practices, testing patterns, code snippets, Gradle dependencies, and platform-specific guidelines for Android, iOS, Flutter, and React Native.
 
 ## Architecture
 
@@ -15,8 +15,9 @@ Follows the [Agent Skills](https://agentskills.io/specification) open format.
 ```
 src/mobile-best-practices/           (Agent Skills directory)
 ├── SKILL.md                 (Required: skill metadata + instructions)
-├── data/                    (Canonical CSV databases - 15 files)
+├── data/                    (Canonical CSV databases - 16 files)
 │   ├── architectures.csv    (49 architecture patterns)
+│   ├── design-patterns.csv  (30 design patterns)
 │   ├── libraries.csv        (101 libraries)
 │   ├── ui-patterns.csv      (91 UI/UX patterns)
 │   ├── anti-patterns.csv    (113 anti-patterns)
@@ -83,6 +84,7 @@ python3 src/mobile-best-practices/scripts/search.py "<query>" --domain <domain> 
 - `security` - Security best practices
 - `testing` - Testing patterns
 - `template` - Project starters
+- `designpattern` - Design patterns with code smell detection
 
 ### Flags
 - `--domain` / `-d` - Search specific domain

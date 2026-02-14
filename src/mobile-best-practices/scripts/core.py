@@ -72,6 +72,11 @@ CSV_CONFIG = {
         "file": "gradle-deps.csv",
         "search_cols": ["Name", "Category", "Keywords"],
         "output_cols": ["Name", "Category", "Version Catalog Key", "Implementation", "KSP/KAPT", "Version", "Notes"]
+    },
+    "designpattern": {
+        "file": "design-patterns.csv",
+        "search_cols": ["Name", "Category", "Platform", "Keywords", "Intent", "Code Smell"],
+        "output_cols": ["Name", "Category", "Platform", "Intent", "Code Smell", "When To Use", "Structure", "Bad Example", "Good Example", "Notes"]
     }
 }
 
@@ -229,7 +234,8 @@ def detect_domain(query):
         "testing": ["test", "unit test", "ui test", "espresso", "xctest", "mockito", "junit", "widget test", "integration"],
         "security": ["security", "encrypt", "keychain", "keystore", "proguard", "obfuscate", "ssl", "pin", "biometric", "auth token"],
         "snippet": ["snippet", "code", "example", "template code", "viewmodel code", "compose screen", "room setup", "hilt module", "bottom nav", "paging", "datastore", "theme code"],
-        "gradle": ["gradle", "dependency", "implementation", "ksp", "kapt", "version catalog", "libs.", "bom", "plugin", "classpath"]
+        "gradle": ["gradle", "dependency", "implementation", "ksp", "kapt", "version catalog", "libs.", "bom", "plugin", "classpath"],
+        "designpattern": ["design pattern", "pattern", "factory", "observer", "strategy", "builder pattern", "adapter pattern", "decorator", "facade", "singleton pattern", "command pattern", "state pattern", "mediator", "proxy pattern", "composite", "code smell", "refactor pattern", "visitor", "chain of responsibility", "template method", "repository pattern", "mapper"]
     }
 
     scores = {domain: sum(1 for kw in keywords if kw in query_lower) for domain, keywords in domain_keywords.items()}
