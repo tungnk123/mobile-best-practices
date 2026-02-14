@@ -9,7 +9,7 @@ const program = new Command();
 program
   .name('mobile-best-practices')
   .description('CLI to install Mobile Best Practices skill for AI coding assistants')
-  .version('1.2.0');
+  .version('1.3.0');
 
 program
   .command('init')
