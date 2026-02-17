@@ -91,7 +91,7 @@ export async function initCommand(options: { ai?: string; offline?: boolean; pla
 
   console.log(chalk.cyan('How to use:'));
   console.log(chalk.dim('  No commands needed - just chat naturally with your AI assistant!'));
-  console.log(chalk.dim('  The AI will automatically search 1,738 best practices as you work.'));
+  console.log(chalk.dim('  The AI will automatically search 2,024 best practices as you work.'));
   console.log();
 
   console.log(chalk.yellow('Examples:'));

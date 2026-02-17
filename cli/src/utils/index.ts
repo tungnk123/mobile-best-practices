@@ -77,7 +77,7 @@ export function installToCache(mobilePlatform: MobilePlatform = 'all'): void {
 
     content = `---
 name: mobile-best-practices
-description: "Mobile development intelligence for Android, iOS, Flutter, and React Native. 1,738 best practices."
+description: "Mobile development intelligence for Android, iOS, Flutter, and React Native. 2,024 best practices."
 ---
 
 ${processedBase}
@@ -145,7 +145,7 @@ export function generateSkillFile(
 
     content = `---
 name: mobile-best-practices
-description: "Mobile development intelligence for Android, iOS, Flutter, and React Native. 1,738 best practices."
+description: "Mobile development intelligence for Android, iOS, Flutter, and React Native. 2,024 best practices."
 ---
 
 ${processedBase}
@@ -241,7 +241,16 @@ export function updateGitignore(projectDir: string, platform: string): void {
     patterns.push('OPENCODE.md');
   }
   if (platform === 'copilot' || platform === 'all') {
-    patterns.push('.github/copilot/');
+    patterns.push('.github/copilot-instructions.md');
+  }
+  if (platform === 'codex' || platform === 'all') {
+    patterns.push('AGENTS.md');
+  }
+  if (platform === 'gemini' || platform === 'all') {
+    patterns.push('GEMINI.md');
+  }
+  if (platform === 'agent' || platform === 'all') {
+    patterns.push('AGENT.md');
   }
   if (platform === 'roocode' || platform === 'all') {
     patterns.push('.roo/');
