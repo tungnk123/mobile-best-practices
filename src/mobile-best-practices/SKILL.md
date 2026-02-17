@@ -1,6 +1,6 @@
 ---
 name: mobile-best-practices
-description: "Mobile development intelligence for Android, iOS, Flutter, and React Native. 1,926 searchable entries: 49 architecture patterns, 30 design patterns, 91 UI patterns, 113 anti-patterns, 101 libraries, 228 performance rules, 437 security practices, 73 testing patterns, 56 reasoning rules, 18 project templates, 573 platform-specific guidelines, 79 copy-paste code snippets, and 78 Gradle dependency declarations. Use when building, reviewing, fixing, or optimizing mobile apps."
+description: "Mobile development intelligence for Android, iOS, Flutter, and React Native. 2,024 searchable entries: 49 architecture patterns, 117 design patterns, 91 UI patterns, 113 anti-patterns, 103 libraries, 228 performance rules, 437 security practices, 73 testing patterns, 56 reasoning rules, 18 project templates, 582 platform-specific guidelines, 79 copy-paste code snippets, and 78 Gradle dependency declarations. Use when building, reviewing, fixing, or optimizing mobile apps."
 license: MIT
 compatibility: Requires Python 3.x for BM25 search. Works with Claude Code and other skills-compatible agents.
 metadata:
@@ -10,7 +10,7 @@ metadata:
 
 # Mobile Best Practices
 
-**1,926 searchable best practices** for Android, iOS, Flutter, and React Native. Android-first with Jetpack Compose.
+**2,024 searchable best practices** for Android, iOS, Flutter, and React Native. Android-first with Jetpack Compose.
 
 ## Prerequisites
 

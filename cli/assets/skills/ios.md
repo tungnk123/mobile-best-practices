@@ -1,16 +1,11 @@
 ---
-name: mobile-best-practices
-description: "iOS development intelligence with SwiftUI. 1,738 searchable entries including 60 iOS-specific guidelines. Default stack: MVVM + SwiftUI + Combine + async/await + SwiftData + URLSession + Kingfisher + NavigationStack. Use when building, reviewing, fixing, or optimizing iOS apps. Covers architecture patterns, UI components, anti-patterns, performance, security, and testing."
-license: MIT
-compatibility: Requires Python 3.x for BM25 search. Works with Claude Code and other skills-compatible agents.
-metadata:
-  author: tungnk123
-  version: "1.0"
+name: mobile-best-practices-ios
+description: "iOS development intelligence with SwiftUI. 49 architecture patterns, 117 design patterns, 91 UI patterns, 113 anti-patterns, 103 libraries, 228 performance rules, 437 security practices, 73 testing patterns, 60 iOS-specific guidelines. Default stack: MVVM + SwiftUI + Combine + async/await + SwiftData + URLSession + Kingfisher + NavigationStack. Actions: plan, build, create, design, implement, review, fix, improve, optimize, refactor, architect iOS apps."
 ---
 
 # iOS Best Practices - SwiftUI Development Intelligence
 
-Searchable database of **1,738 mobile best practices**, **optimized for iOS with SwiftUI**. All searches default to iOS platform. Covers architecture, UI patterns, security, performance, and testing for Apple platforms.
+Searchable database of **2,024 mobile best practices**, **optimized for iOS with SwiftUI**. All searches default to iOS platform. Covers architecture, UI patterns, security, performance, and testing for Apple platforms.
 
 ## Prerequisites
 
@@ -142,8 +137,129 @@ python3 {SKILL_PATH}/scripts/search.py "keychain encryption storage" --domain se
 
 ---
 
-## Code Generation & Quality
+## Code Generation Rules
 
-Before generating code, read the [code generation rules](references/CODE-RULES.md) for platform-specific conventions, required patterns, and anti-patterns to avoid.
+### Default Stack
 
-Before delivering code, verify against the [pre-delivery checklist](references/CHECKLIST.md) covering architecture, SwiftUI, performance, security, testing, and accessibility.
+```
+Architecture:  MVVM + Repository Pattern (or TCA for complex apps)
+UI:            SwiftUI + NavigationStack
+State:         @Observable (iOS 17+) or ObservableObject + @Published
+Navigation:    NavigationStack with NavigationPath
+Network:       URLSession + async/await (or Alamofire)
+Database:      SwiftData (iOS 17+) or CoreData
+Image:         Kingfisher or AsyncImage
+Async:         Swift Concurrency (async/await, Task, Actor)
+Testing:       Swift Testing + XCTest + ViewInspector
+DI:            Environment + @Dependencies (TCA) or manual injection
+```
+
+### Always Use @Observable Pattern (iOS 17+)
+
+```swift
+@Observable
+final class HomeViewModel {
+    private(set) var uiState: HomeUiState = .loading
+    private let repository: HomeRepository
+
+    init(repository: HomeRepository) {
+        self.repository = repository
+    }
+
+    func loadData() async {
+        uiState = .loading
+        do {
+            let items = try await repository.getData()
+            uiState = items.isEmpty ? .empty : .success(items)
+        } catch {
+            uiState = .error(error.localizedDescription)
+        }
+    }
+}
+
+enum HomeUiState {
+    case loading
+    case success([Item])
+    case error(String)
+    case empty
+}
+```
+
+### Always Use NavigationStack (not NavigationView)
+
+```swift
+struct HomeScreen: View {
+    @State private var viewModel = HomeViewModel(repository: .live)
+    @State private var path = NavigationPath()
+
+    var body: some View {
+        NavigationStack(path: $path) {
+            Group {
+                switch viewModel.uiState {
+                case .loading: ProgressView()
+                case .success(let items): ItemListView(items: items)
+                case .error(let msg): ErrorView(message: msg, onRetry: { Task { await viewModel.loadData() } })
+                case .empty: EmptyStateView()
+                }
+            }
+            .navigationTitle("Home")
+            .task { await viewModel.loadData() }
+        }
+    }
+}
+```
+
+### Anti-Patterns to ALWAYS Avoid
+
+- Force unwrapping optionals (`!`) - use `guard let` or `if let`
+- Retain cycles in closures - use `[weak self]`
+- `@ObservedObject` for ViewModel creation - use `@StateObject` or `@State`
+- `NavigationView` - use `NavigationStack` (iOS 16+)
+- Blocking main thread with synchronous calls
+- Not using `@Sendable` for concurrent closures
+- God ViewModels (500+ lines)
+- Hardcoded strings/colors - use localization and asset catalogs
+- Storing secrets in UserDefaults - use Keychain
+- Not handling optional binding properly
+
+---
+
+## Pre-Delivery Checklist
+
+### Architecture
+- [ ] MVVM or TCA with clear separation of concerns
+- [ ] Repository pattern for data access
+- [ ] Enum-based UI state (loading, success, error, empty)
+- [ ] Proper dependency injection
+
+### SwiftUI
+- [ ] NavigationStack (not NavigationView)
+- [ ] @Observable or @StateObject for ViewModel
+- [ ] .task modifier for async loading
+- [ ] Proper use of @State, @Binding, @Environment
+- [ ] List with proper identifiable items
+
+### Performance
+- [ ] LazyVStack/LazyHStack for long lists
+- [ ] Images cached with Kingfisher/AsyncImage
+- [ ] No synchronous work on main actor
+- [ ] Instruments profiling for memory leaks
+
+### Security
+- [ ] Keychain for sensitive data (not UserDefaults)
+- [ ] Biometric authentication (Face ID/Touch ID)
+- [ ] Certificate pinning for sensitive APIs
+- [ ] App Transport Security enabled
+- [ ] No hardcoded secrets in source code
+
+### Testing
+- [ ] Unit tests with Swift Testing or XCTest
+- [ ] Mocked dependencies
+- [ ] Error states tested
+- [ ] UI tests for critical flows
+
+### Accessibility
+- [ ] accessibilityLabel on interactive elements
+- [ ] Dynamic Type support
+- [ ] VoiceOver navigation works
+- [ ] Sufficient color contrast

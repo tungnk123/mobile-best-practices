@@ -1,6 +1,6 @@
 # Mobile Best Practices
 
-**1,926 searchable best practices** for Android, iOS, Flutter, and React Native. Android-first with Jetpack Compose.
+**2,024 searchable best practices** for Android, iOS, Flutter, and React Native. Android-first with Jetpack Compose.
 
 ## Prerequisites
 
