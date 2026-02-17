@@ -44,7 +44,7 @@ python3 scripts/search.py "<query>" --domain <domain> --compact  # token-optimiz
 
 ### Platforms
 
-`android` (404) | `android-xml` (404) | `ios` (60) | `flutter` (54) | `react-native` (55)
+`android` (413) | `android-xml` (413) | `ios` (60) | `flutter` (54) | `react-native` (55)
 
 ### Flags
 

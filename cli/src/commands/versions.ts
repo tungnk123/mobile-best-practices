@@ -45,6 +45,15 @@ const VERSIONS: Version[] = [
       'Fix: Gitignore auto-update for AI assistant directories',
     ],
   },
+  {
+    version: '1.4.0',
+    date: '2026-02-17',
+    changes: [
+      'Feat: Added more design pattern best practices',
+      'Feat: Added Apollo Kotlin and Koin Annotations libraries',
+      'Feat: New Android best practices for architecture, DI, networking, and testing',
+    ],
+  },
 ];
 
 export function versionsCommand(): void {

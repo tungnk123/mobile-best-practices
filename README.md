@@ -1,6 +1,6 @@
 # Mobile Best Practices
 
-Searchable database of **1,896 mobile development best practices** packaged as an AI skill for Claude Code and 14 other AI coding assistants. Covers Android, iOS, Flutter, and React Native.
+Searchable database of **2,024 mobile development best practices** packaged as an AI skill for Claude Code and 14 other AI coding assistants. Covers Android, iOS, Flutter, and React Native.
 
 Your AI assistant becomes a mobile development expert — it automatically searches architecture patterns, security rules, performance tips, anti-patterns, and code snippets while helping you build, review, and fix mobile apps.
 
@@ -9,9 +9,10 @@ Your AI assistant becomes a mobile development expert — it automatically searc
 | Category | Entries | What You Get |
 |---|---|---|
 | Architecture Patterns | 49 | MVVM, MVI, Clean Architecture, VIPER, TCA, BLoC, Redux, KMP |
+| Design Patterns | 117 | Repository, Factory, Observer, Strategy, Adapter, code smells |
 | UI Patterns | 91 | Navigation, lists, sheets, inputs, modals, animations, onboarding |
 | Anti-Patterns | 113 | God Activity, memory leaks, prop drilling, setState abuse |
-| Libraries | 101 | Retrofit, Hilt, Coil, Kingfisher, Dio, BLoC, Redux, Crashlytics |
+| Libraries | 103 | Retrofit, Hilt, Coil, Kingfisher, Dio, BLoC, Redux, Apollo, Koin |
 | Performance | 228 | Startup, rendering, memory, network, Compose, CI/CD, monitoring |
 | Security | 437 | Encryption, keychain, SSL pinning, biometric, compliance, privacy |
 | Testing | 73 | Unit, UI, integration, E2E, screenshot, contract, fuzz testing |
@@ -19,7 +20,7 @@ Your AI assistant becomes a mobile development expert — it automatically searc
 | Project Templates | 18 | Starter configs for common app types |
 | Code Snippets | 79 | Copy-paste templates for Android, iOS, Flutter, React Native |
 | Gradle Dependencies | 78 | Ready-to-paste dependency declarations and plugins |
-| Platform Guidelines | 573 | Android (404), iOS (60), Flutter (54), React Native (55) |
+| Platform Guidelines | 582 | Android (413), iOS (60), Flutter (54), React Native (55) |
 
 Every entry includes a **Reference URL** linking to official docs, GitHub repos, or guides.
 
@@ -84,7 +85,7 @@ Copy the `.claude/skills/mobile-best-practices/` directory into your project. En
 
 ## How It Works
 
-After installation, your AI assistant gains access to 1,896 best practices through a built-in search engine. **You don't need to learn any commands** — just chat naturally and your AI assistant searches the right databases automatically.
+After installation, your AI assistant gains access to 2,024 best practices through a built-in search engine. **You don't need to learn any commands** — just chat naturally and your AI assistant searches the right databases automatically.
 
 ```
 You: "Build a login screen for my banking app"
@@ -231,14 +232,15 @@ Get exact dependency declarations:
 
 ## Search Domains
 
-The skill organizes knowledge into 11 searchable domains:
+The skill organizes knowledge into 12 searchable domains:
 
 | Domain | Entries | Use For |
 |---|---|---|
 | `architecture` | 49 | Choosing patterns (MVVM, MVI, Clean, VIPER, BLoC) |
+| `designpattern` | 117 | Design patterns & code smell detection |
 | `ui` | 91 | UI components, navigation, lists, inputs, animations |
 | `antipattern` | 113 | Common mistakes to avoid |
-| `library` | 101 | Libraries and dependencies |
+| `library` | 103 | Libraries and dependencies |
 | `performance` | 228 | Speed, memory, battery, rendering optimization |
 | `security` | 437 | Encryption, auth, storage, compliance |
 | `testing` | 73 | Unit, UI, integration, E2E testing |
@@ -298,8 +300,9 @@ python3 scripts/search.py "compose performance" --domain performance -n 10
 ```
 src/mobile-best-practices/          # Source of truth
 ├── SKILL.md                       # Skill metadata + instructions
-├── data/                          # 15 CSV databases
+├── data/                          # 16 CSV databases
 │   ├── architectures.csv
+│   ├── design-patterns.csv
 │   ├── libraries.csv
 │   ├── ui-patterns.csv
 │   ├── anti-patterns.csv
