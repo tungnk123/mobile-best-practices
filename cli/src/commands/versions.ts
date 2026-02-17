@@ -72,6 +72,14 @@ const VERSIONS: Version[] = [
       'Fix: Gitignore missing entries for Codex, Gemini, Agent, Copilot platforms',
     ],
   },
+  {
+    version: '1.4.3',
+    date: '2026-02-17',
+    changes: [
+      'Fix: Enforce stringResource(R.string.xxx) for all user-visible text — no more hardcoded strings',
+      'Fix: Remaining Moshi references in skill files and CODE-RULES.md replaced with Kotlin Serialization',
+    ],
+  },
 ];
 
 export function versionsCommand(): void {

@@ -89,7 +89,7 @@ Binding:       ViewBinding (ActivityBinding, FragmentBinding)
 State:         StateFlow + sealed interface UiState (collected in LifecycleScope)
 Events:        Channel<Event> for one-shot (navigation, snackbar)
 Navigation:    Jetpack Navigation Component (XML graphs)
-Network:       Retrofit + Moshi + OkHttp
+Network:       Retrofit + Kotlin Serialization + OkHttp
 Database:      Room + KSP
 Image:         Coil (load into ImageView)
 Async:         Coroutines + Flow (viewModelScope, Dispatchers.IO)
@@ -163,6 +163,7 @@ viewLifecycleOwner.lifecycleScope.launch {
 - **Not handling process death** (use SavedStateHandle)
 - **KAPT** (Use KSP)
 - **Hardcoded versions** (use Version Catalog)
+- **Hardcoded strings** — ALWAYS use getString(R.string.xxx) in XML Views, never android:text="literal"
 - **God classes** (500+ lines)
 
 ---

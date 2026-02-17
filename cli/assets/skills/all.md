@@ -246,7 +246,7 @@ UI:            Jetpack Compose + Material3
 State:         StateFlow + sealed interface UiState
 Events:        Channel<Event> for one-shot (navigation, snackbar)
 Navigation:    Navigation Compose with @Serializable type-safe routes
-Network:       Retrofit + Moshi + OkHttp
+Network:       Retrofit + Kotlin Serialization + OkHttp
 Database:      Room + KSP
 Image:         Coil (AsyncImage)
 Async:         Coroutines + Flow (viewModelScope, Dispatchers.IO)
@@ -319,7 +319,8 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
 
 **All Platforms:**
 - God classes (500+ lines)
-- Hardcoded strings/colors
+- Hardcoded strings — ALWAYS use stringResource(R.string.xxx) in Compose, NSLocalizedString in iOS, AppLocalizations in Flutter
+- Hardcoded colors — use MaterialTheme.colorScheme in Compose, semantic colors in SwiftUI/Flutter
 - No error handling
 - Memory leaks
 - Blocking main thread

@@ -167,7 +167,7 @@ UI:            Jetpack Compose + Material3
 State:         StateFlow + sealed interface UiState
 Events:        Channel<Event> for one-shot (navigation, snackbar)
 Navigation:    Navigation Compose with @Serializable type-safe routes
-Network:       Retrofit + Moshi + OkHttp
+Network:       Retrofit + Kotlin Serialization + OkHttp
 Database:      Room + KSP
 Image:         Coil (AsyncImage)
 Async:         Coroutines + Flow (viewModelScope, Dispatchers.IO)
@@ -238,7 +238,8 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
 - Hardcoded versions in build.gradle (use Version Catalog)
 - Toast for user feedback (use Snackbar with SnackbarHostState)
 - God classes (500+ lines)
-- Hardcoded strings/colors
+- Hardcoded strings — ALWAYS use stringResource(R.string.xxx) for user-visible text in Compose, never Text("literal")
+- Hardcoded colors — use MaterialTheme.colorScheme, never Color(0xFF...)
 - No error handling
 - Hardcoded API keys
 - Storing secrets in plain SharedPreferences
