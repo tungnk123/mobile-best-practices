@@ -54,6 +54,24 @@ const VERSIONS: Version[] = [
       'Feat: New Android best practices for architecture, DI, networking, and testing',
     ],
   },
+  {
+    version: '1.4.1',
+    date: '2026-02-17',
+    changes: [
+      'Feat: Migrate from Moshi to Kotlin Serialization',
+      'Fix: Version bump for npm publish',
+    ],
+  },
+  {
+    version: '1.4.2',
+    date: '2026-02-17',
+    changes: [
+      'Feat: Version compatibility matrix for AGP, Kotlin, KSP, Room, Hilt, Compose',
+      'Feat: Anti-patterns for mismatched dependency versions',
+      'Feat: Updated Compose BOM, Room, Hilt to latest stable versions',
+      'Fix: Gitignore missing entries for Codex, Gemini, Agent, Copilot platforms',
+    ],
+  },
 ];
 
 export function versionsCommand(): void {
