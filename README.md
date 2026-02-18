@@ -1,6 +1,6 @@
 # Mobile Best Practices
 
-Searchable database of **2,033 mobile development best practices** packaged as an AI skill for Claude Code and 14 other AI coding assistants. Covers Android, iOS, Flutter, and React Native.
+Searchable database of **2,042 mobile development best practices** packaged as an AI skill for Claude Code and 14 other AI coding assistants. Covers Android, iOS, Flutter, and React Native.
 
 Your AI assistant becomes a mobile development expert — it automatically searches architecture patterns, security rules, performance tips, anti-patterns, and code snippets while helping you build, review, and fix mobile apps.
 
@@ -11,16 +11,16 @@ Your AI assistant becomes a mobile development expert — it automatically searc
 | Architecture Patterns | 49 | MVVM, MVI, Clean Architecture, VIPER, TCA, BLoC, Redux, KMP |
 | Design Patterns | 117 | Repository, Factory, Observer, Strategy, Adapter, code smells |
 | UI Patterns | 91 | Navigation, lists, sheets, inputs, modals, animations, onboarding |
-| Anti-Patterns | 117 | God Activity, memory leaks, prop drilling, setState abuse |
+| Anti-Patterns | 120 | God Activity, memory leaks, prop drilling, setState abuse |
 | Libraries | 103 | Retrofit, Hilt, Coil, Kingfisher, Dio, BLoC, Redux, Apollo, Koin |
 | Performance | 228 | Startup, rendering, memory, network, Compose, CI/CD, monitoring |
 | Security | 437 | Encryption, keychain, SSL pinning, biometric, compliance, privacy |
 | Testing | 73 | Unit, UI, integration, E2E, screenshot, contract, fuzz testing |
 | Reasoning Rules | 56 | Smart recommendations based on your product type |
 | Project Templates | 18 | Starter configs for common app types |
-| Code Snippets | 79 | Copy-paste templates for Android, iOS, Flutter, React Native |
+| Code Snippets | 80 | Copy-paste templates for Android, iOS, Flutter, React Native |
 | Gradle Dependencies | 78 | Ready-to-paste dependency declarations and plugins |
-| Platform Guidelines | 587 | Android (418), iOS (60), Flutter (54), React Native (55) |
+| Platform Guidelines | 592 | Android (423), iOS (60), Flutter (54), React Native (55) |
 
 Every entry includes a **Reference URL** linking to official docs, GitHub repos, or guides.
 
@@ -85,7 +85,7 @@ Copy the `.claude/skills/mobile-best-practices/` directory into your project. En
 
 ## How It Works
 
-After installation, your AI assistant gains access to 2,033 best practices through a built-in search engine. **You don't need to learn any commands** — just chat naturally and your AI assistant searches the right databases automatically.
+After installation, your AI assistant gains access to 2,042 best practices through a built-in search engine. **You don't need to learn any commands** — just chat naturally and your AI assistant searches the right databases automatically.
 
 ```
 You: "Build a login screen for my banking app"

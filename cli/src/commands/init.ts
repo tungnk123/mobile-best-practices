@@ -15,19 +15,19 @@ export async function initCommand(options: { ai?: string; offline?: boolean; pla
       message: 'Which AI assistant are you using?',
       choices: [
         { title: 'Claude Code', value: 'claude' },
-        { title: 'Cursor', value: 'cursor' },
-        { title: 'Windsurf', value: 'windsurf' },
-        { title: 'GitHub Copilot', value: 'copilot' },
-        { title: 'Kiro', value: 'kiro' },
         { title: 'Codex CLI', value: 'codex' },
+        { title: 'Antigravity', value: 'antigravity' },
+        { title: 'GitHub Copilot', value: 'copilot' },
+        { title: 'Cursor', value: 'cursor' },
+        { title: 'OpenCode', value: 'opencode' },
+        { title: 'Windsurf', value: 'windsurf' },
+        { title: 'Kiro', value: 'kiro' },
         { title: 'Gemini CLI', value: 'gemini' },
         { title: 'Roo Code', value: 'roocode' },
         { title: 'Continue', value: 'continue' },
-        { title: 'OpenCode', value: 'opencode' },
         { title: 'Qoder', value: 'qoder' },
         { title: 'CodeBuddy', value: 'codebuddy' },
         { title: 'Trae', value: 'trae' },
-        { title: 'Antigravity', value: 'antigravity' },
         { title: 'All assistants', value: 'all' },
       ],
     });
@@ -91,7 +91,7 @@ export async function initCommand(options: { ai?: string; offline?: boolean; pla
 
   console.log(chalk.cyan('How to use:'));
   console.log(chalk.dim('  No commands needed - just chat naturally with your AI assistant!'));
-  console.log(chalk.dim('  The AI will automatically search 2,033 best practices as you work.'));
+  console.log(chalk.dim('  The AI will automatically search 2,042 best practices as you work.'));
   console.log();
 
   console.log(chalk.yellow('Examples:'));
