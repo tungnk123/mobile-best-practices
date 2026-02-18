@@ -80,6 +80,15 @@ const VERSIONS: Version[] = [
       'Fix: Remaining Moshi references in skill files and CODE-RULES.md replaced with Kotlin Serialization',
     ],
   },
+  {
+    version: '1.5.0',
+    date: '2026-02-18',
+    changes: [
+      'Feat: Add Room migration best practices and fallback destruction patterns',
+      'Feat: Expand practice count from 2,033 to 2,042 entries',
+      'Fix: Reorder AI assistant choices in init command',
+    ],
+  },
 ];
 
 export function versionsCommand(): void {

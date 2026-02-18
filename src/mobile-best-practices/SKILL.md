@@ -5,7 +5,7 @@ license: MIT
 compatibility: Requires Python 3.x for BM25 search. Works with Claude Code and other skills-compatible agents.
 metadata:
   author: tungnk123
-  version: "1.4.3"
+  version: "1.5.0"
 ---
 
 # Mobile Best Practices
