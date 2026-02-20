@@ -122,6 +122,138 @@ STACK_MAP = {
 
 AVAILABLE_STACKS = list(STACK_MAP.keys())
 
+# Fields across all CSV schemas that contain code
+_CODE_FIELDS = frozenset({
+    "Code Good", "Code Bad", "Code", "Code Example",
+    "Good Example", "Bad Example",
+})
+
+# Keywords that mark a comment as "important" (used by style='important')
+_IMPORTANT_WORDS = frozenset({
+    "important", "note", "warning", "todo", "fixme", "why", "critical",
+    "workaround", "hack", "required", "must", "never", "always",
+    "deprecated", "throws", "override", "see", "param", "return",
+    "caution", "security", "crash", "leak",
+})
+
+
+# ============ COMMENT STYLE FILTER ============
+
+def _is_important_comment(text: str) -> bool:
+    """Return True if comment text contains an importance marker word."""
+    lower = text.lower()
+    return any(w in lower for w in _IMPORTANT_WORDS)
+
+
+def _strip_inline_comment(line: str) -> str:
+    """Remove a trailing // comment, respecting quoted strings."""
+    in_str, str_ch = False, ""
+    i = 0
+    while i < len(line):
+        ch = line[i]
+        if in_str:
+            if ch == "\\" and i + 1 < len(line):
+                i += 2
+                continue
+            if ch == str_ch:
+                in_str = False
+        elif ch in ('"', "'"):
+            in_str, str_ch = True, ch
+        elif ch == "/" and i + 1 < len(line) and line[i + 1] == "/":
+            return line[:i].rstrip()
+        i += 1
+    return line
+
+
+def apply_comment_style(code: str, style: str) -> str:
+    """Filter comments in a code string based on the requested style.
+
+    Styles
+    ------
+    'all'       — unchanged (default)
+    'none'      — every comment line / block is removed; inline comments
+                  are stripped from the end of code lines
+    'important' — only comments whose text contains an importance marker word
+                  (NOTE, WARNING, WHY, IMPORTANT, CRITICAL, …) are kept;
+                  all other comments are removed; KDoc /** */ blocks are kept
+                  only when their body matches as well
+    """
+    if style == "all" or not code:
+        return code
+
+    lines = code.split("\n")
+    result: List[str] = []
+    in_block = False
+    block_buf: List[str] = []
+
+    for line in lines:
+        stripped = line.strip()
+
+        # ── Block-comment: /* ... */ or /** ... */
+        if not in_block and stripped.startswith("/*"):
+            if "*/" in stripped:
+                # Single-line block or KDoc: /** ... */ or /* ... */
+                if style == "none":
+                    continue
+                if style == "important" and _is_important_comment(stripped):
+                    result.append(line)
+                continue
+            else:
+                # Multi-line block comment opening
+                in_block = True
+                block_buf = [line]
+                continue
+
+        # ── Inside a block comment
+        if in_block:
+            block_buf.append(line)
+            if "*/" in stripped:
+                in_block = False
+                combined = " ".join(block_buf)
+                if style == "none":
+                    pass  # discard
+                elif style == "important" and _is_important_comment(combined):
+                    result.extend(block_buf)
+                block_buf = []
+            continue
+
+        # ── Full-line // or # comment
+        if stripped.startswith("//") or stripped.startswith("#"):
+            if style == "none":
+                continue
+            if style == "important" and _is_important_comment(stripped):
+                result.append(line)
+            continue
+
+        # ── Inline // comment appended to code
+        if "//" in line:
+            bare = _strip_inline_comment(line)
+            inline_comment = line[len(bare):]
+            if style == "none":
+                result.append(bare)
+            elif style == "important":
+                if _is_important_comment(inline_comment):
+                    result.append(line)   # keep comment
+                else:
+                    result.append(bare)   # strip comment, keep code
+            else:
+                result.append(line)
+            continue
+
+        result.append(line)
+
+    # Collapse consecutive blank lines → single blank line
+    final: List[str] = []
+    prev_blank = False
+    for ln in result:
+        blank = not ln.strip()
+        if blank and prev_blank:
+            continue
+        final.append(ln)
+        prev_blank = blank
+
+    return "\n".join(final)
+
 
 # ============ BM25 IMPLEMENTATION ============
 class BM25:

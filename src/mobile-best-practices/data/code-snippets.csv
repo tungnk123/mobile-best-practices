@@ -79,3 +79,236 @@ ios_error_handling,iOS Error Handling,iOS,Architecture,swift error handling resu
 flutter_testing,Flutter Widget Test,Flutter,Testing,flutter widget test pump find matcher bloc provider,Widget testing with BLoC provider and interaction verification,"testWidgets('shows items when loaded' (tester) async {\n  final bloc = MockHomeBloc();\n  when(() => bloc.state).thenReturn(HomeLoaded([Item(id: '1' name: 'Test')]));\n\n  await tester.pumpWidget(\n    MaterialApp(\n      home: BlocProvider<HomeBloc>.value(\n        value: bloc,\n        child: const HomeScreen(),\n      ),\n    ),\n  );\n\n  expect(find.text('Test') findsOneWidget);\n  expect(find.byType(CircularProgressIndicator) findsNothing);\n\n  // Interaction test:\n  await tester.tap(find.byType(FloatingActionButton));\n  verify(() => bloc.add(RefreshItems())).called(1);\n});",import 'package:flutter_test/flutter_test.dart';\nimport 'package:bloc_test/bloc_test.dart';\nimport 'package:mocktail/mocktail.dart';,Use mocktail for mocking. Provide BLoC via BlocProvider.value. Always pump before assertions.,https://docs.flutter.dev/testing/overview
 room_database_migration,Room Database with Migration,Android,Database,"room database migration auto fallback destructive schema version","Room database setup with migrations fallbackToDestructiveMigration and AutoMigration","@Database(\n    entities = [User::class Item::class],\n    version = 3,\n    autoMigrations = [\n        AutoMigration(from = 1, to = 2),\n        AutoMigration(from = 2, to = 3, spec = AppDatabase.Migration2To3::class)\n    ],\n    exportSchema = true\n)\nabstract class AppDatabase : RoomDatabase() {\n    abstract fun userDao(): UserDao\n    abstract fun itemDao(): ItemDao\n\n    @RenameColumn(tableName = ""users"", fromColumnName = ""name"", toColumnName = ""displayName"")\n    class Migration2To3 : AutoMigrationSpec\n\n    companion object {\n        // Manual migration example for complex changes\n        val MIGRATION_3_4 = object : Migration(3, 4) {\n            override fun migrate(db: SupportSQLiteDatabase) {\n                db.execSQL(""CREATE TABLE IF NOT EXISTS `orders` (`id` TEXT NOT NULL, `userId` TEXT NOT NULL, `total` REAL NOT NULL, PRIMARY KEY(`id`))"")\n                db.execSQL(""CREATE INDEX IF NOT EXISTS `index_orders_userId` ON `orders` (`userId`)"")\n            }\n        }\n\n        fun create(context: Context): AppDatabase {\n            return Room.databaseBuilder(\n                context.applicationContext,\n                AppDatabase::class.java,\n                ""app_database""\n            )\n                .addMigrations(MIGRATION_3_4)\n                // ONLY for debug builds — wipes all data on failed migration\n                .fallbackToDestructiveMigration(BuildConfig.DEBUG)\n                .build()\n        }\n    }\n}","import androidx.room.*\nimport androidx.room.migration.AutoMigrationSpec\nimport androidx.room.migration.Migration\nimport androidx.sqlite.db.SupportSQLiteDatabase\nimport android.content.Context","Use @AutoMigration for additive changes. Manual Migration for complex schema changes. fallbackToDestructiveMigration(true) ONLY in debug. Always exportSchema = true and commit schemas/ to git. Test with MigrationTestHelper.",https://developer.android.com/training/data-storage/room/migrating-db-versions
 rn_custom_hook,RN Custom Hook,React Native,Architecture,react native custom hook reusable logic composition pattern,Custom hook pattern for reusable logic composition,import { useState useEffect useCallback } from 'react';\n\nfunction useDebounce<T>(value: T delay: number): T {\n  const [debouncedValue setDebouncedValue] = useState(value);\n  useEffect(() => {\n    const timer = setTimeout(() => setDebouncedValue(value) delay);\n    return () => clearTimeout(timer);\n  } [value delay]);\n  return debouncedValue;\n}\n\nfunction usePagination<T>(fetchFn: (page: number) => Promise<T[]>) {\n  const [data setData] = useState<T[]>([]);\n  const [page setPage] = useState(1);\n  const [loading setLoading] = useState(false);\n  const [hasMore setHasMore] = useState(true);\n\n  const loadMore = useCallback(async () => {\n    if (loading || !hasMore) return;\n    setLoading(true);\n    try {\n      const items = await fetchFn(page);\n      setData(prev => [...prev ...items]);\n      setHasMore(items.length > 0);\n      setPage(p => p + 1);\n    } finally { setLoading(false); }\n  } [page loading hasMore fetchFn]);\n\n  return { data loading hasMore loadMore };\n},import { useState useEffect useCallback } from 'react';,Extract reusable logic. useDebounce for search. usePagination for lists. Always cleanup in useEffect.,https://react.dev/learn/reusing-logic-with-custom-hooks
+"alarm_edit_screen","Alarm Create/Edit Screen (M3)","Android","Compose","alarm edit create timepicker repeat one-time delete-after material3 chip filterchip","Full-screen M3 alarm create/edit Composable with: current-time default TimePicker, large tappable time display on PrimaryContainer, OutlinedTextField label, FilterChip day-of-week repeat selector with One time chip and summary text, AnimatedVisibility delete-after Switch for one-time alarms only.","data class AlarmEditState(
+    val id: Long? = null,
+    val hour: Int = Calendar.getInstance().get(Calendar.HOUR_OF_DAY),
+    val minute: Int = Calendar.getInstance().get(Calendar.MINUTE),
+    val label: String = """",
+    val repeatDays: Set<DayOfWeek> = emptySet(),
+    val deleteAfterFiring: Boolean = false
+) {
+    val isOneTime get() = repeatDays.isEmpty()
+    val repeatSummary get() = when {
+        repeatDays.isEmpty() -> ""Does not repeat""
+        repeatDays.size == 7 -> ""Every day""
+        repeatDays == WEEKDAYS -> ""Weekdays""
+        repeatDays == WEEKENDS -> ""Weekends""
+        else -> repeatDays.sortedBy { it.value }
+            .joinToString("", "") { it.getDisplayName(TextStyle.SHORT, Locale.getDefault()) }
+    }
+    companion object {
+        val WEEKDAYS = setOf(
+            DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY,
+            DayOfWeek.THURSDAY, DayOfWeek.FRIDAY
+        )
+        val WEEKENDS = setOf(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY)
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AlarmEditScreen(
+    state: AlarmEditState,
+    onStateChange: (AlarmEditState) -> Unit,
+    onSave: () -> Unit,
+    onNavigateUp: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    var showTimePicker by remember { mutableStateOf(false) }
+    val timePickerState = rememberTimePickerState(
+        initialHour = state.hour,
+        initialMinute = state.minute,
+        is24Hour = DateFormat.is24HourFormat(LocalContext.current)
+    )
+
+    if (showTimePicker) {
+        AlertDialog(
+            onDismissRequest = { showTimePicker = false },
+            dismissButton = { TextButton(onClick = { showTimePicker = false }) { Text(""Cancel"") } },
+            confirmButton = {
+                TextButton(onClick = {
+                    onStateChange(state.copy(hour = timePickerState.hour, minute = timePickerState.minute))
+                    showTimePicker = false
+                }) { Text(""OK"") }
+            },
+            text = { TimePicker(state = timePickerState) }
+        )
+    }
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(if (state.id == null) ""New Alarm"" else ""Edit Alarm"") },
+                navigationIcon = {
+                    IconButton(onClick = onNavigateUp) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = ""Cancel"")
+                    }
+                },
+                actions = {
+                    TextButton(onClick = onSave) {
+                        Text(""Save"", style = MaterialTheme.typography.labelLarge)
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surface
+                )
+            )
+        },
+        modifier = modifier
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            // 1. Large tappable time display
+            Surface(
+                onClick = { showTimePicker = true },
+                shape = MaterialTheme.shapes.extraLarge,
+                color = MaterialTheme.colorScheme.primaryContainer,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(
+                    modifier = Modifier.padding(vertical = 32.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = ""%02d:%02d"".format(state.hour, state.minute),
+                        style = MaterialTheme.typography.displayLarge,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                    Text(
+                        text = ""Tap to change"",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
+                    )
+                }
+            }
+
+            // 2. Label
+            OutlinedTextField(
+                value = state.label,
+                onValueChange = { onStateChange(state.copy(label = it)) },
+                label = { Text(""Label"") },
+                leadingIcon = { Icon(Icons.Default.Label, contentDescription = null) },
+                singleLine = true,
+                shape = MaterialTheme.shapes.medium,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            // 3. Repeat — day chips + One time
+            ElevatedCard(modifier = Modifier.fillMaxWidth()) {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Text(""Repeat"", style = MaterialTheme.typography.titleMedium)
+
+                    val dayLabels = listOf(""Su"", ""Mo"", ""Tu"", ""We"", ""Th"", ""Fr"", ""Sa"")
+                    val orderedDays = listOf(
+                        DayOfWeek.SUNDAY, DayOfWeek.MONDAY, DayOfWeek.TUESDAY,
+                        DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY,
+                        DayOfWeek.FRIDAY, DayOfWeek.SATURDAY
+                    )
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        orderedDays.forEachIndexed { index, day ->
+                            val selected = day in state.repeatDays
+                            FilterChip(
+                                selected = selected,
+                                onClick = {
+                                    val newDays = if (selected)
+                                        state.repeatDays - day
+                                    else
+                                        state.repeatDays + day
+                                    onStateChange(
+                                        state.copy(
+                                            repeatDays = newDays,
+                                            deleteAfterFiring = if (newDays.isNotEmpty()) false
+                                                                else state.deleteAfterFiring
+                                        )
+                                    )
+                                },
+                                label = { Text(dayLabels[index]) }
+                            )
+                        }
+                    }
+
+                    // One time chip — clears all repeat days
+                    FilterChip(
+                        selected = state.isOneTime,
+                        onClick = { onStateChange(state.copy(repeatDays = emptySet())) },
+                        label = { Text(""One time"") },
+                        leadingIcon = if (state.isOneTime) {
+                            { Icon(Icons.Default.Check, null, Modifier.size(FilterChipDefaults.IconSize)) }
+                        } else null
+                    )
+
+                    Text(
+                        text = state.repeatSummary,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+            }
+
+            // 4. Delete after alarm — only for one-time alarms
+            AnimatedVisibility(
+                visible = state.isOneTime,
+                enter = expandVertically() + fadeIn(),
+                exit = shrinkVertically() + fadeOut()
+            ) {
+                ElevatedCard(modifier = Modifier.fillMaxWidth()) {
+                    ListItem(
+                        headlineContent = { Text(""Delete after alarm"") },
+                        supportingContent = { Text(""Automatically remove this alarm once it fires"") },
+                        leadingContent = {
+                            Icon(
+                                imageVector = Icons.Outlined.DeleteOutline,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        },
+                        trailingContent = {
+                            Switch(
+                                checked = state.deleteAfterFiring,
+                                onCheckedChange = { onStateChange(state.copy(deleteAfterFiring = it)) }
+                            )
+                        }
+                    )
+                }
+            }
+
+            Spacer(Modifier.height(16.dp))
+        }
+    }
+}","import android.text.format.DateFormat
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Label
+import androidx.compose.material.icons.outlined.DeleteOutline
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import java.time.DayOfWeek
+import java.time.format.TextStyle
+import java.util.Calendar
+import java.util.Locale","Wire onSave to your ViewModel. In your BroadcastReceiver/Worker: after firing the alarm check alarm.deleteAfterFiring and call alarmDao.delete(alarm) if true. TimePicker requires material3 >= 1.1.0. rememberTimePickerState requires material3 >= 1.2.0.","https://m3.material.io/components/time-pickers/overview"

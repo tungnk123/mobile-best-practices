@@ -28,6 +28,9 @@
       "Bash(npm run build:*)",
       "Bash(npm publish:*)",
       "Bash(npm login:*)"
+    ],
+    "additionalDirectories": [
+      "/home/tungnk123/Desktop/android/mobile-best-practices/src/mobile-best-practices/data/platforms"
     ]
   }
 }
