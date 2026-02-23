@@ -27,7 +27,10 @@
       "Bash(npm whoami:*)",
       "Bash(npm run build:*)",
       "Bash(npm publish:*)",
-      "Bash(npm login:*)"
+      "Bash(npm login:*)",
+      "Read(//home/tungnk123/.claude/**)",
+      "Read(//home/tungnk123/.agents/skills/**)",
+      "Read(//home/tungnk123/.agents/**)"
     ],
     "additionalDirectories": [
       "/home/tungnk123/Desktop/android/mobile-best-practices/src/mobile-best-practices/data/platforms"
