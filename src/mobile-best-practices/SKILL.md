@@ -5,7 +5,7 @@ license: MIT
 compatibility: Requires Python 3.x for BM25 search. Works with Claude Code and other skills-compatible agents.
 metadata:
   author: tungnk123
-  version: "1.6.0"
+  version: "1.6.1"
   usage: "READER | AGENT | CLI"
   invocation: "explicit-only — database is never searched automatically"
   modes:

@@ -1,6 +1,6 @@
 {
   "name": "mobile-best-practices",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "CLI to install Mobile Best Practices skill for AI coding assistants",
   "type": "module",
   "bin": {
