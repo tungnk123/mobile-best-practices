@@ -33,15 +33,22 @@ npx mobile-best-practices init --ai all --platform all
 
 ## See It in Action
 
-Real output from a real Android alarm clock app. Two commands.
+**[SoundAlarm](https://github.com/tungnk123/SoundAlarm)** is a production Android alarm app built entirely with this skill — from the first line of code to the final audit.
+
+Here's how it was built:
+
+1. **`/mobile-setup-android`** — scaffolded the project: Clean Architecture + MVVM + Hilt + Room + Retrofit + Compose, with version catalog and all Gradle dependencies ready to go
+2. **`/mobile-best-practices`** — consulted during development for architecture decisions, code patterns, and anti-patterns to avoid
+3. **`/mobile-performance-check`** — ran at the end to catch performance issues across the entire codebase
+4. **`/mobile-security-audit`** — ran at the end to audit the app against 437 security rules
 
 ### `/mobile-performance-check` — 17 findings
 
-![Performance check output — 17 real findings from a real Android app](docs/performance-check-example.png)
+![Performance check output — 17 real findings from SoundAlarm](docs/performance-check-example.png)
 
 ### `/mobile-security-audit` — 20 checks, 11 failures
 
-![Security audit output — 20 checks against 437 security rules](docs/security-audit-example.png)
+![Security audit output — 20 checks against 437 security rules on SoundAlarm](docs/security-audit-example.png)
 
 Not generic advice. Every finding is linked to an exact rule from the database.
 
