@@ -1,8 +1,71 @@
 # Mobile Best Practices
 
-Searchable database of **2,042 mobile development best practices** packaged as an AI skill for Claude Code and 14 other AI coding assistants. Covers Android, iOS, Flutter, and React Native.
+Your AI assistant just got a mobile development brain upgrade.
 
-Your AI assistant becomes a mobile development expert — it automatically searches architecture patterns, security rules, performance tips, anti-patterns, and code snippets while helping you build, review, and fix mobile apps.
+**2,042 battle-tested best practices** — architecture, security, performance, anti-patterns, code snippets, and Gradle dependencies — packaged as an AI skill for Claude Code and 14 other AI coding assistants. Android, iOS, Flutter, React Native.
+
+> Install once. Every code review, security audit, and performance check from that point forward pulls from a real database of 2,042 rules — not just your AI's training data.
+
+---
+
+## See It in Action
+
+Here's what `/mobile-performance-check` found in a real Android alarm clock app in **one command**:
+
+![Performance check output — 17 real findings from a real Android app](docs/performance-check-example.png)
+
+| # | File | Severity | Issue | DB Rule |
+|---|------|----------|-------|---------|
+| 1 | `AppModule.kt` | **Critical** | No WAL mode on Room DB | `database query index room` |
+| 2 | `AlarmEventDao / StatisticsRepositoryImpl` | **Critical** | Full table scan + Kotlin-side aggregation | `database query index room` |
+| 3 | `app/build.gradle.kts` | **Critical** | No Baseline Profiles | `baseline profile startup trace` |
+| 4 | `app/build.gradle.kts` | **Critical** | No LeakCanary | `memory leak allocation heap` |
+| 5 | `HomeScreen.kt` | **Critical** | Unstable lambdas → excessive recomposition | `recomposition compose lambda` |
+| 6 | `SnoozeManager.kt` | Medium | SharedPreferences blocking I/O | `threading coroutine main dispatcher` |
+| 7 | `LocaleManager.kt` | Medium | SharedPreferences blocking I/O | `threading coroutine main dispatcher` |
+| 8 | `MusicSelectionScreen.kt:135` | Medium | Missing `key` in LazyColumn items | `list scroll lazy virtualize` |
+| 9 | `SnoozeBannerCard.kt:37` | Medium | `SimpleDateFormat` created every recomposition | `recomposition compose lambda` |
+| 10 | `HomeViewModel.kt:57` | Medium | CPU-bound `computeNextAlarmInfo` on wrong dispatcher | `threading coroutine main dispatcher` |
+| 11 | `NetworkModule.kt` | Medium | No OkHttp response cache | `network http caching request` |
+| 12 | `StatisticsScreen.kt` | Low | Missing `contentType` in LazyColumn | `list scroll lazy virtualize` |
+| 13 | `AlarmEntity.kt` | Low | No index on `isEnabled` column | `database query index room` |
+| 14 | `gradle.properties` | Low | Parallel builds disabled | `apk size binary proguard shrink` |
+| 15 | *(missing)* | Low | No StrictMode in debug | `threading coroutine main dispatcher` |
+| 16 | *(missing)* | Low | No JankStats production monitoring | `ui rendering frame drop jank` |
+| 17 | `HomeScreen.kt` | Low | Business logic / string formatting in Composable | `anti-pattern: business logic in UI` |
+
+17 real findings, each linked to an exact database rule — not generic advice.
+
+### `/mobile-security-audit` — same app, same command
+
+![Security audit output — 20 checks against 437 security rules](docs/security-audit-example.png)
+
+| # | Check | Status |
+|---|-------|--------|
+| 1 | Encrypted SharedPreferences for sensitive local data | ❌ Fails — `SnoozeManager` uses plain SharedPreferences |
+| 2 | `network_security_config.xml` with `cleartextTrafficPermitted=false` | ❌ Fails — No NSC file present |
+| 3 | OkHttp `CertificatePinner` with backup pin | ❌ Fails — No pinning configured |
+| 4 | TLS 1.2/1.3 minimum via `ConnectionSpec.MODERN_TLS` | ❌ Fails — No minimum TLS version set |
+| 5 | Exported `BroadcastReceiver` protected by `android:permission` | ❌ Fails — `AlarmReceiver` exported without permission |
+| 6 | Backup exclusion rules for sensitive files | ❌ Fails — `backup_rules.xml` and `data_extraction_rules.xml` are empty stubs |
+| 7 | `FLAG_SECURE` on sensitive Activities | ❌ Fails — `AlarmTriggerActivity` missing FLAG_SECURE |
+| 8 | Intent extra validation (length, range) | ❌ Fails — Alarm label/ID not sanitised |
+| 9 | R8 minification enabled in release | ✅ Pass — `isMinifyEnabled=true`, `isShrinkResources=true` |
+| 10 | `PendingIntent.FLAG_IMMUTABLE` used | ✅ Pass — All PendingIntents use `FLAG_IMMUTABLE` |
+| 11 | Logging gated to debug builds | 🟡 Partial — `HttpLoggingInterceptor` is debug-only but uses `Level.BODY` |
+| 12 | `AlarmService` not exported | ✅ Pass — `android:exported="false"` |
+| 13 | `AlarmTriggerActivity` not exported | ✅ Pass — `android:exported="false"` |
+| 14 | Room database encrypted (SQLCipher) | ❌ Fails — Unencrypted Room database |
+| 15 | DataStore encrypted | ❌ Fails — Plain unencrypted DataStore |
+| 16 | Play Integrity API / root detection | ❌ Fails — No integrity checks |
+| 17 | Runtime `ACTIVITY_RECOGNITION` permission request | ❌ Needs verification |
+| 18 | No hardcoded production API credentials | ✅ Pass — `BASE_URL` is placeholder, no keys in code |
+| 19 | ProGuard rules minimal (no broad `-keep class **`) | 🟡 Partial — Rules are targeted but retain debug attributes |
+| 20 | `allowBackup` is false or backup rules exclude sensitive data | ❌ Fails — `allowBackup=true` with no exclusions |
+
+20 security checks, 11 failures, 2 partials — surfaced in seconds against 437 database rules.
+
+---
 
 ## What's Inside
 
@@ -35,9 +98,7 @@ cd /path/to/your/mobile/project
 npx mobile-best-practices init
 ```
 
-This launches an interactive prompt — pick your AI assistant and mobile platform, and the skill files are installed into your project.
-
-**Note**: The installer automatically updates your `.gitignore` to exclude AI assistant directories (`.claude/`, `.cursor/`, etc.), so skill files won't appear in git changes.
+Pick your AI assistant and mobile platform. Done. The skill is installed into your project and your `.gitignore` is updated automatically so skill files don't show up in git changes.
 
 ### One-liner Install
 
@@ -77,15 +138,11 @@ Claude Code, Cursor, Windsurf, GitHub Copilot, Kiro, Codex CLI, Gemini CLI, Roo 
 npx mobile-best-practices update
 ```
 
-### Manual Install (Claude Code only)
-
-Copy the `.claude/skills/mobile-best-practices/` directory into your project. Ensure Python 3 is available.
-
 ---
 
 ## How It Works
 
-After installation, your AI assistant gains access to 2,042 best practices through a built-in search engine. **You don't need to learn any commands** — just chat naturally and your AI assistant searches the right databases automatically.
+After installation, your AI assistant searches 2,042 best practices through a built-in BM25 search engine. **You don't need to learn any commands** — just chat naturally.
 
 ```
 You: "Build a login screen for my banking app"
@@ -100,22 +157,22 @@ AI assistant automatically:
 
 ### Slash Commands (Claude Code & Cursor)
 
-Claude Code and Cursor users can also invoke the skill using slash commands:
+Type `/` to see all available commands:
 
-- **`/mobile-best-practices`** - Invokes the main skill
-- **`/mobile-security-audit`** - Runs a comprehensive security audit
-- **`/mobile-performance-check`** - Analyzes performance issues
-- **`/mobile-setup-android`** - Sets up a new Android project with best practices
-
-Just type `/` in your AI assistant to see all available commands!
+| Command | What It Does |
+|---|---|
+| `/mobile-best-practices` | Invokes the main skill |
+| `/mobile-security-audit` | Full security audit against 437 rules — finds hardcoded secrets, insecure storage, missing SSL pinning, and more |
+| `/mobile-performance-check` | Performance analysis against 228 rules — finds recomposition issues, thread violations, slow startup, memory leaks, and more |
+| `/mobile-setup-android` | Scaffolds a new Android project with the full best-practice stack |
 
 ---
 
 ## Use Cases & Examples
 
-### "Review my project for security issues"
+### "Audit my project for security issues"
 
-Ask your AI assistant to audit your codebase against 437 security best practices:
+Scans your entire codebase against 437 security best practices:
 
 ```
 "Check my Android project for security vulnerabilities"
@@ -124,8 +181,8 @@ Ask your AI assistant to audit your codebase against 437 security best practices
 "Are there any hardcoded API keys or secrets in my project?"
 ```
 
-The AI will scan your code and cross-reference it against security rules covering:
-- Hardcoded secrets and API keys
+Catches issues like:
+- Hardcoded API keys and secrets
 - Insecure data storage (SharedPreferences, UserDefaults)
 - Missing SSL/certificate pinning
 - Improper encryption usage
@@ -135,39 +192,19 @@ The AI will scan your code and cross-reference it against security rules coverin
 
 ### "Check my project for performance issues"
 
-Get your app reviewed against 228 performance optimization rules:
+Reviews your code against 228 performance rules (see the real example in the table above):
 
 ```
 "Find performance issues in my Android app"
 "Why is my app startup slow?"
 "Review my Compose code for unnecessary recompositions"
-"Check my RecyclerView/LazyColumn for performance problems"
+"Check my LazyColumn for performance problems"
 "Audit my app's memory usage patterns"
-```
-
-Catches issues like:
-- Unnecessary recompositions in Jetpack Compose
-- Missing image caching and downsizing
-- Blocking the main thread with I/O operations
-- Inefficient list rendering (LazyColumn, FlatList, ListView)
-- Memory leaks from lifecycle-unaware observers
-- Missing R8/ProGuard configuration
-- Unoptimized app startup (cold start, splash screen)
-
-### "Check accessibility in my app"
-
-Validate your app against accessibility guidelines:
-
-```
-"Review my app for accessibility issues"
-"Does my Compose UI follow accessibility best practices?"
-"Check if my app works with screen readers"
-"Audit content descriptions and touch targets"
 ```
 
 ### "Review my entire project"
 
-Run a comprehensive audit across all domains:
+Full audit across all domains:
 
 ```
 "Do a full code review of my Android project"
@@ -175,8 +212,8 @@ Run a comprehensive audit across all domains:
 "Review my Flutter project and suggest improvements"
 ```
 
-The AI reviews your project against:
-- Architecture patterns — is the structure maintainable?
+Reviews against:
+- Architecture — is the structure maintainable?
 - Anti-patterns — any God Activities, memory leaks, tight coupling?
 - Security — any vulnerabilities or data leaks?
 - Performance — any slow paths or wasted resources?
@@ -206,20 +243,9 @@ Start with the right architecture from day one:
 "What dependencies do I need for a React Native social media app?"
 ```
 
-### "Fix a bug"
-
-Get fixes that follow best practices:
-
-```
-"My ViewModel survives configuration changes but leaks the Activity"
-"State is lost when navigating back in Compose"
-"My app crashes on Android 14 — photo picker permissions"
-"Room database migration is failing"
-```
-
 ### "Help with Gradle setup"
 
-Get exact dependency declarations:
+Get exact, paste-ready dependency declarations:
 
 ```
 "What Gradle dependencies do I need for Compose + Hilt + Room?"
@@ -239,21 +265,21 @@ The skill organizes knowledge into 12 searchable domains:
 | `architecture` | 49 | Choosing patterns (MVVM, MVI, Clean, VIPER, BLoC) |
 | `designpattern` | 117 | Design patterns & code smell detection |
 | `ui` | 91 | UI components, navigation, lists, inputs, animations |
-| `antipattern` | 117 | Common mistakes to avoid |
+| `antipattern` | 120 | Common mistakes to avoid |
 | `library` | 103 | Libraries and dependencies |
 | `performance` | 228 | Speed, memory, battery, rendering optimization |
 | `security` | 437 | Encryption, auth, storage, compliance |
 | `testing` | 73 | Unit, UI, integration, E2E testing |
 | `reasoning` | 56 | Smart recommendations by product type |
 | `template` | 18 | Project starter configurations |
-| `snippet` | 79 | Copy-paste code templates |
+| `snippet` | 80 | Copy-paste code templates |
 | `gradle` | 78 | Gradle dependency declarations |
 
 ---
 
 ## Advanced: Manual Search
 
-You can also run searches directly from the terminal:
+Run searches directly from the terminal:
 
 ```bash
 # Search by domain
