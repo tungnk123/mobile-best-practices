@@ -86,6 +86,8 @@ AI assistant automatically:
 
 ### Slash Commands (Claude Code & Cursor)
 
+> **Note:** After installing, restart your IDE to register the slash commands — the command registry is only loaded at startup and the commands won't appear until you do.
+
 Type `/` to see all available commands:
 
 | Command | What It Does |
