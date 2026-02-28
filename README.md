@@ -8,62 +8,42 @@ Your AI assistant just got a mobile development brain upgrade.
 
 ---
 
+## Install in 10 Seconds
+
+```bash
+cd /path/to/your/mobile/project
+npx mobile-best-practices init
+```
+
+Pick your AI assistant and mobile platform. Done. Your `.gitignore` is updated automatically.
+
+**One-liner options:**
+
+```bash
+npx mobile-best-practices init --ai claude --platform android
+npx mobile-best-practices init --ai cursor --platform ios
+npx mobile-best-practices init --ai windsurf --platform flutter
+npx mobile-best-practices init --ai copilot --platform react-native
+npx mobile-best-practices init --ai all --platform all
+```
+
+**Supports:** Claude Code · Cursor · Windsurf · GitHub Copilot · Kiro · Codex CLI · Gemini CLI · Roo Code · Continue · OpenCode · Qoder · CodeBuddy · Trae · Antigravity
+
+---
+
 ## See It in Action
 
-Here's what `/mobile-performance-check` found in a real Android alarm clock app in **one command**:
+Real output from a real Android alarm clock app. Two commands.
+
+### `/mobile-performance-check` — 17 findings
 
 ![Performance check output — 17 real findings from a real Android app](docs/performance-check-example.png)
 
-| # | File | Severity | Issue | DB Rule |
-|---|------|----------|-------|---------|
-| 1 | `AppModule.kt` | **Critical** | No WAL mode on Room DB | `database query index room` |
-| 2 | `AlarmEventDao / StatisticsRepositoryImpl` | **Critical** | Full table scan + Kotlin-side aggregation | `database query index room` |
-| 3 | `app/build.gradle.kts` | **Critical** | No Baseline Profiles | `baseline profile startup trace` |
-| 4 | `app/build.gradle.kts` | **Critical** | No LeakCanary | `memory leak allocation heap` |
-| 5 | `HomeScreen.kt` | **Critical** | Unstable lambdas → excessive recomposition | `recomposition compose lambda` |
-| 6 | `SnoozeManager.kt` | Medium | SharedPreferences blocking I/O | `threading coroutine main dispatcher` |
-| 7 | `LocaleManager.kt` | Medium | SharedPreferences blocking I/O | `threading coroutine main dispatcher` |
-| 8 | `MusicSelectionScreen.kt:135` | Medium | Missing `key` in LazyColumn items | `list scroll lazy virtualize` |
-| 9 | `SnoozeBannerCard.kt:37` | Medium | `SimpleDateFormat` created every recomposition | `recomposition compose lambda` |
-| 10 | `HomeViewModel.kt:57` | Medium | CPU-bound `computeNextAlarmInfo` on wrong dispatcher | `threading coroutine main dispatcher` |
-| 11 | `NetworkModule.kt` | Medium | No OkHttp response cache | `network http caching request` |
-| 12 | `StatisticsScreen.kt` | Low | Missing `contentType` in LazyColumn | `list scroll lazy virtualize` |
-| 13 | `AlarmEntity.kt` | Low | No index on `isEnabled` column | `database query index room` |
-| 14 | `gradle.properties` | Low | Parallel builds disabled | `apk size binary proguard shrink` |
-| 15 | *(missing)* | Low | No StrictMode in debug | `threading coroutine main dispatcher` |
-| 16 | *(missing)* | Low | No JankStats production monitoring | `ui rendering frame drop jank` |
-| 17 | `HomeScreen.kt` | Low | Business logic / string formatting in Composable | `anti-pattern: business logic in UI` |
-
-17 real findings, each linked to an exact database rule — not generic advice.
-
-### `/mobile-security-audit` — same app, same command
+### `/mobile-security-audit` — 20 checks, 11 failures
 
 ![Security audit output — 20 checks against 437 security rules](docs/security-audit-example.png)
 
-| # | Check | Status |
-|---|-------|--------|
-| 1 | Encrypted SharedPreferences for sensitive local data | ❌ Fails — `SnoozeManager` uses plain SharedPreferences |
-| 2 | `network_security_config.xml` with `cleartextTrafficPermitted=false` | ❌ Fails — No NSC file present |
-| 3 | OkHttp `CertificatePinner` with backup pin | ❌ Fails — No pinning configured |
-| 4 | TLS 1.2/1.3 minimum via `ConnectionSpec.MODERN_TLS` | ❌ Fails — No minimum TLS version set |
-| 5 | Exported `BroadcastReceiver` protected by `android:permission` | ❌ Fails — `AlarmReceiver` exported without permission |
-| 6 | Backup exclusion rules for sensitive files | ❌ Fails — `backup_rules.xml` and `data_extraction_rules.xml` are empty stubs |
-| 7 | `FLAG_SECURE` on sensitive Activities | ❌ Fails — `AlarmTriggerActivity` missing FLAG_SECURE |
-| 8 | Intent extra validation (length, range) | ❌ Fails — Alarm label/ID not sanitised |
-| 9 | R8 minification enabled in release | ✅ Pass — `isMinifyEnabled=true`, `isShrinkResources=true` |
-| 10 | `PendingIntent.FLAG_IMMUTABLE` used | ✅ Pass — All PendingIntents use `FLAG_IMMUTABLE` |
-| 11 | Logging gated to debug builds | 🟡 Partial — `HttpLoggingInterceptor` is debug-only but uses `Level.BODY` |
-| 12 | `AlarmService` not exported | ✅ Pass — `android:exported="false"` |
-| 13 | `AlarmTriggerActivity` not exported | ✅ Pass — `android:exported="false"` |
-| 14 | Room database encrypted (SQLCipher) | ❌ Fails — Unencrypted Room database |
-| 15 | DataStore encrypted | ❌ Fails — Plain unencrypted DataStore |
-| 16 | Play Integrity API / root detection | ❌ Fails — No integrity checks |
-| 17 | Runtime `ACTIVITY_RECOGNITION` permission request | ❌ Needs verification |
-| 18 | No hardcoded production API credentials | ✅ Pass — `BASE_URL` is placeholder, no keys in code |
-| 19 | ProGuard rules minimal (no broad `-keep class **`) | 🟡 Partial — Rules are targeted but retain debug attributes |
-| 20 | `allowBackup` is false or backup rules exclude sensitive data | ❌ Fails — `allowBackup=true` with no exclusions |
-
-20 security checks, 11 failures, 2 partials — surfaced in seconds against 437 database rules.
+Not generic advice. Every finding is linked to an exact rule from the database.
 
 ---
 
@@ -86,57 +66,6 @@ Here's what `/mobile-performance-check` found in a real Android alarm clock app 
 | Platform Guidelines | 592 | Android (423), iOS (60), Flutter (54), React Native (55) |
 
 Every entry includes a **Reference URL** linking to official docs, GitHub repos, or guides.
-
----
-
-## Installation
-
-### Quick Install (Recommended)
-
-```bash
-cd /path/to/your/mobile/project
-npx mobile-best-practices init
-```
-
-Pick your AI assistant and mobile platform. Done. The skill is installed into your project and your `.gitignore` is updated automatically so skill files don't show up in git changes.
-
-### One-liner Install
-
-```bash
-# Android + Claude Code
-npx mobile-best-practices init --ai claude --platform android
-
-# iOS + Cursor
-npx mobile-best-practices init --ai cursor --platform ios
-
-# Flutter + Windsurf
-npx mobile-best-practices init --ai windsurf --platform flutter
-
-# React Native + GitHub Copilot
-npx mobile-best-practices init --ai copilot --platform react-native
-
-# All platforms + All AI assistants
-npx mobile-best-practices init --ai all --platform all
-```
-
-### Supported AI Assistants
-
-Claude Code, Cursor, Windsurf, GitHub Copilot, Kiro, Codex CLI, Gemini CLI, Roo Code, Continue, OpenCode, Qoder, CodeBuddy, Trae, Antigravity
-
-### Supported Mobile Platforms
-
-| Platform | Default Stack |
-|---|---|
-| **Android** | Jetpack Compose + Hilt + Room + Retrofit + Coil + Navigation Compose |
-| **iOS** | SwiftUI + Combine/async-await + SwiftData + URLSession + Kingfisher |
-| **Flutter** | BLoC/Riverpod + Dio + Drift/Hive + GoRouter + CachedNetworkImage |
-| **React Native** | Redux Toolkit/Zustand + Axios + MMKV + React Navigation + FastImage |
-
-### Update to Latest Version
-
-```bash
-npx mobile-best-practices update
-```
 
 ---
 
@@ -192,7 +121,7 @@ Catches issues like:
 
 ### "Check my project for performance issues"
 
-Reviews your code against 228 performance rules (see the real example in the table above):
+Reviews your code against 228 performance rules:
 
 ```
 "Find performance issues in my Android app"
@@ -256,9 +185,18 @@ Get exact, paste-ready dependency declarations:
 
 ---
 
-## Search Domains
+## Supported Platforms
 
-The skill organizes knowledge into 12 searchable domains:
+| Platform | Default Stack |
+|---|---|
+| **Android** | Jetpack Compose + Hilt + Room + Retrofit + Coil + Navigation Compose |
+| **iOS** | SwiftUI + Combine/async-await + SwiftData + URLSession + Kingfisher |
+| **Flutter** | BLoC/Riverpod + Dio + Drift/Hive + GoRouter + CachedNetworkImage |
+| **React Native** | Redux Toolkit/Zustand + Axios + MMKV + React Navigation + FastImage |
+
+---
+
+## Search Domains
 
 | Domain | Entries | Use For |
 |---|---|---|
@@ -279,35 +217,14 @@ The skill organizes knowledge into 12 searchable domains:
 
 ## Advanced: Manual Search
 
-Run searches directly from the terminal:
-
 ```bash
-# Search by domain
 python3 scripts/search.py "mvvm clean architecture" --domain architecture
-
-# Search platform guidelines
 python3 scripts/search.py "compose state management" --platform android
-
-# Search by tech stack
-python3 scripts/search.py "navigation" --stack swiftui
-
-# Get code snippets
 python3 scripts/search.py "viewmodel hilt" --domain snippet
-
-# Get Gradle dependencies
 python3 scripts/search.py "compose room retrofit" --domain gradle
-
-# Generate architecture blueprint
-python3 scripts/search.py "e-commerce android" --persist --project-name MyApp
-
-# Output as JSON
 python3 scripts/search.py "security encryption" --domain security --json
-
-# Get more results
 python3 scripts/search.py "compose performance" --domain performance -n 10
 ```
-
-### Search Flags
 
 | Flag | Description |
 |---|---|
