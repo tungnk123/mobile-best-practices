@@ -30,7 +30,10 @@
       "Bash(npm login:*)",
       "Read(//home/tungnk123/.claude/**)",
       "Read(//home/tungnk123/.agents/skills/**)",
-      "Read(//home/tungnk123/.agents/**)"
+      "Read(//home/tungnk123/.agents/**)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(gh issue:*)",
+      "Bash(wc -l src/mobile-best-practices/data/*.csv src/mobile-best-practices/data/platforms/*.csv)"
     ],
     "additionalDirectories": [
       "/home/tungnk123/Desktop/android/mobile-best-practices/src/mobile-best-practices/data/platforms"

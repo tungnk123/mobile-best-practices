@@ -1,8 +1,17 @@
 # Mobile Best Practices
 
+[![npm version](https://img.shields.io/npm/v/mobile-best-practices?color=blue)](https://www.npmjs.com/package/mobile-best-practices)
+[![npm downloads](https://img.shields.io/npm/dm/mobile-best-practices)](https://www.npmjs.com/package/mobile-best-practices)
+[![Python](https://img.shields.io/badge/python-3.x-blue?logo=python&logoColor=white)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Entries](https://img.shields.io/badge/entries-2%2C042-orange)](src/mobile-best-practices/data/)
+[![Platforms](https://img.shields.io/badge/platforms-Android%20%7C%20iOS%20%7C%20Flutter%20%7C%20RN-blueviolet)](README.md)
+
 Searchable database of **2,042 mobile development best practices** packaged as an AI skill for Claude Code and 14 other AI coding assistants. Covers Android, iOS, Flutter, and React Native.
 
 Your AI assistant becomes a mobile development expert — it automatically searches architecture patterns, security rules, performance tips, anti-patterns, and code snippets while helping you build, review, and fix mobile apps.
+
+**[Live Demo →](DEMO.md)** | **[Changelog →](CHANGELOG.md)** | **[Contributing →](CONTRIBUTING.md)**
 
 ## What's Inside
 

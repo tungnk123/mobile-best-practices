@@ -116,12 +116,12 @@ When user requests mobile work, **default to Android with Jetpack Compose** unle
 ### Build: search snippet → gradle → platform → antipattern → designpattern → architecture
 
 ```bash
-python3 scripts/search.py "viewmodel repository" --domain snippet -n 3
+python3 scripts/search.py "viewmodel repository" --domain snippet -n 5
 python3 scripts/search.py "hilt room retrofit" --domain gradle -n 5
 python3 scripts/search.py "compose state" --platform android -n 5
-python3 scripts/search.py "android compose" --domain antipattern
-python3 scripts/search.py "repository factory" --domain designpattern
-python3 scripts/search.py "mvvm clean" --domain architecture
+python3 scripts/search.py "android compose" --domain antipattern -n 5
+python3 scripts/search.py "repository factory" --domain designpattern -n 5
+python3 scripts/search.py "mvvm clean" --domain architecture -n 5
 ```
 
 ### Review: antipattern → designpattern → platform → performance → security
@@ -130,8 +130,8 @@ python3 scripts/search.py "mvvm clean" --domain architecture
 python3 scripts/search.py "android compose viewmodel" --domain antipattern -n 5
 python3 scripts/search.py "code smell switch if-else" --domain designpattern -n 5
 python3 scripts/search.py "state recomposition lifecycle" --platform android -n 5
-python3 scripts/search.py "compose lazy startup" --domain performance
-python3 scripts/search.py "storage encryption api key" --domain security
+python3 scripts/search.py "compose lazy startup" --domain performance -n 5
+python3 scripts/search.py "storage encryption api key" --domain security -n 5
 ```
 
 ## Code Quality

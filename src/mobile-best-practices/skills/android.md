@@ -42,16 +42,16 @@ python3 {SKILL_PATH}/scripts/search.py "<keyword>" --domain snippet -n 3
 python3 {SKILL_PATH}/scripts/search.py "<keyword>" --domain gradle -n 5
 
 # Architecture patterns
-python3 {SKILL_PATH}/scripts/search.py "<keyword>" --domain architecture
+python3 {SKILL_PATH}/scripts/search.py "<keyword>" --domain architecture -n 5
 
 # Anti-patterns
-python3 {SKILL_PATH}/scripts/search.py "<keyword>" --domain antipattern
+python3 {SKILL_PATH}/scripts/search.py "<keyword>" --domain antipattern -n 5
 
 # Performance rules
-python3 {SKILL_PATH}/scripts/search.py "<keyword>" --domain performance
+python3 {SKILL_PATH}/scripts/search.py "<keyword>" --domain performance -n 5
 
 # Stack-specific search
-python3 {SKILL_PATH}/scripts/search.py "<keyword>" --stack compose
+python3 {SKILL_PATH}/scripts/search.py "<keyword>" --stack compose -n 5
 ```
 
 ### Step 3: Recommended Search Order for Android
@@ -67,13 +67,13 @@ python3 {SKILL_PATH}/scripts/search.py "hilt room retrofit" --domain gradle -n 5
 python3 {SKILL_PATH}/scripts/search.py "compose state hilt" --platform android -n 5
 
 # 4. Check anti-patterns to avoid
-python3 {SKILL_PATH}/scripts/search.py "android compose" --domain antipattern
+python3 {SKILL_PATH}/scripts/search.py "android compose" --domain antipattern -n 5
 
 # 5. Get architecture guidance
-python3 {SKILL_PATH}/scripts/search.py "mvvm clean architecture" --domain architecture
+python3 {SKILL_PATH}/scripts/search.py "mvvm clean architecture" --domain architecture -n 5
 
 # 6. Check performance rules
-python3 {SKILL_PATH}/scripts/search.py "compose recomposition lazy" --domain performance
+python3 {SKILL_PATH}/scripts/search.py "compose recomposition lazy" --domain performance -n 5
 ```
 
 ### Step 4: Generate Code
@@ -142,19 +142,19 @@ python3 {SKILL_PATH}/scripts/search.py "<keywords from generated code>" --domain
 python3 {SKILL_PATH}/scripts/search.py "viewmodel compose screen" --domain snippet -n 3
 python3 {SKILL_PATH}/scripts/search.py "coil paging compose" --domain gradle -n 5
 python3 {SKILL_PATH}/scripts/search.py "lazy list image performance" --platform android -n 3
-python3 {SKILL_PATH}/scripts/search.py "product list card" --domain ui
+python3 {SKILL_PATH}/scripts/search.py "product list card" --domain ui -n 5
 ```
 
 ### New Project: "Build an e-commerce app"
 
 ```bash
-python3 {SKILL_PATH}/scripts/search.py "e-commerce" --domain reasoning
-python3 {SKILL_PATH}/scripts/search.py "mvvm clean architecture android" --domain architecture
+python3 {SKILL_PATH}/scripts/search.py "e-commerce" --domain reasoning -n 5
+python3 {SKILL_PATH}/scripts/search.py "mvvm clean architecture android" --domain architecture -n 5
 python3 {SKILL_PATH}/scripts/search.py "viewmodel repository hilt" --domain snippet -n 5
 python3 {SKILL_PATH}/scripts/search.py "room navigation theme" --domain snippet -n 5
 python3 {SKILL_PATH}/scripts/search.py "compose hilt room retrofit" --domain gradle -n 10
-python3 {SKILL_PATH}/scripts/search.py "android architecture" --domain antipattern
-python3 {SKILL_PATH}/scripts/search.py "compose startup image" --domain performance
+python3 {SKILL_PATH}/scripts/search.py "android architecture" --domain antipattern -n 5
+python3 {SKILL_PATH}/scripts/search.py "compose startup image" --domain performance -n 5
 ```
 
 ### Code Review: "Review my Android code"
@@ -162,8 +162,8 @@ python3 {SKILL_PATH}/scripts/search.py "compose startup image" --domain performa
 ```bash
 python3 {SKILL_PATH}/scripts/search.py "android compose viewmodel" --domain antipattern -n 5
 python3 {SKILL_PATH}/scripts/search.py "state recomposition lifecycle" --platform android -n 5
-python3 {SKILL_PATH}/scripts/search.py "compose lazy image startup" --domain performance
-python3 {SKILL_PATH}/scripts/search.py "android storage encryption api key" --domain security
+python3 {SKILL_PATH}/scripts/search.py "compose lazy image startup" --domain performance -n 5
+python3 {SKILL_PATH}/scripts/search.py "android storage encryption api key" --domain security -n 5
 ```
 
 ### Check ANR / Crash / Splash: "My app is freezing, crashing, or slow to start"
