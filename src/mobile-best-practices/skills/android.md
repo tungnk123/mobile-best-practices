@@ -1,6 +1,6 @@
 ---
 name: mobile-best-practices-android
-description: "Android development intelligence with Jetpack Compose. 49 architecture patterns, 117 design patterns, 91 UI patterns, 113 anti-patterns, 103 libraries, 228 performance rules, 437 security practices, 73 testing patterns, 79 code snippets, 78 Gradle declarations, 246 Android-specific guidelines. Default stack: MVVM + Hilt + Room + Retrofit + Coil + Navigation Compose + Material3. Actions: plan, build, create, design, implement, review, fix, improve, optimize, refactor, architect Android apps."
+description: "Android development intelligence with Jetpack Compose. 49 architecture patterns, 117 design patterns, 91 UI patterns, 113 anti-patterns, 103 libraries, 228 performance rules, 437 security practices, 73 testing patterns, 79 code snippets, 78 Gradle declarations, 246 Android-specific guidelines. Default stack: MVVM + Hilt + Room + Retrofit + Coil + Navigation Compose + Material3. Actions: plan, build, create, design, implement, review, fix, improve, optimize, refactor, architect Android apps. Post-generation checks: performance, security, ANR/crash/splash."
 ---
 
 # Android Best Practices - Jetpack Compose Development Intelligence
@@ -44,11 +44,11 @@ python3 {SKILL_PATH}/scripts/search.py "<keyword>" --domain gradle -n 5
 # Architecture patterns
 python3 {SKILL_PATH}/scripts/search.py "<keyword>" --domain architecture
 
-# Anti-patterns filtered for Android
-python3 {SKILL_PATH}/scripts/search.py "<keyword>" --domain antipattern --filter-platform android
+# Anti-patterns
+python3 {SKILL_PATH}/scripts/search.py "<keyword>" --domain antipattern
 
-# Performance rules filtered for Android
-python3 {SKILL_PATH}/scripts/search.py "<keyword>" --domain performance --filter-platform android
+# Performance rules
+python3 {SKILL_PATH}/scripts/search.py "<keyword>" --domain performance
 
 # Stack-specific search
 python3 {SKILL_PATH}/scripts/search.py "<keyword>" --stack compose
@@ -67,18 +67,39 @@ python3 {SKILL_PATH}/scripts/search.py "hilt room retrofit" --domain gradle -n 5
 python3 {SKILL_PATH}/scripts/search.py "compose state hilt" --platform android -n 5
 
 # 4. Check anti-patterns to avoid
-python3 {SKILL_PATH}/scripts/search.py "android compose" --domain antipattern --filter-platform android
+python3 {SKILL_PATH}/scripts/search.py "android compose" --domain antipattern
 
 # 5. Get architecture guidance
 python3 {SKILL_PATH}/scripts/search.py "mvvm clean architecture" --domain architecture
 
 # 6. Check performance rules
-python3 {SKILL_PATH}/scripts/search.py "compose recomposition lazy" --domain performance --filter-platform android
+python3 {SKILL_PATH}/scripts/search.py "compose recomposition lazy" --domain performance
 ```
 
 ### Step 4: Generate Code
 
 Use snippet results as starting templates. Customize for user's needs. Follow the code generation rules below.
+
+### Step 5: Check Performance, Security & ANR/Crash/Splash
+
+After generating code, extract keywords from the generated code (e.g. component names, patterns, APIs used) and run all three checks:
+
+```bash
+# Performance: use keywords from generated code (composables, data ops, images, lists)
+python3 {SKILL_PATH}/scripts/search.py "<keywords from generated code>" --domain performance -n 5
+
+# Security: use keywords from generated code (auth, storage, network, keys)
+python3 {SKILL_PATH}/scripts/search.py "<keywords from generated code>" --domain security -n 5
+
+# ANR / Crash / Splash: use keywords from generated code (threading, lifecycle, IO, startup)
+python3 {SKILL_PATH}/scripts/search.py "<keywords from generated code>" --domain performance -n 5
+python3 {SKILL_PATH}/scripts/search.py "<keywords from generated code>" --domain antipattern -n 5
+```
+
+**Keyword extraction guide:**
+- Performance → composables, lazy lists, images, DB queries, recomposition triggers
+- Security → login, token, storage, API key, network call, encryption, biometric
+- ANR/Crash/Splash → coroutine, dispatcher, lifecycle, IO call, null handling, exception, context, startup, splash, cold start
 
 ---
 
@@ -121,7 +142,7 @@ Use snippet results as starting templates. Customize for user's needs. Follow th
 python3 {SKILL_PATH}/scripts/search.py "viewmodel compose screen" --domain snippet -n 3
 python3 {SKILL_PATH}/scripts/search.py "coil paging compose" --domain gradle -n 5
 python3 {SKILL_PATH}/scripts/search.py "lazy list image performance" --platform android -n 3
-python3 {SKILL_PATH}/scripts/search.py "product list card" --domain ui --filter-platform android
+python3 {SKILL_PATH}/scripts/search.py "product list card" --domain ui
 ```
 
 ### New Project: "Build an e-commerce app"
@@ -132,8 +153,8 @@ python3 {SKILL_PATH}/scripts/search.py "mvvm clean architecture android" --domai
 python3 {SKILL_PATH}/scripts/search.py "viewmodel repository hilt" --domain snippet -n 5
 python3 {SKILL_PATH}/scripts/search.py "room navigation theme" --domain snippet -n 5
 python3 {SKILL_PATH}/scripts/search.py "compose hilt room retrofit" --domain gradle -n 10
-python3 {SKILL_PATH}/scripts/search.py "android architecture" --domain antipattern --filter-platform android
-python3 {SKILL_PATH}/scripts/search.py "compose startup image" --domain performance --filter-platform android
+python3 {SKILL_PATH}/scripts/search.py "android architecture" --domain antipattern
+python3 {SKILL_PATH}/scripts/search.py "compose startup image" --domain performance
 ```
 
 ### Code Review: "Review my Android code"
@@ -141,8 +162,31 @@ python3 {SKILL_PATH}/scripts/search.py "compose startup image" --domain performa
 ```bash
 python3 {SKILL_PATH}/scripts/search.py "android compose viewmodel" --domain antipattern -n 5
 python3 {SKILL_PATH}/scripts/search.py "state recomposition lifecycle" --platform android -n 5
-python3 {SKILL_PATH}/scripts/search.py "compose lazy image startup" --domain performance --filter-platform android
-python3 {SKILL_PATH}/scripts/search.py "android storage encryption api key" --domain security --filter-platform android
+python3 {SKILL_PATH}/scripts/search.py "compose lazy image startup" --domain performance
+python3 {SKILL_PATH}/scripts/search.py "android storage encryption api key" --domain security
+```
+
+### Check ANR / Crash / Splash: "My app is freezing, crashing, or slow to start"
+
+```bash
+# ANR: main thread work, blocking calls, StrictMode violations
+python3 {SKILL_PATH}/scripts/search.py "anr main thread blocking" --domain performance -n 5
+
+# ANR: coroutine dispatcher, IO on main thread
+python3 {SKILL_PATH}/scripts/search.py "dispatcher io main thread coroutine" --domain antipattern -n 5
+
+# Crash: null pointer, exception handling, lifecycle crashes
+python3 {SKILL_PATH}/scripts/search.py "crash null exception lifecycle" --domain antipattern -n 5
+
+# Crash: Android platform-specific crash patterns
+python3 {SKILL_PATH}/scripts/search.py "crash anr exception" --platform android -n 5
+
+# Crash: memory leaks causing OOM crashes
+python3 {SKILL_PATH}/scripts/search.py "memory leak oom context" --domain performance -n 5
+
+# Splash: cold start, splash screen delay, app startup
+python3 {SKILL_PATH}/scripts/search.py "splash screen cold start startup time" --domain performance -n 5
+python3 {SKILL_PATH}/scripts/search.py "splash screen initialization blocking" --domain antipattern -n 5
 ```
 
 ### Gradle Setup: "What dependencies do I need?"

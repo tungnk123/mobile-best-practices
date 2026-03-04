@@ -127,6 +127,7 @@ export async function initCommand(options: { ai?: string; offline?: boolean; pla
     console.log(chalk.white('  • /mobile-best-practices - Main skill'));
     console.log(chalk.white('  • /mobile-security-audit - Security vulnerability scan'));
     console.log(chalk.white('  • /mobile-performance-check - Performance analysis'));
+    console.log(chalk.white('  • /mobile-anr-crash-check - ANR, crash & splash screen check'));
     console.log(chalk.white('  • /mobile-setup-android - New Android project setup'));
   }
   console.log();
