@@ -36,7 +36,7 @@ JUnit,Testing,"junit test unit assert rule",junit,testImplementation(libs.junit)
 JUnit5,Testing,"junit5 jupiter test parameterized",junit5,testImplementation(libs.junit.jupiter),,5.10.2,Modern testing with extensions,https://junit.org/junit5/
 MockK,Testing,"mockk mock test kotlin coroutine",mockk,testImplementation(libs.mockk),,1.13.13,Kotlin-first mocking,https://mockk.io/
 Turbine,Testing,"turbine flow test stateflow coroutine",turbine,testImplementation(libs.turbine),,1.2.0,Flow testing made easy,https://github.com/cashapp/turbine
-Coroutines Test,Testing,"coroutines test dispatcher runtest",coroutines-test,testImplementation(libs.coroutines.test),,1.9.0,TestDispatcher and runTest,https://kotlinlang.org/docs/coroutines-test.html
+Coroutines Test,Testing,"coroutines test dispatcher runtest",coroutines-test,testImplementation(libs.coroutines.test),,1.9.0,TestDispatcher and runTest,https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/
 Compose UI Test,Testing,"compose test ui junit4 semantics rule",compose-ui-test,androidTestImplementation(libs.compose.ui.test.junit4),,BOM,Compose UI testing,https://developer.android.com/develop/ui/compose/testing
 Compose UI Test Manifest,Testing,"compose test manifest activity debug",compose-ui-test-manifest,debugImplementation(libs.compose.ui.test.manifest),,BOM,Required for Compose tests,https://developer.android.com/develop/ui/compose/testing
 Room Testing,Testing,"room test inmemory database migration",room-testing,testImplementation(libs.room.testing),,2.6.1,In-memory DB for tests,https://developer.android.com/training/data-storage/room/testing-db

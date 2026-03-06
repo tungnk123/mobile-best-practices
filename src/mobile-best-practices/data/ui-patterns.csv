@@ -1,5 +1,5 @@
 Pattern Name,Platform,Category,Keywords,Use Case,Components,Implementation Notes,Accessibility,Reference URL
-Bottom Navigation,Android,Navigation,"bottom tab navbar material",Main app navigation,NavigationBar|NavController|NavHost,Use Material3 NavigationBar with 3-5 destinations,contentDescription on each tab,https://developer.android.com/develop/ui/compose/components/bottom-navigation
+Bottom Navigation,Android,Navigation,"bottom tab navbar material",Main app navigation,NavigationBar|NavController|NavHost,Use Material3 NavigationBar with 3-5 destinations,contentDescription on each tab,https://developer.android.com/develop/ui/compose/components/navigation-bar
 Tab Layout,Android,Navigation,"tab viewpager swipe sections",Swipeable sections,TabRow|HorizontalPager,Use HorizontalPager in Compose,Tab labels accessible,https://developer.android.com/develop/ui/compose/layouts/pager
 Navigation Drawer,Android,Navigation,"drawer sidebar hamburger menu",Secondary navigation,ModalNavigationDrawer|DrawerState,Use ModalNavigationDrawer in Compose,Drawer toggle labeled,https://developer.android.com/develop/ui/compose/components/drawer
 Tab Bar,iOS,Navigation,"tabbar uitabbar swiftui",Main navigation,TabView|tabItem,Max 5 tabs in TabView,VoiceOver for each tab,https://developer.apple.com/documentation/swiftui/tabview
