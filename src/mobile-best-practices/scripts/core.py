@@ -66,7 +66,7 @@ CSV_CONFIG = {
     "snippet": {
         "file": "code-snippets.csv",
         "search_cols": ["Name", "Category", "Keywords", "Description"],
-        "output_cols": ["ID", "Name", "Platform", "Category", "Description", "Code", "Imports", "Notes"]
+        "output_cols": ["ID", "Name", "Platform", "Category", "Description", "Code", "Imports", "Notes", "Source URL"]
     },
     "gradle": {
         "file": "gradle-deps.csv",

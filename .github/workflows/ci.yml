@@ -7,6 +7,10 @@ on:
     branches: [main]
 
 jobs:
+  # ─────────────────────────────────────────────────────────────
+  # 1. Validate CSV structure: columns, row counts, severity values,
+  #    deduplication, Source URL presence for Android snippets
+  # ─────────────────────────────────────────────────────────────
   validate-csv:
     name: Validate CSV Data
     runs-on: ubuntu-latest
@@ -18,6 +22,25 @@ jobs:
       - name: Validate CSV files
         run: python3 scripts/validate-csv.py
 
+  # ─────────────────────────────────────────────────────────────
+  # 2. Check all Reference URLs / Docs URLs / Source URLs return 2xx
+  #    Runs only on push to main (not every PR) to avoid rate limits
+  # ─────────────────────────────────────────────────────────────
+  check-urls:
+    name: Check Reference URLs
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Check URLs
+        run: python3 scripts/check-urls.py
+
+  # ─────────────────────────────────────────────────────────────
+  # 3. Smoke-test the BM25 search engine across all domains
+  # ─────────────────────────────────────────────────────────────
   test-search:
     name: Test Search Engine
     runs-on: ubuntu-latest
@@ -29,13 +52,43 @@ jobs:
       - name: Run search tests
         run: |
           cd src/mobile-best-practices
-          python3 scripts/search.py "mvvm" --domain architecture --json
-          python3 scripts/search.py "compose" --platform android --json
-          python3 scripts/search.py "navigation" --stack swiftui --json
-          python3 scripts/search.py "hilt retrofit" --domain gradle --json
-          python3 scripts/search.py "viewmodel" --domain snippet --json
-          echo "All search tests passed"
+          echo "=== Architecture ==="
+          python3 scripts/search.py "mvvm clean" --domain architecture --json | python3 -c "import json,sys; d=json.load(sys.stdin); assert d['count'] > 0, 'No results'"
 
+          echo "=== Anti-patterns ==="
+          python3 scripts/search.py "memory leak context" --domain antipattern --json | python3 -c "import json,sys; d=json.load(sys.stdin); assert d['count'] > 0"
+
+          echo "=== Performance ==="
+          python3 scripts/search.py "anr main thread" --domain performance --json | python3 -c "import json,sys; d=json.load(sys.stdin); assert d['count'] > 0"
+
+          echo "=== Security ==="
+          python3 scripts/search.py "ssl pinning certificate" --domain security --json | python3 -c "import json,sys; d=json.load(sys.stdin); assert d['count'] > 0"
+
+          echo "=== Snippet (with Source URL) ==="
+          python3 scripts/search.py "viewmodel hilt" --domain snippet --json | python3 -c "
+          import json, sys
+          d = json.load(sys.stdin)
+          assert d['count'] > 0, 'No snippets returned'
+          r = d['results'][0]
+          assert 'Source URL' in r, 'Source URL missing from snippet output'
+          assert 'cs.android.com' in r.get('Source URL',''), f'Expected cs.android.com, got: {r.get(\"Source URL\")}'
+          print('Source URL OK:', r['Source URL'])
+          "
+
+          echo "=== Gradle ==="
+          python3 scripts/search.py "compose bom hilt" --domain gradle --json | python3 -c "import json,sys; d=json.load(sys.stdin); assert d['count'] > 0"
+
+          echo "=== Platform Android ==="
+          python3 scripts/search.py "compose state lifecycle" --platform android --json | python3 -c "import json,sys; d=json.load(sys.stdin); assert d['count'] > 0"
+
+          echo "=== Platform iOS ==="
+          python3 scripts/search.py "swiftui navigation" --platform ios --json | python3 -c "import json,sys; d=json.load(sys.stdin); assert d['count'] > 0"
+
+          echo "All search tests passed ✓"
+
+  # ─────────────────────────────────────────────────────────────
+  # 4. Build and smoke-test the npm CLI
+  # ─────────────────────────────────────────────────────────────
   build-cli:
     name: Build CLI
     runs-on: ubuntu-latest
@@ -49,12 +102,15 @@ jobs:
           node-version: "20"
       - run: npm ci
       - run: npm run build
-      - name: Test CLI commands
+      - name: Smoke-test CLI
         run: |
           node dist/index.js versions
           node dist/index.js init --ai claude --offline
-          echo "CLI build and test passed"
+          echo "CLI build and smoke test passed ✓"
 
+  # ─────────────────────────────────────────────────────────────
+  # 5. Publish to npm — only on main commits starting with "release:"
+  # ─────────────────────────────────────────────────────────────
   publish-npm:
     name: Publish to npm
     needs: [validate-csv, test-search, build-cli]
