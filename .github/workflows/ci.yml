@@ -84,6 +84,9 @@ jobs:
           echo "=== Platform iOS ==="
           python3 scripts/search.py "swiftui navigation" --platform ios --json | python3 -c "import json,sys; d=json.load(sys.stdin); assert d['count'] > 0"
 
+          echo "=== Fuzzy search (typo tolerance) ==="
+          python3 scripts/search.py "encryptoin keystroe" --domain security --fuzzy --json | python3 -c "import json,sys; d=json.load(sys.stdin); assert d['count'] > 0, 'Fuzzy search returned no results for typo query'; assert d['fuzzy'] == True, 'fuzzy flag not set in response'"
+
           echo "All search tests passed ✓"
 
   # ─────────────────────────────────────────────────────────────

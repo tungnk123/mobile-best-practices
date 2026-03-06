@@ -21,62 +21,62 @@ CSV_CONFIG = {
     "architecture": {
         "file": "architectures.csv",
         "search_cols": ["Name", "Platform", "Keywords", "Best For", "Tech Stack"],
-        "output_cols": ["Name", "Platform", "Complexity", "Team Size", "Keywords", "Best For", "Tech Stack", "Layers", "Structure", "Anti Patterns", "Notes"]
+        "output_cols": ["Name", "Platform", "Complexity", "Team Size", "Keywords", "Best For", "Tech Stack", "Layers", "Structure", "Anti Patterns", "Notes", "Reference URL"]
     },
     "ui": {
         "file": "ui-patterns.csv",
         "search_cols": ["Pattern Name", "Platform", "Category", "Keywords", "Use Case"],
-        "output_cols": ["Pattern Name", "Platform", "Category", "Keywords", "Use Case", "Components", "Implementation Notes", "Accessibility"]
+        "output_cols": ["Pattern Name", "Platform", "Category", "Keywords", "Use Case", "Components", "Implementation Notes", "Accessibility", "Reference URL"]
     },
     "template": {
         "file": "project-templates.csv",
         "search_cols": ["Template Name", "Platform", "Architecture", "Tech Stack", "Features Included"],
-        "output_cols": ["Template Name", "Platform", "Architecture", "Tech Stack", "Modules", "Folder Structure", "Features Included", "Key Dependencies"]
+        "output_cols": ["Template Name", "Platform", "Architecture", "Tech Stack", "Modules", "Folder Structure", "Features Included", "Key Dependencies", "Reference URL"]
     },
     "antipattern": {
         "file": "anti-patterns.csv",
         "search_cols": ["Name", "Platform", "Category", "Keywords", "Description"],
-        "output_cols": ["Name", "Platform", "Category", "Severity", "Description", "Bad Example", "Good Example", "Fix"]
+        "output_cols": ["Name", "Platform", "Category", "Severity", "Description", "Bad Example", "Good Example", "Fix", "Reference URL"]
     },
     "reasoning": {
         "file": "reasoning-rules.csv",
         "search_cols": ["Product Type", "Platform", "Keywords", "Key Features"],
-        "output_cols": ["Product Type", "Platform", "Recommended Arch", "Recommended UI", "Color Mood", "Key Features", "Anti Patterns", "Key Dependencies", "Notes"]
+        "output_cols": ["Product Type", "Platform", "Recommended Arch", "Recommended UI", "Color Mood", "Key Features", "Anti Patterns", "Key Dependencies", "Notes", "Reference URL"]
     },
     "library": {
         "file": "libraries.csv",
         "search_cols": ["Name", "Platform", "Category", "Keywords", "Description"],
-        "output_cols": ["Name", "Platform", "Category", "Keywords", "Description", "Gradle/Pod/Pub", "Alternative", "Stars", "Notes"]
+        "output_cols": ["Name", "Platform", "Category", "Keywords", "Description", "Gradle/Pod/Pub", "Alternative", "Stars", "Notes", "Reference URL"]
     },
     "performance": {
         "file": "performance.csv",
         "search_cols": ["Category", "Issue", "Platform", "Keywords", "Description"],
-        "output_cols": ["Category", "Issue", "Platform", "Severity", "Description", "Do", "Dont", "Code Good", "Code Bad", "Metric"]
+        "output_cols": ["Category", "Issue", "Platform", "Severity", "Description", "Do", "Dont", "Code Good", "Code Bad", "Metric", "Reference URL"]
     },
     "testing": {
         "file": "testing.csv",
         "search_cols": ["Category", "Pattern", "Platform", "Keywords", "Description"],
-        "output_cols": ["Category", "Pattern", "Platform", "Description", "Framework", "Code Example", "Anti Pattern", "Notes"]
+        "output_cols": ["Category", "Pattern", "Platform", "Description", "Framework", "Code Example", "Anti Pattern", "Notes", "Reference URL"]
     },
     "security": {
         "file": "security.csv",
         "search_cols": ["Category", "Threat", "Platform", "Keywords", "Description"],
-        "output_cols": ["Category", "Threat", "Platform", "Severity", "Description", "Mitigation", "Code Good", "Code Bad"]
+        "output_cols": ["Category", "Threat", "Platform", "Severity", "Description", "Mitigation", "Code Good", "Code Bad", "OWASP Ref", "Reference URL"]
     },
     "snippet": {
         "file": "code-snippets.csv",
         "search_cols": ["Name", "Category", "Keywords", "Description"],
-        "output_cols": ["ID", "Name", "Platform", "Category", "Description", "Code", "Imports", "Notes"]
+        "output_cols": ["ID", "Name", "Platform", "Category", "Description", "Code", "Imports", "Notes", "Source URL"]
     },
     "gradle": {
         "file": "gradle-deps.csv",
         "search_cols": ["Name", "Category", "Keywords"],
-        "output_cols": ["Name", "Category", "Version Catalog Key", "Implementation", "KSP/KAPT", "Version", "Notes"]
+        "output_cols": ["Name", "Category", "Version Catalog Key", "Implementation", "KSP/KAPT", "Version", "Notes", "Reference URL"]
     },
     "designpattern": {
         "file": "design-patterns.csv",
         "search_cols": ["Name", "Category", "Platform", "Keywords", "Intent", "Code Smell"],
-        "output_cols": ["Name", "Category", "Platform", "Intent", "Code Smell", "When To Use", "Bad Example", "Good Example", "Notes"]
+        "output_cols": ["Name", "Category", "Platform", "Intent", "Code Smell", "When To Use", "Bad Example", "Good Example", "Notes", "Reference URL"]
     }
 }
 
@@ -121,6 +121,138 @@ STACK_MAP = {
 }
 
 AVAILABLE_STACKS = list(STACK_MAP.keys())
+
+# Fields across all CSV schemas that contain code
+_CODE_FIELDS = frozenset({
+    "Code Good", "Code Bad", "Code", "Code Example",
+    "Good Example", "Bad Example",
+})
+
+# Keywords that mark a comment as "important" (used by style='important')
+_IMPORTANT_WORDS = frozenset({
+    "important", "note", "warning", "todo", "fixme", "why", "critical",
+    "workaround", "hack", "required", "must", "never", "always",
+    "deprecated", "throws", "override", "see", "param", "return",
+    "caution", "security", "crash", "leak",
+})
+
+
+# ============ COMMENT STYLE FILTER ============
+
+def _is_important_comment(text: str) -> bool:
+    """Return True if comment text contains an importance marker word."""
+    lower = text.lower()
+    return any(w in lower for w in _IMPORTANT_WORDS)
+
+
+def _strip_inline_comment(line: str) -> str:
+    """Remove a trailing // comment, respecting quoted strings."""
+    in_str, str_ch = False, ""
+    i = 0
+    while i < len(line):
+        ch = line[i]
+        if in_str:
+            if ch == "\\" and i + 1 < len(line):
+                i += 2
+                continue
+            if ch == str_ch:
+                in_str = False
+        elif ch in ('"', "'"):
+            in_str, str_ch = True, ch
+        elif ch == "/" and i + 1 < len(line) and line[i + 1] == "/":
+            return line[:i].rstrip()
+        i += 1
+    return line
+
+
+def apply_comment_style(code: str, style: str) -> str:
+    """Filter comments in a code string based on the requested style.
+
+    Styles
+    ------
+    'all'       — unchanged (default)
+    'none'      — every comment line / block is removed; inline comments
+                  are stripped from the end of code lines
+    'important' — only comments whose text contains an importance marker word
+                  (NOTE, WARNING, WHY, IMPORTANT, CRITICAL, …) are kept;
+                  all other comments are removed; KDoc /** */ blocks are kept
+                  only when their body matches as well
+    """
+    if style == "all" or not code:
+        return code
+
+    lines = code.split("\n")
+    result: List[str] = []
+    in_block = False
+    block_buf: List[str] = []
+
+    for line in lines:
+        stripped = line.strip()
+
+        # ── Block-comment: /* ... */ or /** ... */
+        if not in_block and stripped.startswith("/*"):
+            if "*/" in stripped:
+                # Single-line block or KDoc: /** ... */ or /* ... */
+                if style == "none":
+                    continue
+                if style == "important" and _is_important_comment(stripped):
+                    result.append(line)
+                continue
+            else:
+                # Multi-line block comment opening
+                in_block = True
+                block_buf = [line]
+                continue
+
+        # ── Inside a block comment
+        if in_block:
+            block_buf.append(line)
+            if "*/" in stripped:
+                in_block = False
+                combined = " ".join(block_buf)
+                if style == "none":
+                    pass  # discard
+                elif style == "important" and _is_important_comment(combined):
+                    result.extend(block_buf)
+                block_buf = []
+            continue
+
+        # ── Full-line // or # comment
+        if stripped.startswith("//") or stripped.startswith("#"):
+            if style == "none":
+                continue
+            if style == "important" and _is_important_comment(stripped):
+                result.append(line)
+            continue
+
+        # ── Inline // comment appended to code
+        if "//" in line:
+            bare = _strip_inline_comment(line)
+            inline_comment = line[len(bare):]
+            if style == "none":
+                result.append(bare)
+            elif style == "important":
+                if _is_important_comment(inline_comment):
+                    result.append(line)   # keep comment
+                else:
+                    result.append(bare)   # strip comment, keep code
+            else:
+                result.append(line)
+            continue
+
+        result.append(line)
+
+    # Collapse consecutive blank lines → single blank line
+    final: List[str] = []
+    prev_blank = False
+    for ln in result:
+        blank = not ln.strip()
+        if blank and prev_blank:
+            continue
+        final.append(ln)
+        prev_blank = blank
+
+    return "\n".join(final)
 
 
 # ============ BM25 IMPLEMENTATION ============
@@ -186,6 +318,48 @@ class BM25:
 
         return sorted(scores, key=lambda x: x[1], reverse=True)
 
+    # ── Fuzzy helpers ──────────────────────────────────────────────────────────
+
+    def _bigrams(self, word: str) -> set:
+        """Character bigrams of a word (space-padded) for Dice similarity."""
+        padded = f" {word} "
+        return {padded[i:i + 2] for i in range(len(padded) - 1)}
+
+    def expand_query(self, query: str, threshold: float = 0.72) -> str:
+        """Return an expanded query string with fuzzy-matched vocabulary terms.
+
+        For each query token absent from the BM25 vocabulary, finds the
+        closest vocabulary word using Dice coefficient on character bigrams.
+        If the best match exceeds *threshold* the matched word is appended to
+        the query so the BM25 scorer can pick it up.  Tokens shorter than 4
+        characters are skipped to avoid noisy expansions.
+        """
+        query_tokens = self.tokenize(query)
+        vocab = set(self.idf.keys())
+        extra: List[str] = []
+
+        for token in query_tokens:
+            if token in vocab or len(token) < 4:
+                continue
+            tok_bg = self._bigrams(token)
+            best_word, best_dice = "", 0.0
+            for word in vocab:
+                if abs(len(word) - len(token)) > 3:
+                    continue  # skip obviously different lengths early
+                w_bg = self._bigrams(word)
+                intersection = len(tok_bg & w_bg)
+                dice = 2 * intersection / (len(tok_bg) + len(w_bg))
+                if dice > best_dice:
+                    best_dice, best_word = dice, word
+            if best_dice >= threshold:
+                extra.append(best_word)
+
+        return (query + " " + " ".join(extra)) if extra else query
+
+    def score_fuzzy(self, query: str, threshold: float = 0.72) -> List[Tuple[int, float]]:
+        """Score with automatic fuzzy query expansion for typo tolerance."""
+        return self.score(self.expand_query(query, threshold))
+
 
 # ============ SEARCH FUNCTIONS ============
 def _load_csv(filepath):
@@ -194,8 +368,8 @@ def _load_csv(filepath):
         return list(csv.DictReader(f))
 
 
-def _search_csv(filepath: Path, search_cols: List[str], output_cols: List[str], query: str, max_results: int) -> List[Dict[str, str]]:
-    """Core search function using BM25"""
+def _search_csv(filepath: Path, search_cols: List[str], output_cols: List[str], query: str, max_results: int, fuzzy: bool = False) -> List[Dict[str, str]]:
+    """Core search function using BM25 (with optional fuzzy expansion)"""
     if not filepath.exists():
         return []
 
@@ -204,10 +378,10 @@ def _search_csv(filepath: Path, search_cols: List[str], output_cols: List[str], 
     # Build documents from search columns
     documents = [" ".join(str(row.get(col, "")) for col in search_cols) for row in data]
 
-    # BM25 search
+    # BM25 search (fuzzy expands query tokens to handle typos)
     bm25 = BM25()
     bm25.fit(documents)
-    ranked = bm25.score(query)
+    ranked = bm25.score_fuzzy(query) if fuzzy else bm25.score(query)
 
     # Get top results with score > 0
     results = []
@@ -243,7 +417,7 @@ def detect_domain(query):
     return best if scores[best] > 0 else "architecture"
 
 
-def search(query: str, domain: Optional[str] = None, max_results: int = MAX_RESULTS, filter_platform: Optional[str] = None) -> Dict[str, Any]:
+def search(query: str, domain: Optional[str] = None, max_results: int = MAX_RESULTS, filter_platform: Optional[str] = None, fuzzy: bool = False) -> Dict[str, Any]:
     """Main search function with auto-domain detection and optional platform filter"""
     if domain is None:
         domain = detect_domain(query)
@@ -259,7 +433,7 @@ def search(query: str, domain: Optional[str] = None, max_results: int = MAX_RESU
     search_cols = cast(List[str], config["search_cols"])
     output_cols = cast(List[str], config["output_cols"])
 
-    results = _search_csv(filepath, search_cols, output_cols, query, max_results * 3 if filter_platform else max_results)
+    results = _search_csv(filepath, search_cols, output_cols, query, max_results * 3 if filter_platform else max_results, fuzzy=fuzzy)
 
     # Filter by platform if specified
     if filter_platform and results:
@@ -280,11 +454,12 @@ def search(query: str, domain: Optional[str] = None, max_results: int = MAX_RESU
         "query": query,
         "file": config["file"],
         "count": len(results),
-        "results": results
+        "results": results,
+        "fuzzy": fuzzy,
     }
 
 
-def search_platform(query: str, platform: str, max_results: int = MAX_RESULTS) -> Dict[str, Any]:
+def search_platform(query: str, platform: str, max_results: int = MAX_RESULTS, fuzzy: bool = False) -> Dict[str, Any]:
     """Search platform-specific guidelines"""
     if platform not in PLATFORM_CONFIG:
         return {"error": f"Unknown platform: {platform}. Available: {', '.join(AVAILABLE_PLATFORMS)}"}
@@ -296,7 +471,7 @@ def search_platform(query: str, platform: str, max_results: int = MAX_RESULTS) -
 
     search_cols = cast(List[str], _PLATFORM_COLS["search_cols"])
     output_cols = cast(List[str], _PLATFORM_COLS["output_cols"])
-    results = _search_csv(filepath, search_cols, output_cols, query, max_results)
+    results = _search_csv(filepath, search_cols, output_cols, query, max_results, fuzzy=fuzzy)
 
     return {
         "domain": "platform",
@@ -304,11 +479,12 @@ def search_platform(query: str, platform: str, max_results: int = MAX_RESULTS) -
         "query": query,
         "file": PLATFORM_CONFIG[platform]["file"],
         "count": len(results),
-        "results": results
+        "results": results,
+        "fuzzy": fuzzy,
     }
 
 
-def search_stack(query: str, stack: str, max_results: int = MAX_RESULTS) -> Dict[str, Any]:
+def search_stack(query: str, stack: str, max_results: int = MAX_RESULTS, fuzzy: bool = False) -> Dict[str, Any]:
     """Search filtered by tech stack (maps stack to platform + adds stack keywords)"""
     stack_lower = stack.lower()
 
@@ -318,10 +494,10 @@ def search_stack(query: str, stack: str, max_results: int = MAX_RESULTS) -> Dict
     platform = STACK_MAP[stack_lower]
 
     # Search platform guidelines first
-    platform_results = search_platform(f"{query} {stack}", platform, max_results)
+    platform_results = search_platform(f"{query} {stack}", platform, max_results, fuzzy=fuzzy)
 
     # Also search across domains filtered by platform
-    domain_results = search(f"{query} {stack}", filter_platform=platform, max_results=max_results)
+    domain_results = search(f"{query} {stack}", filter_platform=platform, max_results=max_results, fuzzy=fuzzy)
 
     # Merge results
     all_results: List[Any] = []

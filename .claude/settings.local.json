@@ -33,7 +33,11 @@
       "Read(//home/tungnk123/.agents/**)",
       "WebFetch(domain:raw.githubusercontent.com)",
       "Bash(gh issue:*)",
-      "Bash(wc -l src/mobile-best-practices/data/*.csv src/mobile-best-practices/data/platforms/*.csv)"
+      "Bash(wc -l src/mobile-best-practices/data/*.csv src/mobile-best-practices/data/platforms/*.csv)",
+      "Bash(grep '\"\"version\"\"')",
+      "Bash(grep '\"\"version\"\"' cli/package.json)",
+      "Bash(__NEW_LINE_e7c3cd225ed4c53a__ git log --oneline -4)",
+      "Bash(git push)"
     ],
     "additionalDirectories": [
       "/home/tungnk123/Desktop/android/mobile-best-practices/src/mobile-best-practices/data/platforms"

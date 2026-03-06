@@ -51,10 +51,11 @@ def format_output(result, compact=False, comment_style=_COMMENT_STYLE_DEFAULT):
         output.append(f"**Domain:** {result['domain']} | **Query:** {result['query']}")
 
     file_info = result.get('file', '')
+    fuzzy_tag = " | **Mode:** fuzzy" if result.get('fuzzy') else ""
     if file_info:
-        output.append(f"**Source:** {file_info} | **Found:** {result['count']} results\n")
+        output.append(f"**Source:** {file_info} | **Found:** {result['count']} results{fuzzy_tag}\n")
     else:
-        output.append(f"**Found:** {result['count']} results\n")
+        output.append(f"**Found:** {result['count']} results{fuzzy_tag}\n")
 
     if comment_style != "all":
         output.append(f"**Comment style:** {comment_style}\n")
@@ -117,6 +118,7 @@ if __name__ == "__main__":
             "'important' = keep only comments with NOTE/WARNING/WHY/IMPORTANT/etc."
         )
     )
+    parser.add_argument("--fuzzy", "-f", action="store_true", help="Enable fuzzy search: tolerates typos and near-matches via bigram expansion")
     parser.add_argument("--persist", action="store_true", help="Save results to architecture blueprint file")
     parser.add_argument("--project-name", "-pn", help="Project name for blueprint (default: MyApp)")
     parser.add_argument("--page", help="Generate page-specific blueprint override")
@@ -140,7 +142,7 @@ if __name__ == "__main__":
             print(f"Total entries: {result['total_entries']}")
     # Stack search
     elif args.stack:
-        result = search_stack(args.query, args.stack, args.max_results)
+        result = search_stack(args.query, args.stack, args.max_results, fuzzy=args.fuzzy)
         if args.json:
             import json
             print(json.dumps(result, indent=2, ensure_ascii=False))
@@ -148,14 +150,14 @@ if __name__ == "__main__":
             print(format_output(result, compact=args.compact, comment_style=cs))
     # Platform search takes priority
     elif args.platform:
-        result = search_platform(args.query, args.platform, args.max_results)
+        result = search_platform(args.query, args.platform, args.max_results, fuzzy=args.fuzzy)
         if args.json:
             import json
             print(json.dumps(result, indent=2, ensure_ascii=False))
         else:
             print(format_output(result, compact=args.compact, comment_style=cs))
     else:
-        result = search(args.query, args.domain, args.max_results, filter_platform=args.filter_platform)
+        result = search(args.query, args.domain, args.max_results, filter_platform=args.filter_platform, fuzzy=args.fuzzy)
         if args.json:
             import json
             print(json.dumps(result, indent=2, ensure_ascii=False))
