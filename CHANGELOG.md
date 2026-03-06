@@ -6,6 +6,42 @@ Format: [Semantic Versioning](https://semver.org/)
 
 ---
 
+## [1.7.0] — 2026-03-06
+
+### Added
+- `Source URL` column in `code-snippets.csv` — 37 Android snippets now link directly to verified `androidx/` source code on `cs.android.com` (ViewModel.kt, LazyList.kt, NavHost.kt, RoomDatabase.kt, BiometricPrompt.kt, AppInitializer.kt, WorkManager.kt, and more)
+- `Source URL` now shown in BM25 search output for snippet domain results
+- `scripts/check-urls.py` — concurrent HTTP checker (10 threads) for all 964 unique Reference URL, Docs URL, and Source URL entries across 14 CSV files
+- `DEMO.md` — live search output samples showing real database results before install
+- `CONTRIBUTING.md` — full guide for adding entries: column schemas, CSV conventions, quality checklist, gap areas
+- `CHANGELOG.md` — version history
+
+### Fixed
+- **61 broken reference URLs** fixed across all CSV files:
+  - `refactoring.guru` (16): `/refactoring/smells/xxx` → `/smells/xxx`
+  - `developer.android.com` (17): perfetto, RTL, bottom-nav, predictive-back, companion-device, drawable-animation, SMS retriever, and more — all moved after 2024 site redesign
+  - `developer.apple.com` (8): Xcode performance docs renamed, SwiftUI task URL, app-privacy-details path changed
+  - `support.google.com` (4): Play Console answer IDs replaced with `developer.android.com` canonical URLs
+  - `reactnative.dev` (3): turbo-modules/native-modules migrated to new architecture docs
+  - `gdpr.eu` (2): replaced with `gdpr-info.eu`
+  - Apollo Kotlin, Expo prebuild, Flutter perf, Redux Toolkit, AsyncStorage, MITRE ATLAS, EBA DORA, FTC COPPA — updated paths
+- CSV parse bug in `platforms/android.csv` row 413: unquoted comma caused `Severity` field to contain `"or Parcelable"` — now correctly quoted
+
+### Changed
+- `scripts/validate-csv.py` upgraded with:
+  - Severity value validation (Critical/High/Medium/Low only)
+  - Duplicate detection per domain identifier column
+  - Source URL presence check for Android snippets
+  - Missing URL count per file
+- `.github/workflows/ci.yml` upgraded:
+  - New `check-urls` job (runs on push to `main`)
+  - `test-search` job now asserts JSON output and verifies `cs.android.com` in snippet Source URL
+  - All search smoke tests use JSON assertions per domain
+- `README.md`: added npm version, downloads, Python, MIT, entries, and platforms badges; added links to Demo, Changelog, Contributing
+- Badges: `[![npm version]...]`, `[![npm downloads]...]`, `[![Python 3.x]...]`, `[![MIT]...]`, `[![entries: 2,042]...]`, `[![platforms]...]`
+
+---
+
 ## [1.6.1] — 2025-03-04
 
 ### Added
