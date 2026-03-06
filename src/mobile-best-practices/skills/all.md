@@ -132,7 +132,9 @@ Use snippet results as starting templates. Customize for user's specific needs. 
 | `--domain` / `-d` | Search a specific domain | `--domain snippet` |
 | `--platform` / `-p` | Search platform guidelines | `--platform android` |
 | `--filter-platform` / `-fp` | Filter any domain by platform | `--domain library --filter-platform android` |
-| `--max-results` / `-n` | Number of results (default: 3) | `-n 5` |
+| `--all-domains` / `-a` | **Search all domains at once**, ranked by relevance (default: 10 results) | `-a -n 10` |
+| `--fuzzy` / `-f` | Typo-tolerant search via bigram expansion | `-f` |
+| `--max-results` / `-n` | Number of results (default: 5 per-domain, 10 for `-a`) | `-n 10` |
 | `--json` | Output as JSON | `--json` |
 
 ---

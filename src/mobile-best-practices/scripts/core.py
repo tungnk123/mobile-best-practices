@@ -15,7 +15,8 @@ from itertools import islice
 
 # ============ CONFIGURATION ============
 DATA_DIR = Path(__file__).parent.parent / "data"
-MAX_RESULTS = 3
+MAX_RESULTS = 15           # default for single-domain searches
+ALL_DOMAINS_MAX_RESULTS = 30  # default for --all-domains cross-domain search
 
 CSV_CONFIG = {
     "architecture": {
@@ -325,7 +326,7 @@ class BM25:
         padded = f" {word} "
         return {padded[i:i + 2] for i in range(len(padded) - 1)}
 
-    def expand_query(self, query: str, threshold: float = 0.72) -> str:
+    def expand_query(self, query: str, threshold: float = 0.60) -> str:
         """Return an expanded query string with fuzzy-matched vocabulary terms.
 
         For each query token absent from the BM25 vocabulary, finds the
@@ -356,7 +357,7 @@ class BM25:
 
         return (query + " " + " ".join(extra)) if extra else query
 
-    def score_fuzzy(self, query: str, threshold: float = 0.72) -> List[Tuple[int, float]]:
+    def score_fuzzy(self, query: str, threshold: float = 0.60) -> List[Tuple[int, float]]:
         """Score with automatic fuzzy query expansion for typo tolerance."""
         return self.score(self.expand_query(query, threshold))
 
@@ -366,6 +367,100 @@ def _load_csv(filepath):
     """Load CSV and return list of dicts"""
     with open(filepath, 'r', encoding='utf-8') as f:
         return list(csv.DictReader(f))
+
+
+def _score_csv(filepath: Path, search_cols: List[str], output_cols: List[str], query: str, top_k: int, fuzzy: bool = False) -> List[Tuple[float, Dict[str, str]]]:
+    """Return (normalized_score, row) pairs for the top_k hits in one CSV.
+
+    Scores are normalised to [0, 1] by dividing by the maximum score in the
+    file so that results from different corpora are comparable when merged.
+    """
+    if not filepath.exists():
+        return []
+
+    data = _load_csv(filepath)
+    if not data:
+        return []
+
+    documents = [" ".join(str(row.get(col, "")) for col in search_cols) for row in data]
+    bm25 = BM25()
+    bm25.fit(documents)
+    ranked = bm25.score_fuzzy(query) if fuzzy else bm25.score(query)
+
+    candidates = [(idx, score) for idx, score in ranked[:top_k * 2] if score > 0]
+    if not candidates:
+        return []
+
+    max_score = candidates[0][1]  # ranked is sorted descending
+    if max_score == 0:
+        return []
+
+    hits = []
+    for idx, score in candidates[:top_k]:
+        row = data[idx]
+        hits.append((score / max_score, {col: row.get(col, "") for col in output_cols if col in row}))
+    return hits
+
+
+# Common task-instruction verbs and generic nouns that carry no technical meaning
+# in a best-practices database.  Stripping them before searching improves token
+# coverage and ranking quality.
+_TASK_WORDS = frozenset({
+    # Task verbs
+    "implement", "implementing", "implementation",
+    "create", "creating",
+    "build", "building",
+    "make", "making",
+    "add", "adding",
+    "write", "writing",
+    "setup", "set",
+    "configure", "configuration",
+    "handle", "handling",
+    "define", "defining",
+    "develop", "developing",
+    "fix", "fixing",
+    "update", "updating",
+    "refactor", "refactoring",
+    "use", "using",
+    "need", "want",
+    "get", "show", "display",
+    "support", "integrate", "integrating",
+    # Generic nouns with no domain signal
+    "logic", "code", "function", "method", "class",
+    "feature", "functionality", "behavior", "behaviour",
+    "app", "application", "project",
+    "page",
+    # Stop words / prepositions / articles
+    "how", "the", "for", "with", "in", "a", "an", "to", "of", "on", "at",
+    "my", "our", "your", "their",
+    "that", "this", "which", "when", "where",
+    # Common adverbs / qualifiers with no domain signal
+    "securely", "safely", "properly", "correctly", "efficiently", "quickly", "easily",
+    "best", "good", "better", "right", "correct",
+    # Common question words
+    "what", "why", "is", "are", "do", "does", "should", "can", "could", "would",
+    "between", "from", "into", "about",
+})
+
+
+def clean_query(query: str) -> str:
+    """Strip task-instruction and generic words from a natural-language query.
+
+    Turns 'implement logic for search viewmodel' into 'search viewmodel',
+    which matches the technical vocabulary in the best-practices CSVs.
+    """
+    tokens = re.split(r'\s+', query.strip())
+    seen: set = set()
+    filtered = []
+    for t in tokens:
+        lower = t.lower()
+        if lower not in _TASK_WORDS and lower not in seen:
+            seen.add(lower)
+            filtered.append(t)
+    # Fallback to original query if stripping left ≤1 meaningful token
+    if len(filtered) <= 1:
+        return query.strip()
+    return " ".join(filtered)
 
 
 def _search_csv(filepath: Path, search_cols: List[str], output_cols: List[str], query: str, max_results: int, fuzzy: bool = False) -> List[Dict[str, str]]:
@@ -419,6 +514,7 @@ def detect_domain(query):
 
 def search(query: str, domain: Optional[str] = None, max_results: int = MAX_RESULTS, filter_platform: Optional[str] = None, fuzzy: bool = False) -> Dict[str, Any]:
     """Main search function with auto-domain detection and optional platform filter"""
+    query = clean_query(query)
     if domain is None:
         domain = detect_domain(query)
 
@@ -461,6 +557,7 @@ def search(query: str, domain: Optional[str] = None, max_results: int = MAX_RESU
 
 def search_platform(query: str, platform: str, max_results: int = MAX_RESULTS, fuzzy: bool = False) -> Dict[str, Any]:
     """Search platform-specific guidelines"""
+    query = clean_query(query)
     if platform not in PLATFORM_CONFIG:
         return {"error": f"Unknown platform: {platform}. Available: {', '.join(AVAILABLE_PLATFORMS)}"}
 
@@ -486,6 +583,7 @@ def search_platform(query: str, platform: str, max_results: int = MAX_RESULTS, f
 
 def search_stack(query: str, stack: str, max_results: int = MAX_RESULTS, fuzzy: bool = False) -> Dict[str, Any]:
     """Search filtered by tech stack (maps stack to platform + adds stack keywords)"""
+    query = clean_query(query)
     stack_lower = stack.lower()
 
     if stack_lower not in STACK_MAP:
@@ -515,6 +613,83 @@ def search_stack(query: str, stack: str, max_results: int = MAX_RESULTS, fuzzy: 
         "query": query,
         "count": len(final_results),
         "results": final_results
+    }
+
+
+def search_all_domains(query: str, max_results: int = ALL_DOMAINS_MAX_RESULTS, fuzzy: bool = False, filter_platform: Optional[str] = None, min_norm_score: float = 0.5, min_token_coverage: float = 0.5) -> Dict[str, Any]:
+    """Search across ALL domains and return top results ranked by normalised BM25 score.
+
+    Each domain's scores are normalised to [0, 1] before merging so results
+    from small and large CSVs are comparable.  Two quality filters are applied:
+
+    - *min_norm_score* (default 0.5): result must score >= 50% of the best hit
+      in its own domain.
+    - *min_token_coverage* (default 0.5): at least half of the unique query
+      tokens must actually appear in the result's searchable text, preventing
+      entries that only incidentally share one common word from surfacing.
+
+    Each result row includes a ``"Domain"`` key (first field).
+    """
+    query = clean_query(query)
+    # Pre-compute query token set for coverage check
+    _bm25_tmp = BM25()
+    query_tokens = set(_bm25_tmp.tokenize(query))
+    n_query_tokens = len(query_tokens) if query_tokens else 1
+
+    all_hits: List[Tuple[float, Dict[str, str]]] = []
+
+    for domain, config in CSV_CONFIG.items():
+        filepath = DATA_DIR / str(config["file"])
+        search_cols = cast(List[str], config["search_cols"])
+        output_cols = cast(List[str], config["output_cols"])
+
+        if not filepath.exists():
+            continue
+        data = _load_csv(filepath)
+        if not data:
+            continue
+
+        # Build searchable text per row for coverage check
+        row_texts = [" ".join(str(row.get(col, "")) for col in search_cols) for row in data]
+
+        # Fetch more candidates per domain so cross-domain merge has good coverage
+        hits = _score_csv(filepath, search_cols, output_cols, query, max_results * 2, fuzzy=fuzzy)
+
+        for norm_score, row in hits:
+            if norm_score < min_norm_score:
+                continue  # skip weak incidental matches
+
+            # Find this row's index to check token coverage against its search text
+            # Match by first output column value for a lightweight lookup
+            row_idx = next(
+                (i for i, d in enumerate(data) if all(d.get(c, "") == row.get(c, "") for c in output_cols[:2] if c in row)),
+                None
+            )
+            if row_idx is not None:
+                doc_tokens = set(_bm25_tmp.tokenize(row_texts[row_idx]))
+                coverage = len(query_tokens & doc_tokens) / n_query_tokens
+                if coverage < min_token_coverage:
+                    continue  # too few query tokens matched this entry
+
+            # Optional platform filter
+            if filter_platform:
+                fp = filter_platform.lower().replace("android-xml", "android")
+                if not any(fp in str(v).lower() for k, v in row.items() if k.lower() == "platform"):
+                    continue
+            tagged = {"Domain": domain}
+            tagged.update(row)
+            all_hits.append((norm_score, tagged))
+
+    # Sort by normalised score descending, then take top N
+    all_hits.sort(key=lambda x: x[0], reverse=True)
+    results = [row for _, row in all_hits[:max_results]]
+
+    return {
+        "domain": "all",
+        "query": query,
+        "count": len(results),
+        "results": results,
+        "fuzzy": fuzzy,
     }
 
 

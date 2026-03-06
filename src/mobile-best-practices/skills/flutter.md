@@ -103,7 +103,9 @@ python3 {SKILL_PATH}/scripts/search.py "flutter storage encryption api" --domain
 | `--stack` / `-s` | Stack-specific search | `--stack bloc` or `--stack riverpod` |
 | `--domain` / `-d` | Search a specific domain | `--domain architecture` |
 | `--filter-platform` / `-fp` | Filter results by platform | `--domain library --filter-platform flutter` |
-| `--max-results` / `-n` | Number of results (default: 3) | `-n 5` |
+| `--all-domains` / `-a` | **Search all domains at once**, ranked by relevance (default: 10 results) | `-a -n 10` |
+| `--fuzzy` / `-f` | Typo-tolerant search via bigram expansion | `-f` |
+| `--max-results` / `-n` | Number of results (default: 5 per-domain, 10 for `-a`) | `-n 10` |
 | `--json` | Output as JSON | `--json` |
 
 ---

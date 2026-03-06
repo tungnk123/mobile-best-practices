@@ -37,10 +37,15 @@
       "Bash(grep '\"\"version\"\"')",
       "Bash(grep '\"\"version\"\"' cli/package.json)",
       "Bash(__NEW_LINE_e7c3cd225ed4c53a__ git log --oneline -4)",
-      "Bash(git push)"
+      "Bash(git push)",
+      "Bash(python3 -:*)",
+      "Bash(bash -c ':*)",
+      "Bash(cp -r /home/tungnk123/Desktop/android/mobile-best-practices/src/mobile-best-practices/scripts/* /home/tungnk123/Desktop/android/mobile-best-practices/cli/assets/scripts/)",
+      "Bash(cp -r /home/tungnk123/Desktop/android/mobile-best-practices/src/mobile-best-practices/data/* /home/tungnk123/Desktop/android/mobile-best-practices/cli/assets/data/)"
     ],
     "additionalDirectories": [
-      "/home/tungnk123/Desktop/android/mobile-best-practices/src/mobile-best-practices/data/platforms"
+      "/home/tungnk123/Desktop/android/mobile-best-practices/src/mobile-best-practices/data/platforms",
+      "/home/tungnk123/Desktop/android/mobile-best-practices/src/mobile-best-practices/skills"
     ]
   }
 }
