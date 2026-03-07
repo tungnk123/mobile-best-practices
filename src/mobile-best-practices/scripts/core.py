@@ -680,6 +680,19 @@ def search_all_domains(query: str, max_results: int = ALL_DOMAINS_MAX_RESULTS, f
             tagged.update(row)
             all_hits.append((norm_score, tagged))
 
+    # Fallback: coverage filter was too strict (e.g. a generic word like "screen"
+    # inflates n_query_tokens so domain-specific terms score below 50% coverage).
+    # Retry with at-least-1-token requirement so high-scoring domain entries surface.
+    if not all_hits and min_token_coverage > 1.0 / n_query_tokens:
+        return search_all_domains(
+            query,
+            max_results=max_results,
+            fuzzy=fuzzy,
+            filter_platform=filter_platform,
+            min_norm_score=min_norm_score,
+            min_token_coverage=1.0 / n_query_tokens,
+        )
+
     # Sort by normalised score descending, then take top N
     all_hits.sort(key=lambda x: x[0], reverse=True)
     results = [row for _, row in all_hits[:max_results]]
