@@ -5,7 +5,7 @@ description: "Android development intelligence with Jetpack Compose. 49 architec
 
 # Android Best Practices - Jetpack Compose Development Intelligence
 
-Searchable database of **2,024 mobile best practices**, **optimized for Android with Jetpack Compose**. All searches default to Android platform. Includes copy-paste code snippets and ready-to-use Gradle dependency declarations.
+Searchable database of **2,461 mobile best practices**, **optimized for Android with Jetpack Compose**. All searches default to Android platform. Includes copy-paste code snippets and ready-to-use Gradle dependency declarations.
 
 ## Prerequisites
 

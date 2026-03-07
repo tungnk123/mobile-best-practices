@@ -5,7 +5,7 @@ description: "React Native development intelligence with TypeScript. 49 architec
 
 # React Native Best Practices - TypeScript Development Intelligence
 
-Searchable database of **2,024 mobile best practices**, **optimized for React Native with TypeScript**. All searches default to React Native platform. Covers architecture, hooks, navigation, performance, and testing for cross-platform RN apps.
+Searchable database of **2,461 mobile best practices**, **optimized for React Native with TypeScript**. All searches default to React Native platform. Covers architecture, hooks, navigation, performance, and testing for cross-platform RN apps.
 
 ## Prerequisites
 

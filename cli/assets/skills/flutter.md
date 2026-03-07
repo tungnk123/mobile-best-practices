@@ -5,7 +5,7 @@ description: "Flutter development intelligence with Dart. 49 architecture patter
 
 # Flutter Best Practices - Dart Development Intelligence
 
-Searchable database of **2,024 mobile best practices**, **optimized for Flutter with Dart**. All searches default to Flutter platform. Covers architecture, widgets, state management, performance, and testing for cross-platform Flutter apps.
+Searchable database of **2,461 mobile best practices**, **optimized for Flutter with Dart**. All searches default to Flutter platform. Covers architecture, widgets, state management, performance, and testing for cross-platform Flutter apps.
 
 ## Prerequisites
 

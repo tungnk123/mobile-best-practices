@@ -5,7 +5,7 @@ description: "iOS development intelligence with SwiftUI. 49 architecture pattern
 
 # iOS Best Practices - SwiftUI Development Intelligence
 
-Searchable database of **2,024 mobile best practices**, **optimized for iOS with SwiftUI**. All searches default to iOS platform. Covers architecture, UI patterns, security, performance, and testing for Apple platforms.
+Searchable database of **2,461 mobile best practices**, **optimized for iOS with SwiftUI**. All searches default to iOS platform. Covers architecture, UI patterns, security, performance, and testing for Apple platforms.
 
 ## Prerequisites
 

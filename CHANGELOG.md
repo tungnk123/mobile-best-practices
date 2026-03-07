@@ -6,6 +6,21 @@ Format: [Semantic Versioning](https://semver.org/)
 
 ---
 
+## [1.9.0] — 2026-03-07
+
+### Added
+- 123 new anti-pattern entries — total now 243 (was 120); covers Compose, coroutine, lifecycle, navigation, and architecture anti-patterns
+- 100 new UI pattern entries — total now 191 (was 91); covers dark mode, adaptive layouts, accessibility, and dynamic theming
+- 200 new Android platform guidelines — total now 623 (was 423); expanded Compose, Material 3, and Jetpack coverage
+- 1 new code snippet — total now 81
+
+### Changed
+- `--comment-style` / `-cs` flag: control code comment verbosity in output (`all` default, `none`, `important`)
+- `--page` flag: generate page-specific architecture blueprint overrides
+- SKILL.md, README, and package.json updated to reflect 2,461 total entries
+
+---
+
 ## [1.8.0] — 2026-03-06
 
 ### Added
