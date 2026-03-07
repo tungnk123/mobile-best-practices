@@ -1,11 +1,11 @@
 ---
 name: mobile-best-practices
-description: "Mobile development intelligence for Android, iOS, Flutter, and React Native. 2,024 searchable entries: 49 architecture patterns, 117 design patterns, 91 UI patterns, 113 anti-patterns, 103 libraries, 228 performance rules, 437 security practices, 73 testing patterns, 56 reasoning rules, 18 project templates, 582 platform-specific guidelines, 79 copy-paste code snippets, and 78 Gradle dependency declarations. Actions: plan, build, create, design, implement, review, fix, improve, optimize, refactor, architect mobile apps. Platforms: Android Jetpack Compose, iOS SwiftUI, Flutter Dart, React Native TypeScript. Architectures: MVVM, MVI, VIPER, TCA, BLoC, Clean Architecture, Redux, Provider, Riverpod, Zustand. Topics: state management, navigation, dependency injection, networking, database, image loading, testing, security, performance, accessibility, offline-first, modularization, CI/CD, crash reporting, localization, clean code, scalability, monitoring, analytics, Material3, Gradle version catalog, code generation."
+description: "Mobile development intelligence for Android, iOS, Flutter, and React Native. 2,461 searchable entries: 49 architecture patterns, 112 design patterns, 191 UI patterns, 243 anti-patterns, 103 libraries, 228 performance rules, 437 security practices, 73 testing patterns, 56 reasoning rules, 18 project templates, 792 platform-specific guidelines, 81 copy-paste code snippets, and 78 Gradle dependency declarations. Actions: plan, build, create, design, implement, review, fix, improve, optimize, refactor, architect mobile apps. Platforms: Android Jetpack Compose, iOS SwiftUI, Flutter Dart, React Native TypeScript. Architectures: MVVM, MVI, VIPER, TCA, BLoC, Clean Architecture, Redux, Provider, Riverpod, Zustand. Topics: state management, navigation, dependency injection, networking, database, image loading, testing, security, performance, accessibility, offline-first, modularization, CI/CD, crash reporting, localization, clean code, scalability, monitoring, analytics, Material3, Gradle version catalog, code generation."
 ---
 
 # Mobile Best Practices - Development Intelligence
 
-Searchable database of **2,024 mobile development best practices** covering architecture patterns, UI components, anti-patterns, libraries, performance rules, security practices, testing patterns, code snippets, Gradle dependencies, and platform-specific guidelines for Android, iOS, Flutter, and React Native.
+Searchable database of **2,461 mobile development best practices** covering architecture patterns, UI components, anti-patterns, libraries, performance rules, security practices, testing patterns, code snippets, Gradle dependencies, and platform-specific guidelines for Android, iOS, Flutter, and React Native.
 
 **Android-first**: Optimized for Android/Jetpack Compose with full copy-paste code snippets and ready-to-use Gradle declarations.
 
@@ -132,7 +132,9 @@ Use snippet results as starting templates. Customize for user's specific needs. 
 | `--domain` / `-d` | Search a specific domain | `--domain snippet` |
 | `--platform` / `-p` | Search platform guidelines | `--platform android` |
 | `--filter-platform` / `-fp` | Filter any domain by platform | `--domain library --filter-platform android` |
-| `--max-results` / `-n` | Number of results (default: 3) | `-n 5` |
+| `--all-domains` / `-a` | **Search all domains at once**, ranked by relevance (default: 10 results) | `-a -n 10` |
+| `--fuzzy` / `-f` | Typo-tolerant search via bigram expansion | `-f` |
+| `--max-results` / `-n` | Number of results (default: 5 per-domain, 10 for `-a`) | `-n 10` |
 | `--json` | Output as JSON | `--json` |
 
 ---

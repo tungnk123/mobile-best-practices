@@ -11,9 +11,9 @@ Stacks: compose, jetpack-compose, material3, hilt, room, kotlin, swiftui, combin
 
 import argparse
 from core import (
-    CSV_CONFIG, AVAILABLE_PLATFORMS, AVAILABLE_STACKS, MAX_RESULTS,
+    CSV_CONFIG, AVAILABLE_PLATFORMS, AVAILABLE_STACKS, MAX_RESULTS, ALL_DOMAINS_MAX_RESULTS,
     _CODE_FIELDS, apply_comment_style,
-    search, search_platform, search_stack, persist_blueprint
+    search, search_platform, search_stack, search_all_domains, persist_blueprint
 )
 
 
@@ -46,15 +46,19 @@ def format_output(result, compact=False, comment_style=_COMMENT_STYLE_DEFAULT):
     elif result.get("domain") == "stack":
         output.append(f"## Mobile Best Practices - Stack Search")
         output.append(f"**Stack:** {result['stack']} ({result.get('platform', '')}) | **Query:** {result['query']}")
+    elif result.get("domain") == "all":
+        output.append(f"## Mobile Best Practices - Cross-Domain Search")
+        output.append(f"**Query:** {result['query']} | **Domains searched:** all")
     else:
         output.append(f"## Mobile Best Practices - Search Results")
         output.append(f"**Domain:** {result['domain']} | **Query:** {result['query']}")
 
     file_info = result.get('file', '')
+    fuzzy_tag = " | **Mode:** fuzzy" if result.get('fuzzy') else ""
     if file_info:
-        output.append(f"**Source:** {file_info} | **Found:** {result['count']} results\n")
+        output.append(f"**Source:** {file_info} | **Found:** {result['count']} results{fuzzy_tag}\n")
     else:
-        output.append(f"**Found:** {result['count']} results\n")
+        output.append(f"**Found:** {result['count']} results{fuzzy_tag}\n")
 
     if comment_style != "all":
         output.append(f"**Comment style:** {comment_style}\n")
@@ -102,7 +106,7 @@ if __name__ == "__main__":
     parser.add_argument("--domain", "-d", choices=list(CSV_CONFIG.keys()), help="Search domain")
     parser.add_argument("--platform", "-p", choices=AVAILABLE_PLATFORMS, help="Platform-specific search (android, ios, flutter, react-native)")
     parser.add_argument("--stack", "-s", choices=AVAILABLE_STACKS, help="Stack-specific search (compose, swiftui, flutter, react-native, etc.)")
-    parser.add_argument("--max-results", "-n", type=int, default=MAX_RESULTS, help="Max results (default: 3)")
+    parser.add_argument("--max-results", "-n", type=int, default=None, help=f"Max results (default: {MAX_RESULTS} per-domain, {ALL_DOMAINS_MAX_RESULTS} for --all-domains)")
     parser.add_argument("--filter-platform", "-fp", choices=AVAILABLE_PLATFORMS, help="Filter any domain results by platform")
     parser.add_argument("--json", action="store_true", help="Output as JSON")
     parser.add_argument("--compact", "-c", action="store_true", help="Token-optimized compact output format")
@@ -117,12 +121,18 @@ if __name__ == "__main__":
             "'important' = keep only comments with NOTE/WARNING/WHY/IMPORTANT/etc."
         )
     )
+    parser.add_argument("--all-domains", "-a", action="store_true", help="Search across all domains at once, ranked by normalised BM25 score")
+    parser.add_argument("--fuzzy", "-f", action="store_true", help="Enable fuzzy search: tolerates typos and near-matches via bigram expansion")
     parser.add_argument("--persist", action="store_true", help="Save results to architecture blueprint file")
     parser.add_argument("--project-name", "-pn", help="Project name for blueprint (default: MyApp)")
     parser.add_argument("--page", help="Generate page-specific blueprint override")
 
     args = parser.parse_args()
     cs = args.comment_style  # shorthand
+    # Resolve max_results: use explicit -n value, else domain-appropriate default
+    max_results = args.max_results if args.max_results is not None else (
+        ALL_DOMAINS_MAX_RESULTS if args.all_domains else MAX_RESULTS
+    )
 
     # Persist mode
     if args.persist:
@@ -138,9 +148,17 @@ if __name__ == "__main__":
             print(f"Blueprint saved to: {result['file']}")
             print(f"Sections: {', '.join(result['sections'])}")
             print(f"Total entries: {result['total_entries']}")
+    # Cross-domain search
+    elif args.all_domains:
+        result = search_all_domains(args.query, max_results, fuzzy=args.fuzzy, filter_platform=args.filter_platform)
+        if args.json:
+            import json
+            print(json.dumps(result, indent=2, ensure_ascii=False))
+        else:
+            print(format_output(result, compact=args.compact, comment_style=cs))
     # Stack search
     elif args.stack:
-        result = search_stack(args.query, args.stack, args.max_results)
+        result = search_stack(args.query, args.stack, max_results, fuzzy=args.fuzzy)
         if args.json:
             import json
             print(json.dumps(result, indent=2, ensure_ascii=False))
@@ -148,14 +166,14 @@ if __name__ == "__main__":
             print(format_output(result, compact=args.compact, comment_style=cs))
     # Platform search takes priority
     elif args.platform:
-        result = search_platform(args.query, args.platform, args.max_results)
+        result = search_platform(args.query, args.platform, max_results, fuzzy=args.fuzzy)
         if args.json:
             import json
             print(json.dumps(result, indent=2, ensure_ascii=False))
         else:
             print(format_output(result, compact=args.compact, comment_style=cs))
     else:
-        result = search(args.query, args.domain, args.max_results, filter_platform=args.filter_platform)
+        result = search(args.query, args.domain, max_results, filter_platform=args.filter_platform, fuzzy=args.fuzzy)
         if args.json:
             import json
             print(json.dumps(result, indent=2, ensure_ascii=False))

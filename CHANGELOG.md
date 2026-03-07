@@ -6,6 +6,44 @@ Format: [Semantic Versioning](https://semver.org/)
 
 ---
 
+## [1.9.0] — 2026-03-07
+
+### Added
+- 123 new anti-pattern entries — total now 243 (was 120); covers Compose, coroutine, lifecycle, navigation, and architecture anti-patterns
+- 100 new UI pattern entries — total now 191 (was 91); covers dark mode, adaptive layouts, accessibility, and dynamic theming
+- 200 new Android platform guidelines — total now 623 (was 423); expanded Compose, Material 3, and Jetpack coverage
+- 1 new code snippet — total now 81
+
+### Changed
+- `--comment-style` / `-cs` flag: control code comment verbosity in output (`all` default, `none`, `important`)
+- `--page` flag: generate page-specific architecture blueprint overrides
+- SKILL.md, README, and package.json updated to reflect 2,461 total entries
+
+---
+
+## [1.8.0] — 2026-03-06
+
+### Added
+- `--all-domains / -a` flag — cross-domain BM25 search across all 11 domains at once, ranked by normalised score
+- `--fuzzy / -f` flag — typo-tolerant search via character bigram Dice similarity (threshold 0.60)
+- `--filter-platform` flag — filter any domain/cross-domain results by platform
+- 5 new dark mode entries across `ui-patterns.csv`, `platforms/android.csv`, and `anti-patterns.csv`
+- 35+ CI test cases covering platforms, stacks, domains, natural language, fuzzy, dedup, and user scenarios
+
+### Changed
+- Default `MAX_RESULTS` raised from 3 → 15 (single-domain) and 10 → 30 (cross-domain)
+- Fuzzy match threshold lowered 0.72 → 0.60 for better typo recall
+- `clean_query()`: strips task-instruction words (`implement`, `refactor`, `add`, etc.) before BM25 scoring; deduplicates repeated tokens; falls back to original query when ≤1 token remains after stripping
+- `"screen"` removed from strip list — kept as context (LoginScreen, SearchScreen)
+- `Reference URL` added to output columns for all 11 domains
+- Security CSV: patched credential/token storage entries with `"token"` keyword for natural-language queries
+
+### Fixed
+- Double-token bug: `"Add search function for search viewmodel"` was producing `"search search viewmodel"` — now deduped to `"search viewmodel"`
+- `--max-results` default resolution: `default=None` + post-parse resolution prevents `args.max_results` always overriding domain-appropriate default
+
+---
+
 ## [1.7.0] — 2026-03-06
 
 ### Added

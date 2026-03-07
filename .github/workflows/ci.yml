@@ -84,6 +84,176 @@ jobs:
           echo "=== Platform iOS ==="
           python3 scripts/search.py "swiftui navigation" --platform ios --json | python3 -c "import json,sys; d=json.load(sys.stdin); assert d['count'] > 0"
 
+          echo "=== Fuzzy search (typo tolerance) ==="
+          python3 scripts/search.py "encryptoin keystroe" --domain security --fuzzy --json | python3 -c "import json,sys; d=json.load(sys.stdin); assert d['count'] > 0, 'Fuzzy search returned no results for typo query'; assert d['fuzzy'] == True, 'fuzzy flag not set in response'"
+
+          echo "=== Cross-domain search ==="
+          python3 scripts/search.py "memory leak android" --all-domains -n 5 --json | python3 -c "
+          import json, sys
+          d = json.load(sys.stdin)
+          assert d['count'] > 0, 'All-domains search returned no results'
+          assert d['domain'] == 'all', 'domain field should be all'
+          domains = {r['Domain'] for r in d['results']}
+          assert len(domains) > 1, f'Expected results from multiple domains, got: {domains}'
+          print('Domains hit:', sorted(domains))
+          "
+
+          echo "=== User scenario: dark mode ==="
+          python3 scripts/search.py "dark mode theme" --all-domains --json | python3 -c "
+          import json, sys
+          d = json.load(sys.stdin)
+          assert d['count'] >= 3, f'Expected >=3 dark mode results, got {d[\"count\"]}'
+          domains = {r['Domain'] for r in d['results']}
+          assert len(domains) >= 2, f'Expected results from multiple domains, got: {domains}'
+          print('Dark mode domains:', sorted(domains))
+          "
+
+          echo "=== User scenario: biometric login ==="
+          python3 scripts/search.py "implement login screen with biometric" --all-domains --json | python3 -c "
+          import json, sys
+          d = json.load(sys.stdin)
+          assert d['count'] >= 3, f'Expected >=3 biometric login results, got {d[\"count\"]}'
+          print('Biometric login results:', d['count'])
+          "
+
+          echo "=== User scenario: token storage (natural language) ==="
+          python3 scripts/search.py "how to store user token securely" --all-domains --json | python3 -c "
+          import json, sys
+          d = json.load(sys.stdin)
+          assert d['count'] >= 1, f'Expected >=1 token storage results, got {d[\"count\"]}'
+          print('Token storage results:', d['count'])
+          "
+
+          echo "=== User scenario: app crash on rotation ==="
+          python3 scripts/search.py "app crash on rotation" --all-domains --json | python3 -c "
+          import json, sys
+          d = json.load(sys.stdin)
+          assert d['count'] >= 2, f'Expected >=2 crash rotation results, got {d[\"count\"]}'
+          print('Crash rotation results:', d['count'])
+          "
+
+          echo "=== User scenario: list scroll performance ==="
+          python3 scripts/search.py "lazycolumn scroll performance slow" --all-domains --json | python3 -c "
+          import json, sys
+          d = json.load(sys.stdin)
+          assert d['count'] >= 3, f'Expected >=3 list performance results, got {d[\"count\"]}'
+          print('List performance results:', d['count'])
+          "
+
+          echo "=== User scenario: fuzzy typos (encryptoin keystroe) ==="
+          python3 scripts/search.py "encryptoin keystroe" --domain security --fuzzy --json | python3 -c "
+          import json, sys
+          d = json.load(sys.stdin)
+          assert d['count'] >= 5, f'Expected >=5 fuzzy results, got {d[\"count\"]}'
+          assert d['fuzzy'] == True
+          print('Fuzzy typo results:', d['count'])
+          "
+
+          echo "=== Default result counts ==="
+          python3 scripts/search.py "security" --domain security --json | python3 -c "
+          import json, sys
+          d = json.load(sys.stdin)
+          assert d['count'] == 15, f'Expected default 15 results, got {d[\"count\"]}'
+          print('Default count OK:', d['count'])
+          "
+          python3 scripts/search.py "security" --all-domains --json | python3 -c "
+          import json, sys
+          d = json.load(sys.stdin)
+          assert d['count'] >= 15, f'Expected >=15 all-domains results, got {d[\"count\"]}'
+          print('All-domains default count OK:', d['count'])
+          "
+
+          echo "=== clean_query: screen kept as context ==="
+          python3 scripts/search.py "Refactor screen Search" --all-domains --json | python3 -c "
+          import json, sys
+          d = json.load(sys.stdin)
+          assert d['query'] == 'screen Search', f'Expected screen Search, got: {d[\"query\"]}'
+          assert d['count'] >= 3, f'got {d[\"count\"]}'
+          print('Screen kept, query:', d['query'], '| count:', d['count'])
+          "
+
+          echo "=== clean_query: login screen fallback ==="
+          python3 scripts/search.py "implement login screen" --all-domains --json | python3 -c "
+          import json, sys
+          d = json.load(sys.stdin)
+          assert 'login' in d['query'], f'Expected login in query, got: {d[\"query\"]}'
+          assert d['count'] >= 3, f'got {d[\"count\"]}'
+          print('Login screen query:', d['query'], '| count:', d['count'])
+          "
+
+          # ── Platform-specific searches ──────────────────────────
+          echo "=== Platform: Android Compose state ==="
+          python3 scripts/search.py "compose state hoisting" --platform android --json | python3 -c "import json,sys; d=json.load(sys.stdin); assert d['count'] >= 3, f'got {d[\"count\"]}'; print('Android:', d['count'])"
+
+          echo "=== Platform: iOS SwiftUI Combine ==="
+          python3 scripts/search.py "swiftui combine viewmodel" --platform ios --json | python3 -c "import json,sys; d=json.load(sys.stdin); assert d['count'] >= 3, f'got {d[\"count\"]}'; print('iOS:', d['count'])"
+
+          echo "=== Platform: Flutter BLoC ==="
+          python3 scripts/search.py "bloc cubit state flutter" --platform flutter --json | python3 -c "import json,sys; d=json.load(sys.stdin); assert d['count'] >= 3, f'got {d[\"count\"]}'; print('Flutter:', d['count'])"
+
+          echo "=== Platform: React Native navigation ==="
+          python3 scripts/search.py "redux hooks navigation react native" --platform react-native --json | python3 -c "import json,sys; d=json.load(sys.stdin); assert d['count'] >= 3, f'got {d[\"count\"]}'; print('RN:', d['count'])"
+
+          # ── Stack-specific searches ──────────────────────────────
+          echo "=== Stack: Compose + Hilt ==="
+          python3 scripts/search.py "hilt dependency injection viewmodel" --stack compose --json | python3 -c "import json,sys; d=json.load(sys.stdin); assert d['count'] >= 3, f'got {d[\"count\"]}'; print('Compose+Hilt:', d['count'])"
+
+          echo "=== Stack: Compose + Room ==="
+          python3 scripts/search.py "room database migration query" --stack compose --json | python3 -c "import json,sys; d=json.load(sys.stdin); assert d['count'] >= 3, f'got {d[\"count\"]}'; print('Room:', d['count'])"
+
+          # ── Architecture domain ───────────────────────────────────
+          echo "=== Architecture: clean usecase ==="
+          python3 scripts/search.py "clean architecture usecase repository" --domain architecture --json | python3 -c "import json,sys; d=json.load(sys.stdin); assert d['count'] >= 3, f'got {d[\"count\"]}'"
+
+          echo "=== Architecture: MVI state flow ==="
+          python3 scripts/search.py "mvvm mvi state flow android" --domain architecture --json | python3 -c "import json,sys; d=json.load(sys.stdin); assert d['count'] >= 3, f'got {d[\"count\"]}'"
+
+          # ── Testing domain ────────────────────────────────────────
+          echo "=== Testing: ViewModel unit test ==="
+          python3 scripts/search.py "unit test viewmodel coroutine mock" --domain testing --json | python3 -c "import json,sys; d=json.load(sys.stdin); assert d['count'] >= 3, f'got {d[\"count\"]}'; print('VM test:', d['count'])"
+
+          echo "=== Testing: Compose UI test ==="
+          python3 scripts/search.py "ui test compose espresso" --domain testing --json | python3 -c "import json,sys; d=json.load(sys.stdin); assert d['count'] >= 3, f'got {d[\"count\"]}'"
+
+          # ── Performance domain ────────────────────────────────────
+          echo "=== Performance: app startup ==="
+          python3 scripts/search.py "startup time cold launch optimize" --domain performance --json | python3 -c "import json,sys; d=json.load(sys.stdin); assert d['count'] >= 3, f'got {d[\"count\"]}'"
+
+          echo "=== Performance: battery drain ==="
+          python3 scripts/search.py "battery drain background work" --domain performance --json | python3 -c "import json,sys; d=json.load(sys.stdin); assert d['count'] >= 3, f'got {d[\"count\"]}'"
+
+          # ── Security domain ───────────────────────────────────────
+          echo "=== Security: root detection ==="
+          python3 scripts/search.py "root detection tamper jailbreak" --domain security --json | python3 -c "import json,sys; d=json.load(sys.stdin); assert d['count'] >= 3, f'got {d[\"count\"]}'"
+
+          echo "=== Security: hardcoded api key ==="
+          python3 scripts/search.py "api key hardcoded reverse engineer" --domain security --json | python3 -c "import json,sys; d=json.load(sys.stdin); assert d['count'] >= 3, f'got {d[\"count\"]}'"
+
+          # ── Natural language / cross-domain ───────────────────────
+          echo "=== NL: network error retry ==="
+          python3 scripts/search.py "how to handle network error retry" --all-domains --json | python3 -c "import json,sys; d=json.load(sys.stdin); assert d['count'] >= 3, f'got {d[\"count\"]}'; print('Network error:', d['count'])"
+
+          echo "=== NL: offline mode cache ==="
+          python3 scripts/search.py "implement offline mode cache data" --all-domains --json | python3 -c "import json,sys; d=json.load(sys.stdin); assert d['count'] >= 3, f'got {d[\"count\"]}'; print('Offline:', d['count'])"
+
+          echo "=== NL: push notifications ==="
+          python3 scripts/search.py "add push notification firebase" --all-domains --json | python3 -c "import json,sys; d=json.load(sys.stdin); assert d['count'] >= 3, f'got {d[\"count\"]}'; print('Push notif:', d['count'])"
+
+          echo "=== NL: bottom navigation ==="
+          python3 scripts/search.py "build bottom navigation tab bar" --all-domains --json | python3 -c "import json,sys; d=json.load(sys.stdin); assert d['count'] >= 3, f'got {d[\"count\"]}'; print('Bottom nav:', d['count'])"
+
+          echo "=== NL: camera permission ==="
+          python3 scripts/search.py "handle camera permission runtime" --all-domains --json | python3 -c "import json,sys; d=json.load(sys.stdin); assert d['count'] >= 3, f'got {d[\"count\"]}'; print('Permission:', d['count'])"
+
+          echo "=== NL: search viewmodel dedup ==="
+          python3 scripts/search.py "Add search function for search viewmodel" --all-domains --json | python3 -c "
+          import json, sys
+          d = json.load(sys.stdin)
+          assert d['count'] >= 3, f'got {d[\"count\"]}'
+          assert d['query'] == 'search viewmodel', f'Expected deduped query, got: {d[\"query\"]}'
+          print('Query cleaned to:', d['query'], '| count:', d['count'])
+          "
+
           echo "All search tests passed ✓"
 
   # ─────────────────────────────────────────────────────────────

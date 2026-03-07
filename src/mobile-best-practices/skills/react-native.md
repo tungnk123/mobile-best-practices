@@ -5,7 +5,7 @@ description: "React Native development intelligence with TypeScript. 49 architec
 
 # React Native Best Practices - TypeScript Development Intelligence
 
-Searchable database of **2,024 mobile best practices**, **optimized for React Native with TypeScript**. All searches default to React Native platform. Covers architecture, hooks, navigation, performance, and testing for cross-platform RN apps.
+Searchable database of **2,461 mobile best practices**, **optimized for React Native with TypeScript**. All searches default to React Native platform. Covers architecture, hooks, navigation, performance, and testing for cross-platform RN apps.
 
 ## Prerequisites
 
@@ -104,7 +104,9 @@ python3 {SKILL_PATH}/scripts/search.py "react native storage encryption" --domai
 | `--stack` / `-s` | Stack-specific search | `--stack react-native` or `--stack hooks` |
 | `--domain` / `-d` | Search a specific domain | `--domain architecture` |
 | `--filter-platform` / `-fp` | Filter results by platform | `--domain library --filter-platform react-native` |
-| `--max-results` / `-n` | Number of results (default: 3) | `-n 5` |
+| `--all-domains` / `-a` | **Search all domains at once**, ranked by relevance (default: 10 results) | `-a -n 10` |
+| `--fuzzy` / `-f` | Typo-tolerant search via bigram expansion | `-f` |
+| `--max-results` / `-n` | Number of results (default: 5 per-domain, 10 for `-a`) | `-n 10` |
 | `--json` | Output as JSON | `--json` |
 
 ---
