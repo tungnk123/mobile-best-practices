@@ -5,7 +5,7 @@ description: "iOS development intelligence with SwiftUI. 49 architecture pattern
 
 # iOS Best Practices - SwiftUI Development Intelligence
 
-Searchable database of **2,024 mobile best practices**, **optimized for iOS with SwiftUI**. All searches default to iOS platform. Covers architecture, UI patterns, security, performance, and testing for Apple platforms.
+Searchable database of **2,461 mobile best practices**, **optimized for iOS with SwiftUI**. All searches default to iOS platform. Covers architecture, UI patterns, security, performance, and testing for Apple platforms.
 
 ## Prerequisites
 
@@ -101,7 +101,9 @@ python3 {SKILL_PATH}/scripts/search.py "keychain biometric encryption" --domain 
 | `--stack` / `-s` | Stack-specific search | `--stack swiftui` |
 | `--domain` / `-d` | Search a specific domain | `--domain architecture` |
 | `--filter-platform` / `-fp` | Filter results by platform | `--domain library --filter-platform ios` |
-| `--max-results` / `-n` | Number of results (default: 3) | `-n 5` |
+| `--all-domains` / `-a` | **Search all domains at once**, ranked by relevance (default: 10 results) | `-a -n 10` |
+| `--fuzzy` / `-f` | Typo-tolerant search via bigram expansion | `-f` |
+| `--max-results` / `-n` | Number of results (default: 5 per-domain, 10 for `-a`) | `-n 10` |
 | `--json` | Output as JSON | `--json` |
 
 ---

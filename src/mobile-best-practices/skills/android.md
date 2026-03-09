@@ -5,7 +5,7 @@ description: "Android development intelligence with Jetpack Compose. 49 architec
 
 # Android Best Practices - Jetpack Compose Development Intelligence
 
-Searchable database of **2,024 mobile best practices**, **optimized for Android with Jetpack Compose**. All searches default to Android platform. Includes copy-paste code snippets and ready-to-use Gradle dependency declarations.
+Searchable database of **2,461 mobile best practices**, **optimized for Android with Jetpack Compose**. All searches default to Android platform. Includes copy-paste code snippets and ready-to-use Gradle dependency declarations.
 
 ## Prerequisites
 
@@ -29,28 +29,30 @@ No need to detect platform - **always Android with Jetpack Compose**. Extract:
 
 ### Step 2: Search the Database
 
-Use `search.py` with `--platform android` or `--stack compose` for focused results.
+**Option A — Cross-domain (recommended for most tasks):** one command, 10 results spanning all relevant domains.
 
 ```bash
-# Android platform guidelines (ALWAYS search this first)
+python3 {SKILL_PATH}/scripts/search.py "<keyword>" --all-domains -n 10
+# With typo tolerance:
+python3 {SKILL_PATH}/scripts/search.py "<keyword>" --all-domains --fuzzy -n 10
+```
+
+**Option B — Targeted single-domain:** use when you need depth in one specific area.
+
+```bash
+# Android platform guidelines
 python3 {SKILL_PATH}/scripts/search.py "<keyword>" --platform android -n 5
 
 # Code snippets (copy-paste Kotlin/Compose templates)
-python3 {SKILL_PATH}/scripts/search.py "<keyword>" --domain snippet -n 3
+python3 {SKILL_PATH}/scripts/search.py "<keyword>" --domain snippet -n 5
 
-# Gradle dependencies (ready-to-paste declarations)
+# Gradle dependencies
 python3 {SKILL_PATH}/scripts/search.py "<keyword>" --domain gradle -n 5
 
-# Architecture patterns
+# Architecture / anti-patterns / performance / security
 python3 {SKILL_PATH}/scripts/search.py "<keyword>" --domain architecture -n 5
-
-# Anti-patterns
 python3 {SKILL_PATH}/scripts/search.py "<keyword>" --domain antipattern -n 5
-
-# Performance rules
 python3 {SKILL_PATH}/scripts/search.py "<keyword>" --domain performance -n 5
-
-# Stack-specific search
 python3 {SKILL_PATH}/scripts/search.py "<keyword>" --stack compose -n 5
 ```
 
@@ -129,7 +131,9 @@ python3 {SKILL_PATH}/scripts/search.py "<keywords from generated code>" --domain
 | `--platform` / `-p` | Platform guidelines | `--platform android` |
 | `--filter-platform` / `-fp` | Filter results by platform | `--domain library --filter-platform android` |
 | `--stack` / `-s` | Stack-specific search | `--stack compose` |
-| `--max-results` / `-n` | Number of results (default: 3) | `-n 5` |
+| `--all-domains` / `-a` | **Search all domains at once**, ranked by relevance (default: 10 results) | `-a -n 10` |
+| `--fuzzy` / `-f` | Typo-tolerant search via bigram expansion | `-f` |
+| `--max-results` / `-n` | Number of results (default: 5 per-domain, 10 for `-a`) | `-n 10` |
 | `--json` | Output as JSON | `--json` |
 
 ---

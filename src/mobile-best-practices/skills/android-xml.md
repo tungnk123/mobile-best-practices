@@ -5,7 +5,7 @@ description: "Android development intelligence with XML Views. 49 architecture p
 
 # Android Best Practices - XML Views Development Intelligence
 
-Searchable database of **2,024 mobile best practices**, **optimized for Android with XML Views**. All searches default to Android platform. Includes best practices for View System, Fragments, and ConstraintLayout.
+Searchable database of **2,461 mobile best practices**, **optimized for Android with XML Views**. All searches default to Android platform. Includes best practices for View System, Fragments, and ConstraintLayout.
 
 ## Prerequisites
 

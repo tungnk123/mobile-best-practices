@@ -4,10 +4,10 @@
 [![npm downloads](https://img.shields.io/npm/dm/mobile-best-practices)](https://www.npmjs.com/package/mobile-best-practices)
 [![Python](https://img.shields.io/badge/python-3.x-blue?logo=python&logoColor=white)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Entries](https://img.shields.io/badge/entries-2%2C042-orange)](src/mobile-best-practices/data/)
+[![Entries](https://img.shields.io/badge/entries-2%2C461-orange)](src/mobile-best-practices/data/)
 [![Platforms](https://img.shields.io/badge/platforms-Android%20%7C%20iOS%20%7C%20Flutter%20%7C%20RN-blueviolet)](README.md)
 
-Searchable database of **2,042 mobile development best practices** packaged as an AI skill for Claude Code and 14 other AI coding assistants. Covers Android, iOS, Flutter, and React Native.
+Searchable database of **2,461 mobile development best practices** packaged as an AI skill for Claude Code and 14 other AI coding assistants. Covers Android, iOS, Flutter, and React Native.
 
 Your AI assistant becomes a mobile development expert — it automatically searches architecture patterns, security rules, performance tips, anti-patterns, and code snippets while helping you build, review, and fix mobile apps.
 
@@ -18,20 +18,76 @@ Your AI assistant becomes a mobile development expert — it automatically searc
 | Category | Entries | What You Get |
 |---|---|---|
 | Architecture Patterns | 49 | MVVM, MVI, Clean Architecture, VIPER, TCA, BLoC, Redux, KMP |
-| Design Patterns | 117 | Repository, Factory, Observer, Strategy, Adapter, code smells |
-| UI Patterns | 91 | Navigation, lists, sheets, inputs, modals, animations, onboarding |
-| Anti-Patterns | 120 | God Activity, memory leaks, prop drilling, setState abuse |
+| Design Patterns | 112 | Repository, Factory, Observer, Strategy, Adapter, code smells |
+| UI Patterns | 191 | Navigation, lists, sheets, inputs, modals, animations, onboarding |
+| Anti-Patterns | 243 | God Activity, memory leaks, prop drilling, setState abuse |
 | Libraries | 103 | Retrofit, Hilt, Coil, Kingfisher, Dio, BLoC, Redux, Apollo, Koin |
 | Performance | 228 | Startup, rendering, memory, network, Compose, CI/CD, monitoring |
 | Security | 437 | Encryption, keychain, SSL pinning, biometric, compliance, privacy |
 | Testing | 73 | Unit, UI, integration, E2E, screenshot, contract, fuzz testing |
 | Reasoning Rules | 56 | Smart recommendations based on your product type |
 | Project Templates | 18 | Starter configs for common app types |
-| Code Snippets | 80 | Copy-paste templates for Android, iOS, Flutter, React Native |
+| Code Snippets | 81 | Copy-paste templates for Android, iOS, Flutter, React Native |
 | Gradle Dependencies | 78 | Ready-to-paste dependency declarations and plugins |
-| Platform Guidelines | 592 | Android (423), iOS (60), Flutter (54), React Native (55) |
+| Platform Guidelines | 792 | Android (623), iOS (60), Flutter (54), React Native (55) |
 
 Every entry includes a **Reference URL** linking to official docs, GitHub repos, or guides.
+
+---
+
+## Why BM25 Search Instead of a Markdown File?
+
+Most "best practices" repos give you a giant markdown file and tell you to paste it into your AI's context or system prompt. This project does something different — and the difference matters at 2,461 entries.
+
+### The problem with a static markdown file
+
+| Problem | Impact |
+|---|---|
+| **Entire file loaded every request** | 2,461 entries ≈ 150,000+ tokens consumed whether relevant or not |
+| **Context window bloat** | Less room for your actual code, leaving the AI with less to work with |
+| **No ranking** | AI sees everything with equal weight — a Compose tip buried 300 lines down gets the same attention as the first line |
+| **Stale retrieval** | AI "remembers" patterns from a big blob of text rather than precisely fetching what fits your query |
+| **Hard to scale** | Every new entry makes the problem worse |
+
+### How BM25 search fixes this
+
+BM25 (Best Match 25) is the same ranking algorithm used by search engines like Elasticsearch and Lucene. Instead of loading the whole database, it scores every entry against your query and returns only the top matches — ranked by relevance.
+
+```
+Query: "compose state management viewmodel"
+
+BM25 scores every entry → returns top 15 ranked results
+→ AI sees ~2,000 tokens of highly relevant content
+→ vs 150,000+ tokens if the whole database were loaded
+```
+
+**Result:** The AI gets precise, high-signal context instead of a firehose — and generates better code because of it.
+
+### Fuzzy search on top of BM25
+
+Typos and abbreviations break exact keyword search. The `--fuzzy` flag adds character bigram similarity (Dice coefficient) to catch near-matches:
+
+```bash
+# Exact match fails:  "recompostion" → 0 results
+# Fuzzy match works:  "recompostion" → finds "recomposition" entries ✓
+
+# Exact match fails:  "LazyColum" → 0 results
+# Fuzzy match works:  "LazyColum" → finds "LazyColumn" entries ✓
+```
+
+Bigram expansion runs before BM25 scoring, so results are still ranked by relevance — not just "close enough to match."
+
+### Cross-domain search (`--all-domains`)
+
+A single query like `"login screen banking"` spans multiple domains at once — security rules, architecture patterns, UI components, anti-patterns, code snippets. The `--all-domains` flag runs BM25 across all 12 domains in parallel and merges results by normalised score, so the most relevant entries float to the top regardless of which domain they live in.
+
+### Summary
+
+| Approach | Tokens used | Relevance | Scales with more entries |
+|---|---|---|---|
+| Static markdown file | All 150,000+ | Low — everything equally weighted | Gets worse |
+| BM25 search (this project) | ~2,000 (top results) | High — ranked by query match | Stays fast |
+| BM25 + fuzzy + cross-domain | ~2,000–6,000 | Highest — typo-tolerant, multi-domain | Stays fast |
 
 ---
 
@@ -94,7 +150,7 @@ Copy the `.claude/skills/mobile-best-practices/` directory into your project. En
 
 ## How It Works
 
-After installation, your AI assistant gains access to 2,042 best practices through a built-in search engine. **You don't need to learn any commands** — just chat naturally and your AI assistant searches the right databases automatically.
+After installation, your AI assistant gains access to 2,461 best practices through a built-in search engine. **You don't need to learn any commands** — just chat naturally and your AI assistant searches the right databases automatically.
 
 ```
 You: "Build a login screen for my banking app"
@@ -267,16 +323,16 @@ The skill organizes knowledge into 12 searchable domains:
 | Domain | Entries | Use For |
 |---|---|---|
 | `architecture` | 49 | Choosing patterns (MVVM, MVI, Clean, VIPER, BLoC) |
-| `designpattern` | 117 | Design patterns & code smell detection |
-| `ui` | 91 | UI components, navigation, lists, inputs, animations |
-| `antipattern` | 117 | Common mistakes to avoid |
+| `designpattern` | 112 | Design patterns & code smell detection |
+| `ui` | 191 | UI components, navigation, lists, inputs, animations |
+| `antipattern` | 243 | Common mistakes to avoid |
 | `library` | 103 | Libraries and dependencies |
 | `performance` | 228 | Speed, memory, battery, rendering optimization |
 | `security` | 437 | Encryption, auth, storage, compliance |
 | `testing` | 73 | Unit, UI, integration, E2E testing |
 | `reasoning` | 56 | Smart recommendations by product type |
 | `template` | 18 | Project starter configurations |
-| `snippet` | 79 | Copy-paste code templates |
+| `snippet` | 81 | Copy-paste code templates |
 | `gradle` | 78 | Gradle dependency declarations |
 
 ---
@@ -318,9 +374,14 @@ python3 scripts/search.py "compose performance" --domain performance -n 10
 | `--domain` / `-d` | Search a specific domain |
 | `--platform` / `-p` | Platform guidelines (android, ios, flutter, react-native) |
 | `--stack` / `-s` | Filter by tech stack (compose, swiftui, flutter, react-native) |
-| `--filter-platform` / `-fp` | Filter any domain results by platform |
+| `--filter-platform` / `-fp` | Filter any domain/cross-domain results by platform |
+| `--all-domains` / `-a` | Search across all domains at once, ranked by normalised BM25 score |
+| `--fuzzy` / `-f` | Enable typo-tolerant search via character bigram expansion |
+| `--max-results` / `-n` | Number of results (default: 15 per-domain, 30 for `--all-domains`) |
+| `--compact` / `-c` | Token-optimized compact output |
+| `--comment-style` / `-cs` | Code comment verbosity: `all` (default), `none`, or `important` |
 | `--persist` | Save results as architecture blueprint markdown |
-| `--max-results` / `-n` | Number of results (default: 3) |
+| `--page` | Generate a page-specific blueprint override |
 | `--json` | Output as JSON |
 
 ---

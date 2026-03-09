@@ -11,18 +11,33 @@ Stacks: compose, jetpack-compose, material3, hilt, room, kotlin, swiftui, combin
 
 import argparse
 from core import (
-    CSV_CONFIG, AVAILABLE_PLATFORMS, AVAILABLE_STACKS, MAX_RESULTS,
-    search, search_platform, search_stack, persist_blueprint
+    CSV_CONFIG, AVAILABLE_PLATFORMS, AVAILABLE_STACKS, MAX_RESULTS, ALL_DOMAINS_MAX_RESULTS,
+    _CODE_FIELDS, apply_comment_style,
+    search, search_platform, search_stack, search_all_domains, persist_blueprint
 )
 
 
-def format_output(result, compact=False):
+_COMMENT_STYLE_CHOICES = ["all", "none", "important"]
+_COMMENT_STYLE_DEFAULT = "all"
+
+
+def _apply_style_to_row(row: dict, style: str) -> dict:
+    """Return a copy of *row* with comment style applied to code fields."""
+    if style == "all":
+        return row
+    return {
+        k: apply_comment_style(v, style) if k in _CODE_FIELDS else v
+        for k, v in row.items()
+    }
+
+
+def format_output(result, compact=False, comment_style=_COMMENT_STYLE_DEFAULT):
     """Format results for Claude consumption (token-optimized)"""
     if "error" in result:
         return f"Error: {result['error']}"
 
     if compact:
-        return format_compact(result)
+        return format_compact(result, comment_style=comment_style)
 
     output = []
     if result.get("domain") == "platform":
@@ -31,19 +46,27 @@ def format_output(result, compact=False):
     elif result.get("domain") == "stack":
         output.append(f"## Mobile Best Practices - Stack Search")
         output.append(f"**Stack:** {result['stack']} ({result.get('platform', '')}) | **Query:** {result['query']}")
+    elif result.get("domain") == "all":
+        output.append(f"## Mobile Best Practices - Cross-Domain Search")
+        output.append(f"**Query:** {result['query']} | **Domains searched:** all")
     else:
         output.append(f"## Mobile Best Practices - Search Results")
         output.append(f"**Domain:** {result['domain']} | **Query:** {result['query']}")
 
     file_info = result.get('file', '')
+    fuzzy_tag = " | **Mode:** fuzzy" if result.get('fuzzy') else ""
     if file_info:
-        output.append(f"**Source:** {file_info} | **Found:** {result['count']} results\n")
+        output.append(f"**Source:** {file_info} | **Found:** {result['count']} results{fuzzy_tag}\n")
     else:
-        output.append(f"**Found:** {result['count']} results\n")
+        output.append(f"**Found:** {result['count']} results{fuzzy_tag}\n")
+
+    if comment_style != "all":
+        output.append(f"**Comment style:** {comment_style}\n")
 
     for i, row in enumerate(result['results'], 1):
         output.append(f"### Result {i}")
-        for key, value in row.items():
+        styled = _apply_style_to_row(row, comment_style)
+        for key, value in styled.items():
             value_str = str(value)
             if len(value_str) > 300:
                 value_str = value_str[:300] + "..."
@@ -53,17 +76,19 @@ def format_output(result, compact=False):
     return "\n".join(output)
 
 
-def format_compact(result):
+def format_compact(result, comment_style=_COMMENT_STYLE_DEFAULT):
     """Compact format: fewer tokens, same information density"""
     output = []
     domain = result.get("domain", "")
     query = result.get("query", "")
     count = result.get("count", 0)
-    output.append(f"[{domain}] q=\"{query}\" found={count}")
+    style_tag = f" comment={comment_style}" if comment_style != "all" else ""
+    output.append(f"[{domain}] q=\"{query}\" found={count}{style_tag}")
 
     for i, row in enumerate(result['results'], 1):
+        styled = _apply_style_to_row(row, comment_style)
         parts = []
-        for key, value in row.items():
+        for key, value in styled.items():
             value_str = str(value).strip()
             if not value_str:
                 continue
@@ -81,15 +106,33 @@ if __name__ == "__main__":
     parser.add_argument("--domain", "-d", choices=list(CSV_CONFIG.keys()), help="Search domain")
     parser.add_argument("--platform", "-p", choices=AVAILABLE_PLATFORMS, help="Platform-specific search (android, ios, flutter, react-native)")
     parser.add_argument("--stack", "-s", choices=AVAILABLE_STACKS, help="Stack-specific search (compose, swiftui, flutter, react-native, etc.)")
-    parser.add_argument("--max-results", "-n", type=int, default=MAX_RESULTS, help="Max results (default: 3)")
+    parser.add_argument("--max-results", "-n", type=int, default=None, help=f"Max results (default: {MAX_RESULTS} per-domain, {ALL_DOMAINS_MAX_RESULTS} for --all-domains)")
     parser.add_argument("--filter-platform", "-fp", choices=AVAILABLE_PLATFORMS, help="Filter any domain results by platform")
     parser.add_argument("--json", action="store_true", help="Output as JSON")
     parser.add_argument("--compact", "-c", action="store_true", help="Token-optimized compact output format")
+    parser.add_argument(
+        "--comment-style", "-cs",
+        choices=_COMMENT_STYLE_CHOICES,
+        default=_COMMENT_STYLE_DEFAULT,
+        help=(
+            "Code comment style in output: "
+            "'all' = keep all comments (default), "
+            "'none' = strip every comment, "
+            "'important' = keep only comments with NOTE/WARNING/WHY/IMPORTANT/etc."
+        )
+    )
+    parser.add_argument("--all-domains", "-a", action="store_true", help="Search across all domains at once, ranked by normalised BM25 score")
+    parser.add_argument("--fuzzy", "-f", action="store_true", help="Enable fuzzy search: tolerates typos and near-matches via bigram expansion")
     parser.add_argument("--persist", action="store_true", help="Save results to architecture blueprint file")
     parser.add_argument("--project-name", "-pn", help="Project name for blueprint (default: MyApp)")
     parser.add_argument("--page", help="Generate page-specific blueprint override")
 
     args = parser.parse_args()
+    cs = args.comment_style  # shorthand
+    # Resolve max_results: use explicit -n value, else domain-appropriate default
+    max_results = args.max_results if args.max_results is not None else (
+        ALL_DOMAINS_MAX_RESULTS if args.all_domains else MAX_RESULTS
+    )
 
     # Persist mode
     if args.persist:
@@ -105,26 +148,34 @@ if __name__ == "__main__":
             print(f"Blueprint saved to: {result['file']}")
             print(f"Sections: {', '.join(result['sections'])}")
             print(f"Total entries: {result['total_entries']}")
+    # Cross-domain search
+    elif args.all_domains:
+        result = search_all_domains(args.query, max_results, fuzzy=args.fuzzy, filter_platform=args.filter_platform)
+        if args.json:
+            import json
+            print(json.dumps(result, indent=2, ensure_ascii=False))
+        else:
+            print(format_output(result, compact=args.compact, comment_style=cs))
     # Stack search
     elif args.stack:
-        result = search_stack(args.query, args.stack, args.max_results)
+        result = search_stack(args.query, args.stack, max_results, fuzzy=args.fuzzy)
         if args.json:
             import json
             print(json.dumps(result, indent=2, ensure_ascii=False))
         else:
-            print(format_output(result, compact=args.compact))
+            print(format_output(result, compact=args.compact, comment_style=cs))
     # Platform search takes priority
     elif args.platform:
-        result = search_platform(args.query, args.platform, args.max_results)
+        result = search_platform(args.query, args.platform, max_results, fuzzy=args.fuzzy)
         if args.json:
             import json
             print(json.dumps(result, indent=2, ensure_ascii=False))
         else:
-            print(format_output(result, compact=args.compact))
+            print(format_output(result, compact=args.compact, comment_style=cs))
     else:
-        result = search(args.query, args.domain, args.max_results, filter_platform=args.filter_platform)
+        result = search(args.query, args.domain, max_results, filter_platform=args.filter_platform, fuzzy=args.fuzzy)
         if args.json:
             import json
             print(json.dumps(result, indent=2, ensure_ascii=False))
         else:
-            print(format_output(result, compact=args.compact))
+            print(format_output(result, compact=args.compact, comment_style=cs))
