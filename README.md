@@ -4,10 +4,10 @@
 [![npm downloads](https://img.shields.io/npm/dm/mobile-best-practices)](https://www.npmjs.com/package/mobile-best-practices)
 [![Python](https://img.shields.io/badge/python-3.x-blue?logo=python&logoColor=white)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Entries](https://img.shields.io/badge/entries-2%2C461-orange)](src/mobile-best-practices/data/)
+[![Entries](https://img.shields.io/badge/entries-1%2C937-orange)](src/mobile-best-practices/data/)
 [![Platforms](https://img.shields.io/badge/platforms-Android%20%7C%20iOS%20%7C%20Flutter%20%7C%20RN-blueviolet)](README.md)
 
-Searchable database of **2,461 mobile development best practices** packaged as an AI skill for Claude Code and 14 other AI coding assistants. Covers Android, iOS, Flutter, and React Native.
+Searchable database of **1,937 mobile development best practices** packaged as an AI skill for Claude Code and 14 other AI coding assistants. Covers Android, iOS, Flutter, and React Native.
 
 Your AI assistant becomes a mobile development expert — it automatically searches architecture patterns, security rules, performance tips, anti-patterns, and code snippets while helping you build, review, and fix mobile apps.
 
@@ -19,8 +19,8 @@ Your AI assistant becomes a mobile development expert — it automatically searc
 |---|---|---|
 | Architecture Patterns | 49 | MVVM, MVI, Clean Architecture, VIPER, TCA, BLoC, Redux, KMP |
 | Design Patterns | 112 | Repository, Factory, Observer, Strategy, Adapter, code smells |
-| UI Patterns | 191 | Navigation, lists, sheets, inputs, modals, animations, onboarding |
-| Anti-Patterns | 243 | God Activity, memory leaks, prop drilling, setState abuse |
+| UI Patterns | 95 | Navigation, lists, sheets, inputs, modals, animations, onboarding |
+| Anti-Patterns | 124 | God Activity, memory leaks, prop drilling, setState abuse |
 | Libraries | 103 | Retrofit, Hilt, Coil, Kingfisher, Dio, BLoC, Redux, Apollo, Koin |
 | Performance | 228 | Startup, rendering, memory, network, Compose, CI/CD, monitoring |
 | Security | 437 | Encryption, keychain, SSL pinning, biometric, compliance, privacy |
@@ -29,7 +29,7 @@ Your AI assistant becomes a mobile development expert — it automatically searc
 | Project Templates | 18 | Starter configs for common app types |
 | Code Snippets | 81 | Copy-paste templates for Android, iOS, Flutter, React Native |
 | Gradle Dependencies | 78 | Ready-to-paste dependency declarations and plugins |
-| Platform Guidelines | 792 | Android (623), iOS (60), Flutter (54), React Native (55) |
+| Platform Guidelines | 483 | Android (314), iOS (60), Flutter (54), React Native (55) |
 
 Every entry includes a **Reference URL** linking to official docs, GitHub repos, or guides.
 
@@ -37,13 +37,13 @@ Every entry includes a **Reference URL** linking to official docs, GitHub repos,
 
 ## Why BM25 Search Instead of a Markdown File?
 
-Most "best practices" repos give you a giant markdown file and tell you to paste it into your AI's context or system prompt. This project does something different — and the difference matters at 2,461 entries.
+Most "best practices" repos give you a giant markdown file and tell you to paste it into your AI's context or system prompt. This project does something different — and the difference matters at 1,937 entries.
 
 ### The problem with a static markdown file
 
 | Problem | Impact |
 |---|---|
-| **Entire file loaded every request** | 2,461 entries ≈ 150,000+ tokens consumed whether relevant or not |
+| **Entire file loaded every request** | 1,937 entries ≈ 120,000+ tokens consumed whether relevant or not |
 | **Context window bloat** | Less room for your actual code, leaving the AI with less to work with |
 | **No ranking** | AI sees everything with equal weight — a Compose tip buried 300 lines down gets the same attention as the first line |
 | **Stale retrieval** | AI "remembers" patterns from a big blob of text rather than precisely fetching what fits your query |
@@ -111,7 +111,7 @@ A single query like `"login screen banking"` spans multiple domains at once — 
 
    ![Codex skill installed](docs/codex/skill-installed.png)
 
-4. Start chatting — Codex now searches 2,461 mobile best practices in real time.
+4. Start chatting — Codex now searches 1,937 mobile best practices in real time.
 
 ---
 
@@ -172,7 +172,7 @@ Copy the `.claude/skills/mobile-best-practices/` directory into your project. En
 
 ## How It Works
 
-After installation, your AI assistant gains access to 2,461 best practices through a built-in search engine. **You don't need to learn any commands** — just chat naturally and your AI assistant searches the right databases automatically.
+After installation, your AI assistant gains access to 1,937 best practices through a built-in search engine. **You don't need to learn any commands** — just chat naturally and your AI assistant searches the right databases automatically.
 
 ```
 You: "Build a login screen for my banking app"
