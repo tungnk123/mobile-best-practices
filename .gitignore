@@ -25,4 +25,4 @@ architecture-blueprint/
 # Secrets
 .env
 *.local
-!.claude/settings.local.json
+.claude/settings.local.json
