@@ -97,7 +97,7 @@ A single query like `"login screen banking"` spans multiple domains at once — 
 
 1. Open **Codex** → **Skills** → click the **Skill Creator** bar at the bottom:
 
-   ![Skill Creator bar](docs/codex/skill-creator-bar.png)
+   ![Skill Creator bar](docs/codex/skill-creator-bar.jpg)
 
 2. Paste the URL and press Enter:
 
@@ -105,11 +105,11 @@ A single query like `"login screen banking"` spans multiple domains at once — 
    https://github.com/tungnk123/mobile-best-practices
    ```
 
-   ![Skill Creator URL input](docs/codex/skill-creator-url.png)
+   ![Skill Creator URL input](docs/codex/skill-creator-url.jpg)
 
 3. **Mobile Best Practices** appears under **Installed** with a toggle to enable it:
 
-   ![Codex skill installed](docs/codex/skill-installed.png)
+   ![Codex skill installed](docs/codex/skill-installed.jpg)
 
 4. Start chatting — Codex now searches 1,937 mobile best practices in real time.
 
