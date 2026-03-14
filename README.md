@@ -13,6 +13,12 @@ Your AI assistant becomes a mobile development expert — it automatically searc
 
 **[Live Demo →](DEMO.md)** | **[Changelog →](CHANGELOG.md)** | **[Contributing →](CONTRIBUTING.md)**
 
+```bash
+npx mobile-best-practices init
+```
+
+> **[→ Full installation guide](#installation)** — supports Claude Code, Cursor, Windsurf, GitHub Copilot, Codex, and 11 more AI assistants.
+
 ## What's Inside
 
 | Category | Entries | What You Get |
@@ -212,7 +218,7 @@ Ask your AI assistant to audit your codebase against 437 security best practices
 "Are there any hardcoded API keys or secrets in my project?"
 ```
 
-The AI will scan your code and cross-reference it against security rules covering:
+The AI scans your code and cross-references it against security rules covering:
 - Hardcoded secrets and API keys
 - Insecure data storage (SharedPreferences, UserDefaults)
 - Missing SSL/certificate pinning
@@ -220,6 +226,10 @@ The AI will scan your code and cross-reference it against security rules coverin
 - Insecure authentication flows
 - Missing root/jailbreak detection
 - Sensitive data in logs or crash reports
+
+The output is a **Security Checklist** — every rule gets a ✅ Pass or ❌ Fail status, with the exact issue described and a direct fix. You don't get a vague "your app has security issues" — you get a line-by-line audit tied to real OWASP Mobile Top 10 references, so you know exactly what to fix and why it matters.
+
+![Security audit example](docs/security-audit-example.png)
 
 ### "Check my project for performance issues"
 
@@ -241,6 +251,19 @@ Catches issues like:
 - Memory leaks from lifecycle-unaware observers
 - Missing R8/ProGuard configuration
 - Unoptimized app startup (cold start, splash screen)
+
+The output is a **Summary Table** — each finding shows the exact file name, line number, severity (Critical / Medium / Low), a plain-English description of the issue, and the matched database rule that triggered it. For example:
+
+| # | File | Severity | Issue | DB Rule |
+|---|---|---|---|---|
+| 1 | `AppModule.kt` | Critical | No WAL mode on Room DB | `database query index room` |
+| 5 | `HomeScreen.kt` | Critical | Unstable lambdas → excessive recomposition | `recomposition compose lambda` |
+| 8 | `MusicSelectionScreen.kt:135` | Medium | Missing `key` in LazyColumn items | `list scroll lazy virtualize` |
+| 10 | `HomeViewModel.kt:57` | Medium | CPU-bound `computeNextAlarmInfo` on wrong dispatcher | `threading coroutine main dispatcher` |
+
+Every row is traceable — you know which file to open, what the problem is, and which best practice it violates. No guessing, no generic advice.
+
+![Performance check example](docs/performance-check-example.png)
 
 ### "Check for ANR, crashes, or slow startup"
 
